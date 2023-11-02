@@ -1,8 +1,8 @@
 /*
 /
-// filename: stdafx.cpp
+// filename: EngineInstance.cpp
 // author: Callen Betts
-// brief: precompiled header, should be included in all .cpp files
+// brief: implements EngineInstance.h
 /
 */
 

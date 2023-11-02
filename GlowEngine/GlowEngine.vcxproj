@@ -19,12 +19,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\EngineInstance.h" />
+    <ClInclude Include="Source\Engine\GlowEngine.h" />
+    <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
+    <ClInclude Include="Source\Engine\Systems\Log\Log.h" />
     <ClInclude Include="Source\stdafx.h" />
+    <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
     <ClInclude Include="Source\Windows\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Engine\main.cpp" />
+    <ClCompile Include="Source\Engine\EngineInstance.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\GlowEngine.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Log\Log.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +143,6 @@
       </AdditionalUsingDirectories>
       <AdditionalIncludeDirectories>C:\Users\calle\Desktop\GlowEngine\GlowEngine\Source</AdditionalIncludeDirectories>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile>$(ProjectDir)Source\pch.h</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

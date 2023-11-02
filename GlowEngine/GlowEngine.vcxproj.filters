@@ -5,45 +5,86 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{c8951205-d1bd-4e59-bc80-e80518e23e97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics">
+      <UniqueIdentifier>{1cee3f7b-64f1-4ba9-89a4-d6faad792ed8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Stubs">
+      <UniqueIdentifier>{031acc3e-eeac-4070-94d0-dc3f01d5b4d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Windows">
+      <UniqueIdentifier>{fc739bc9-938a-4aae-8bb0-7e43acf4a884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems">
+      <UniqueIdentifier>{33f5674e-8da7-40fc-831a-c512c11b8b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Log">
+      <UniqueIdentifier>{64bcf1f9-ddf4-4578-a82b-cd3e416ec048}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\Engine\Graphics\Renderer.h">
+      <Filter>Source Files\Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\Stubs\stub.h">
+      <Filter>Source Files\Stubs</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\stdafx.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GlowEngine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\Windows\Resource.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\targetver.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\EngineInstance.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\GlowEngine.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Log\Log.h">
+      <Filter>Source Files\Engine\Systems\Log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GlowEngine.cpp">
+    <ClCompile Include="Source\Engine\main.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\EngineInstance.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\GlowEngine.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Log\Log.cpp">
+      <Filter>Source Files\Engine\Systems\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GlowEngine.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <Image Include="Source\Windows\GlowEngine.ico">
+      <Filter>Source Files\Windows</Filter>
+    </Image>
+    <Image Include="Source\Windows\small.ico">
+      <Filter>Source Files\Windows</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="GlowEngine.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <ResourceCompile Include="Source\Windows\GlowEngine.rc">
+      <Filter>Source Files\Windows</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
