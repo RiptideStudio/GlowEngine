@@ -14,23 +14,36 @@
 // Windows Header Files
 #include <windows.h>
 
+// directX math
+#include <DirectXMath.h>
+
+// standard includes
+#include <string>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <fstream>
+
+// json & deserialization
+#include "Engine/Systems/Parsing/json.hpp"
+
 // engine
 #include "Engine/EngineInstance.h"
-#include "Engine/GlowEngine.h"
+
+// math
+#include "Engine/Math/GlowMath.h"
+#include "Engine/Math/Vertex.h"
+
+using namespace GlowMath;
 
 // rendering
 #include "Windows/Resource.h"
 #include "Engine//Graphics/Renderer.h"
 
-// directX
-#include <DirectXMath.h>
-#include <d3d11.h>
-#pragma comment(lib, "d3d11.lib")
-#include <d3dcompiler.h>
-#pragma comment(lib, "d3dcompiler.lib")
+// systems
+#include "Engine/Systems/Logger/Log.h"
 
-// standard includes
-#include <string>
-#include <map>
-#include <vector>
-
+// components
+#include "Engine/Entity/Components/Physical/Model.h"
+#include "Engine/Entity/Components/Physical/Transform.h"
+#include "Engine/Entity/Components/Component.h"

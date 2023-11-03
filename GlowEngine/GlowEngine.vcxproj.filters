@@ -22,10 +22,34 @@
       <UniqueIdentifier>{fc739bc9-938a-4aae-8bb0-7e43acf4a884}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Systems">
-      <UniqueIdentifier>{33f5674e-8da7-40fc-831a-c512c11b8b01}</UniqueIdentifier>
+      <UniqueIdentifier>{bdf589db-d52b-49ab-bdb3-e35bd0c1fbc1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Systems\Log">
-      <UniqueIdentifier>{64bcf1f9-ddf4-4578-a82b-cd3e416ec048}</UniqueIdentifier>
+    <Filter Include="Source Files\Engine\Systems\Logger">
+      <UniqueIdentifier>{fc6101a2-568d-4186-afbc-00e95b204538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{77f14f4a-ca1d-45b9-b42b-0bf263422a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{45c95cda-6539-4c13-b1d1-53d9004c1af0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Math">
+      <UniqueIdentifier>{2c385dd1-ee6e-42be-8806-f0cf63ba299c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Entity">
+      <UniqueIdentifier>{b342b666-74d3-4086-8807-18915fed2391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Systems\Parsing">
+      <UniqueIdentifier>{44fc5b3f-eaea-47ac-9ded-cef38ebf0b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Entity\Components">
+      <UniqueIdentifier>{4d60cbd8-829e-4c16-9297-e2c1b5dc1727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Entity\Components\Physical">
+      <UniqueIdentifier>{175443be-0878-4289-a0a6-6bca8cde0a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Camera">
+      <UniqueIdentifier>{f8e2de34-d995-4e39-a564-9855abbee746}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,9 +62,6 @@
     <ClInclude Include="Source\stdafx.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Windows\Resource.h">
-      <Filter>Source Files\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Windows\targetver.h">
       <Filter>Source Files\Windows</Filter>
     </ClInclude>
@@ -50,8 +71,38 @@
     <ClInclude Include="Source\Engine\GlowEngine.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Log\Log.h">
-      <Filter>Source Files\Engine\Systems\Log</Filter>
+    <ClInclude Include="Source\Engine\Systems\Logger\Log.h">
+      <Filter>Source Files\Engine\Systems\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\Resource.h">
+      <Filter>Source Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Math\GlowMath.h">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Math\Vertex.h">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Entity.h">
+      <Filter>Source Files\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp">
+      <Filter>Source Files\Engine\Systems\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp">
+      <Filter>Source Files\Engine\Systems\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Component.h">
+      <Filter>Source Files\Engine\Entity\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Model\Model.h">
+      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h">
+      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h">
+      <Filter>Source Files\Engine\Graphics\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -67,11 +118,35 @@
     <ClCompile Include="Source\Engine\GlowEngine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Log\Log.cpp">
-      <Filter>Source Files\Engine\Systems\Log</Filter>
-    </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stubs\stub.cpp">
+      <Filter>Source Files\Stubs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
+      <Filter>Source Files\Engine\Systems\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Math\GlowMath.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Math\Vertex.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Entity.cpp">
+      <Filter>Source Files\Engine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Component.cpp">
+      <Filter>Source Files\Engine\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Physical\Model.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
+      <Filter>Source Files\Engine\Graphics\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,5 +161,13 @@
     <ResourceCompile Include="Source\Windows\GlowEngine.rc">
       <Filter>Source Files\Windows</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Source\Shaders\PixelShader.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\Shaders\VertexShader.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

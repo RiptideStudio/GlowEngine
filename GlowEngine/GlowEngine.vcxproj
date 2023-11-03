@@ -20,9 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\EngineInstance.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Component.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Model\Model.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h" />
+    <ClInclude Include="Source\Engine\Entity\Entity.h" />
     <ClInclude Include="Source\Engine\GlowEngine.h" />
+    <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h" />
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
-    <ClInclude Include="Source\Engine\Systems\Log\Log.h" />
+    <ClInclude Include="Source\Engine\Math\GlowMath.h" />
+    <ClInclude Include="Source\Engine\Math\Vertex.h" />
+    <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
+    <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
+    <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
@@ -32,7 +41,22 @@
     <ClCompile Include="Source\Engine\EngineInstance.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Physical\Model.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Entity.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Engine\GlowEngine.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
@@ -41,10 +65,19 @@
     <ClCompile Include="Source\Engine\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Log\Log.cpp">
+    <ClCompile Include="Source\Engine\Math\GlowMath.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Math\Vertex.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp" />
+    <ClCompile Include="Source\Stubs\stub.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Windows\GlowEngine.ico" />
@@ -52,6 +85,16 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\Windows\GlowEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Source\Shaders\PixelShader.hlsl">
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Source\Shaders\VertexShader.hlsl">
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -143,9 +186,10 @@
       </AdditionalUsingDirectories>
       <AdditionalIncludeDirectories>C:\Users\calle\Desktop\GlowEngine\GlowEngine\Source</AdditionalIncludeDirectories>
       <PrecompiledHeader>Create</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
