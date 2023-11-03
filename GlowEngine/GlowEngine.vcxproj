@@ -29,6 +29,7 @@
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
+    <ClInclude Include="Source\Engine\Systems\Input\Input.h" />
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
@@ -69,6 +70,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Math\Vertex.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Input\Input.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">

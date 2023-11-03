@@ -26,11 +26,22 @@ namespace Visual
 
   private:
 
-    // needs a handle to the window
-    HWND windowHandle;
-
-    Vector position;
+    // camera properties
+    XMVector position;
+    XMVector target;
+    XMVector upDirection;
     float rotation;
+
+    // our field of view
+    float fov; 
+    // how far we can see
+    float viewDistance; 
+
+    // window properties
+    float windowWidth;
+    float windowHeight;
+    float aspectRatio;
+    HWND windowHandle;
 
     // camera contains both the view and perspective matrix
     Matrix viewMatrix;

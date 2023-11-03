@@ -51,6 +51,9 @@
     <Filter Include="Source Files\Engine\Graphics\Camera">
       <UniqueIdentifier>{f8e2de34-d995-4e39-a564-9855abbee746}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Systems\Input">
+      <UniqueIdentifier>{e791ebaf-5669-4bcc-96f4-d6e362452901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -104,6 +107,9 @@
     <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h">
       <Filter>Source Files\Engine\Graphics\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Input\Input.h">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -147,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
       <Filter>Source Files\Engine\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Input\Input.cpp">
+      <Filter>Source Files\Engine\Systems\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

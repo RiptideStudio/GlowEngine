@@ -27,9 +27,9 @@ namespace Components
 
   private:
 
-    Vector position;
-    Vector scale;
-    float rotation;
+    Vector3D position;
+    Vector3D scale;
+    Vector3D rotation;
 
     Matrix transformMatrix;
 

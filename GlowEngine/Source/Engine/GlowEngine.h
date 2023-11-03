@@ -44,6 +44,7 @@ namespace Engine
 
     // engine properties
     int getFps();
+    int getTotalFrames();
     bool isRunning();
     float getDeltaTime();
 

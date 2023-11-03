@@ -38,7 +38,6 @@ using namespace GlowMath;
 
 // rendering
 #include "Windows/Resource.h"
-#include "Engine//Graphics/Renderer.h"
 
 // systems
 #include "Engine/Systems/Logger/Log.h"

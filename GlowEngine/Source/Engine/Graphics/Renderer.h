@@ -28,17 +28,23 @@ namespace Graphics
     Renderer(HWND handle);
 
     void initGraphics();
-    void testUpdate();
+    void testUpdate(); // temp function for rendering
 
     void createDeviceAndSwapChain();
     void loadShaders();
     void createTargetView();
     void createViewport();
 
+    // rasterizer states and helpers
+    void createRasterizer();
+    void setRasterizerFillMode(D3D11_FILL_MODE fillMode = D3D11_FILL_WIREFRAME);
+
+    // clear the target view with a background colour
     void clearTargetView();
     void setBackgroundColor(float color[4]);
 
-    void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    // set the topology with a default of trianglelist
+    void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
   private:
@@ -64,6 +70,10 @@ namespace Graphics
 
     // render target view
     ID3D11Texture2D* backBuffer;
+
+    // rasterizer
+    ID3D11RasterizerState* wireframeRasterizerState;
+    D3D11_RASTERIZER_DESC rasterizerDesc;
 
     // background color
     float backgroundColor[4];

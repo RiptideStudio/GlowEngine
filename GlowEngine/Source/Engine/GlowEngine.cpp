@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "GlowEngine.h"
+#include "Engine/Graphics/Renderer.h"
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -186,6 +187,11 @@ void Engine::GlowEngine::cleanUp()
 int Engine::GlowEngine::getFps()
 {
   return fps;
+}
+
+int Engine::GlowEngine::getTotalFrames()
+{
+  return totalFrames;
 }
 
 // get whether or not the engine is running

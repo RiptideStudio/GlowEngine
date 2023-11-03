@@ -1,8 +1,8 @@
 /*
 /
-// filename: stub.cpp
+// filename: Renderer.cpp
 // author: Callen Betts
-// brief: implements stub.h
+// brief: implements the rendering engine and pipeline
 /
 */
 
@@ -25,7 +25,7 @@ Graphics::Renderer::Renderer(HWND handle)
   float bgCol[4] = { 0,0,0,0 };
   setBackgroundColor(bgCol);
   initGraphics();
-  // init systems reliant on renderer
+  // init camera, which needs window handle (maybe)
   camera = new Visual::Camera(handle);
 }
 
@@ -36,6 +36,7 @@ void Graphics::Renderer::initGraphics()
   loadShaders();
   createTargetView();
   createViewport();
+  createRasterizer();
   setTopology();
 }
 
@@ -51,36 +52,93 @@ void Graphics::Renderer::testUpdate()
   Matrix worldMatrix = transform->getTransformMatrix();
   Matrix viewMatrix = camera->getViewMatrix();
   Matrix perspectiveMatrix = camera->getPerspecitveMatrix();
-  Matrix finalMatrix = perspectiveMatrix * viewMatrix * worldMatrix;
+
+  // Define a structure that matches the shader constant buffer layout
+  struct ConstantBufferType 
+  {
+    DirectX::XMMATRIX world;
+    DirectX::XMMATRIX view;
+    DirectX::XMMATRIX projection;
+  };
+
+  // Create a constant buffer
+  ID3D11Buffer* constantBuffer = nullptr;
+  D3D11_BUFFER_DESC constantBufferDesc;
+  ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+  // Set up the description of the constant buffer
+  constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+  constantBufferDesc.ByteWidth = sizeof(ConstantBufferType);
+  constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+  constantBufferDesc.CPUAccessFlags = 0;
+  constantBufferDesc.MiscFlags = 0;
+  constantBufferDesc.StructureByteStride = 0;
+
+  // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class
+  HRESULT result = device->CreateBuffer(&constantBufferDesc, NULL, &constantBuffer);
+  if (FAILED(result)) 
+  {
+    Logger::error("Failed to create constant buffer");
+  }
+
+  int frames = engine->getTotalFrames();
+  if (frames % 6000 == 0)
+  {
+    setRasterizerFillMode(D3D11_FILL_WIREFRAME);
+  }
+  if (frames % 12000 == 0)
+  {
+    setRasterizerFillMode(D3D11_FILL_SOLID);
+  }
 
   // Create vertex buffer
   ID3D11Buffer* vertexBuffer = nullptr;
   D3D11_BUFFER_DESC vertexBufferDesc = {};
   vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  vertexBufferDesc.ByteWidth = sizeof(Vertex) * model->getVerties().size(); // Use the number of vertices here
+  vertexBufferDesc.ByteWidth = sizeof(Vertex) * model->getVerties().size();
   vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
   vertexBufferDesc.CPUAccessFlags = 0;
 
   D3D11_SUBRESOURCE_DATA vertexData = {};
-  vertexData.pSysMem = model->getVerties().data(); // This should be your vertices, not indices
+  vertexData.pSysMem = model->getVerties().data();
   device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
 
   ID3D11Buffer* indexBuffer = nullptr;
   D3D11_BUFFER_DESC indexBufferDesc = {};
   indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  indexBufferDesc.ByteWidth = sizeof(unsigned short) * model->getIndices().size(); // Use the number of indices here
+  indexBufferDesc.ByteWidth = sizeof(unsigned short) * model->getIndices().size();
   indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
   indexBufferDesc.CPUAccessFlags = 0;
 
   D3D11_SUBRESOURCE_DATA indexData = {};
-  indexData.pSysMem = model->getIndices().data(); // Correct, this should be the indices
+  indexData.pSysMem = model->getIndices().data();
   device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
 
+  // set the 
   UINT stride = sizeof(Vertex);
   UINT offset = 0;
   deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-  deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0); // This was missing in your code
+  deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
   
+  // Update the constant buffer with the matrices
+  ConstantBufferType cbData;
+  cbData.world = DirectX::XMMatrixTranspose(worldMatrix);
+  cbData.view = DirectX::XMMatrixTranspose(viewMatrix);
+  cbData.projection = DirectX::XMMatrixTranspose(perspectiveMatrix);
+
+  // Note: DirectX::XMMATRIX is assuming you're using DirectXMath for your matrix math
+  if (!constantBuffer)
+  {
+    Logger::error("Bad CB buffer");
+  }
+  else
+  {
+    deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &cbData, 0, 0);
+  }
+
+  // Bind the constant buffer to the vertex shader
+  deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+
   // clear the target view for drawing
   clearTargetView();
 
@@ -179,7 +237,8 @@ void Graphics::Renderer::loadShaders()
   deviceContext->PSSetShader(pixelShader, nullptr, 0);
 
   // Define the input layout
-  D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = {
+  D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
+  {
       { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
   };
 
@@ -222,6 +281,40 @@ void Graphics::Renderer::createViewport()
   viewport.TopLeftX = 0.0f;
   viewport.TopLeftY = 0.0f;
   deviceContext->RSSetViewports(1, &viewport);
+}
+
+// create the rasterizer state for defining culling and vertex winding order
+// you can also change this to wireframe to see the vertices connect
+void Graphics::Renderer::createRasterizer()
+{
+  // define the rasterizer state description
+  ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+
+  rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME; // Set the fill mode to wireframe
+  rasterizerDesc.CullMode = D3D11_CULL_NONE;      // No culling to see all the lines
+  rasterizerDesc.FrontCounterClockwise = false;   // Define the front-facing side
+  rasterizerDesc.DepthClipEnable = true;          // Enable depth clipping
+
+  // create the rasterizer state
+  HRESULT result = device->CreateRasterizerState(&rasterizerDesc, &wireframeRasterizerState);
+  if (FAILED(result))
+  {
+    Logger::error("Failed to create rasterizer state");
+  }
+
+  // bind the rasterizer state to the pipeline
+  deviceContext->RSSetState(wireframeRasterizerState);
+}
+
+// set the rasterizer's fill mode with a default of fill all
+void Graphics::Renderer::setRasterizerFillMode(D3D11_FILL_MODE fillMode)
+{
+  // set the fill mode
+  rasterizerDesc.FillMode = fillMode;
+  // recreate the rasterizer state - this will need to change once we finish setup of main rendering pipeline
+  device->CreateRasterizerState(&rasterizerDesc, &wireframeRasterizerState);
+  // re-bind the rasterizer state
+  deviceContext->RSSetState(wireframeRasterizerState);
 }
 
 // clear the target view - this should be done every frame

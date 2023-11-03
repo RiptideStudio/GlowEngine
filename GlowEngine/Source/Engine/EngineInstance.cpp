@@ -16,3 +16,10 @@ Engine::GlowEngine* EngineInstance::getEngine()
 {
   return engine;
 }
+
+// setup the engine so we have a valid instance of it
+// only needs to be called once
+void EngineInstance::setup(Engine::GlowEngine* newEngine)
+{
+  engine = newEngine;
+}
