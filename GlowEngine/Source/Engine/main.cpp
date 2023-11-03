@@ -23,5 +23,7 @@ int main()
     engine->run();
   }
 
+  // terminate program
+  Logger::write("Terminated program");
   return -1;
 }

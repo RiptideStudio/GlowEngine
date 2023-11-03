@@ -42,6 +42,9 @@ namespace Engine
     // cleanup on engine exit
     void cleanUp();
 
+    // get system pointers
+    Input::InputSystem* getInputSystem();
+
     // engine properties
     int getFps();
     int getTotalFrames();
@@ -61,6 +64,7 @@ namespace Engine
 
     // system pointers
     Graphics::Renderer* renderer;
+    Input::InputSystem* input;
 
     // core engine properties (fps, delta time)
     bool running;

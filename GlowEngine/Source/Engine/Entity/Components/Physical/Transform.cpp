@@ -27,9 +27,15 @@ void Components::Transform::recalculateMatrix()
   if (dirty)
   {
     Engine::GlowEngine* engine = EngineInstance::getEngine();
-    rotation.x += 0.001f;
-    rotation.y += 0.001f;
-    rotation.z += 0.001f;
+    Input::InputSystem* input = engine->getInputSystem();
+
+    if (input->keyDown('R'))
+    {
+      rotation.x += 0.001f;
+      rotation.y += 0.001f;
+      rotation.z += 0.001f;
+    }
+
     // rotation matrix
     Matrix rotationMatrixX = DirectX::XMMatrixRotationX(rotation.x);
     Matrix rotationMatrixY = DirectX::XMMatrixRotationY(rotation.y);

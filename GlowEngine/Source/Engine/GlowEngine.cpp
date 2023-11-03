@@ -23,6 +23,8 @@ Engine::GlowEngine::GlowEngine()
   windowClassName = L"Otherglow Window";
   windowName = L"Otherglow";
   fps = 60;
+  // create systems
+  input = new Input::InputSystem();
 }
 
 // start the engine - returns false if failed, true on success
@@ -180,7 +182,13 @@ void Engine::GlowEngine::setupWindow()
 // called on engine exit
 void Engine::GlowEngine::cleanUp()
 {
+  Logger::write("Cleaning up...");
+}
 
+// get the input system
+Input::InputSystem* Engine::GlowEngine::getInputSystem()
+{
+  return input;
 }
 
 // get the engine's FPS
@@ -211,30 +219,20 @@ LRESULT Engine::GlowEngine::windowProc(HWND hWnd, UINT message, WPARAM wParam, L
 {
   switch (message)
   {
-  case WM_COMMAND:
-  {
-    int wmId = LOWORD(wParam);
-    // Parse the menu selections:
-    switch (wmId)
-    {
-    case IDM_EXIT:
-      DestroyWindow(hWnd);
-      break;
-    default:
-      return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-  }
-  break;
-  case WM_PAINT:
-  {
-    PAINTSTRUCT ps;
-    HDC hdc = BeginPaint(hWnd, &ps);
-    // TODO: Add any drawing code that uses hdc here...
-    EndPaint(hWnd, &ps);
-  }
-  break;
+    // when a key is first triggered, set the keystate to active
+  case WM_KEYDOWN:
+    input->keyTriggered(wParam);
+    break;
+
+    // when a key is released, you should reset the keystate and call "released"
+  case WM_KEYUP:
+    input->keyReleased(wParam);
+    break;
+
+    // destroy the window and stop the engine
   case WM_DESTROY:
     PostQuitMessage(0);
+    stop();
     break;
   default:
     return DefWindowProc(hWnd, message, wParam, lParam);
