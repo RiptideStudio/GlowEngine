@@ -17,18 +17,21 @@ namespace Input
 
   public:
     // called when windows triggered a key
-    void keyTriggered(int keycode);
+    void onKeyTriggered(int keycode);
 
     // called when windows released a key
-    void keyReleased(int keycode);
+    void onKeyRelease(int keycode);
 
     // if a key is being held down
     bool keyDown(int key);
 
+    // if a key was triggered
+    bool keyTriggered(int key);
 
   private:
     // keystates
     std::unordered_map<int, bool> keystates;
+    std::unordered_map<int, bool> keystatesTriggered;
 
   };
 

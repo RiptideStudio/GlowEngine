@@ -8,6 +8,17 @@
 
 #pragma once
 #include "Engine/Entity/Components/Component.h"
+#include <d3d11.h>
+#pragma comment(lib, "d3d11.lib")
+#include <d3dcompiler.h>
+#pragma comment(lib, "d3dcompiler.lib")
+
+
+// forward declare renderer
+namespace Graphics
+{
+  class Renderer;
+}
 
 namespace Components
 {
@@ -35,10 +46,34 @@ namespace Components
     const std::vector<GlowMath::Vertex>& getVerties();
     const std::vector<unsigned short>& getIndices();
 
-  protected:
-    ModelType modelType;
+    // create the vertex buffer for a model
+    void updateVertexBuffer();
+    // create the index buffer for a model
+    void updateIndexBuffer();
+    // get the buffers for read only
+    ID3D11Buffer* getVertexBuffer();
+    ID3D11Buffer* getIndexBuffer();
 
-  private:
+    // render a model
+    void render();
+
+  protected:
+    
+    // give the models access to the renderer/engine
+    Engine::GlowEngine* engine;
+    Graphics::Renderer* renderer;
+
+    // all inherited objects have these properties
+    ModelType modelType;
+    ID3D11Buffer* vertexBuffer;
+    ID3D11Buffer* indexBuffer;
+    ID3D11Device* device;
+    ID3D11DeviceContext* deviceContext;
+
+    // define the vertex stride and offset
+    UINT stride = sizeof(Vertex);
+    UINT offset = 0;
+
     // define the vertices and indices containers
     std::vector<GlowMath::Vertex> vertices;
     std::vector<unsigned short> indices;

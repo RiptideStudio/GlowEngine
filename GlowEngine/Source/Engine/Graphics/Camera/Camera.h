@@ -8,6 +8,11 @@
 
 #pragma once
 
+namespace Graphics
+{
+  class Renderer;
+}
+
 namespace Visual
 {
 
@@ -15,7 +20,7 @@ namespace Visual
   {
 
   public:
-    Camera(HWND handle);
+    Camera(Graphics::Renderer* renderEngine);
 
     void update();
 
@@ -25,6 +30,10 @@ namespace Visual
     const Matrix& getPerspecitveMatrix();
 
   private:
+
+    // renderer
+    Graphics::Renderer* renderer;
+    Engine::GlowEngine* engine;
 
     // camera properties
     XMVector position;

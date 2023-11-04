@@ -10,13 +10,14 @@
 #include "Input.h"
 
 // set a key state to active
-void Input::InputSystem::keyTriggered(int keycode)
+void Input::InputSystem::onKeyTriggered(int keycode)
 {
+  // key is held down
   keystates[keycode] = true;
 }
 
 // reset a keystate
-void Input::InputSystem::keyReleased(int keycode)
+void Input::InputSystem::onKeyRelease(int keycode)
 {
   keystates[keycode] = false;
 }
@@ -25,4 +26,11 @@ void Input::InputSystem::keyReleased(int keycode)
 bool Input::InputSystem::keyDown(int key)
 {
   return keystates[key];
+}
+
+// check if a key was triggered
+bool Input::InputSystem::keyTriggered(int key)
+{
+  // TO BE IMPLEMENTED
+  return false;
 }

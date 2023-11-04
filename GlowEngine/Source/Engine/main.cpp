@@ -20,10 +20,8 @@ int main()
   // start the engine
   if (engine->start())
   {
-    engine->run();
+    return engine->run();
   }
 
-  // terminate program
-  Logger::write("Terminated program");
   return -1;
 }

@@ -8,9 +8,11 @@
 
 #include "stdafx.h"
 #include "Renderer.h"
-#include <filesystem>
 #include "Engine/GlowEngine.h"
 #include "Camera/Camera.h"
+#include "Engine/Entity/Entity.h"
+#include "Engine/Entity/EntityList/EntityList.h"
+#include <filesystem>
 
 // initialize the graphics renderer properties
 Graphics::Renderer::Renderer(HWND handle)
@@ -18,139 +20,84 @@ Graphics::Renderer::Renderer(HWND handle)
   windowHandle(handle),
   pixelShader(nullptr),
   vertexShader(nullptr),
-  camera(nullptr)
+  camera(nullptr),
+  constantBuffer(nullptr)
 {
   engine = EngineInstance::getEngine();
   // init graphics
   float bgCol[4] = { 0,0,0,0 };
   setBackgroundColor(bgCol);
   initGraphics();
-  // init camera, which needs window handle (maybe)
-  camera = new Visual::Camera(handle);
+  // init camera, which needs access to the renderer
+  camera = new Visual::Camera(this);
 }
 
 // initialize each part of the graphics pipeline
 void Graphics::Renderer::initGraphics()
 {
+  // create each component of the pipeline starting device and swap chain
   createDeviceAndSwapChain();
   loadShaders();
   createTargetView();
   createViewport();
+  setRenderTarget();
   createRasterizer();
   setTopology();
+  createConstantBuffer();
+
+  // set the rasterizer to wireframe for testing
+  setRasterizerFillMode(D3D11_FILL_WIREFRAME);
 }
 
+
+// test render update for messing with models and such
 void Graphics::Renderer::testUpdate()
 {
-
   // use a test model class - hardcode everything to test
-  camera->update();
+  static Entities::EntityList* list;
+  static Entities::Entity* entity = new Entities::Entity();
+  static Entities::Entity* entity2 = new Entities::Entity();
   static Components::Model* model = new Components::Model();
+  static Components::Model* model2 = new Components::Model();
   static Components::Transform* transform = new Components::Transform();
+  static Components::Transform* transform2 = new Components::Transform();
 
-  transform->recalculateMatrix();
-  Matrix worldMatrix = transform->getTransformMatrix();
-  Matrix viewMatrix = camera->getViewMatrix();
-  Matrix perspectiveMatrix = camera->getPerspecitveMatrix();
-
-  // Define a structure that matches the shader constant buffer layout
-  struct ConstantBufferType 
+  if (!list)
   {
-    DirectX::XMMATRIX world;
-    DirectX::XMMATRIX view;
-    DirectX::XMMATRIX projection;
-  };
-
-  // Create a constant buffer
-  ID3D11Buffer* constantBuffer = nullptr;
-  D3D11_BUFFER_DESC constantBufferDesc;
-  ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
-
-  // Set up the description of the constant buffer
-  constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  constantBufferDesc.ByteWidth = sizeof(ConstantBufferType);
-  constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-  constantBufferDesc.CPUAccessFlags = 0;
-  constantBufferDesc.MiscFlags = 0;
-  constantBufferDesc.StructureByteStride = 0;
-
-  // Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class
-  HRESULT result = device->CreateBuffer(&constantBufferDesc, NULL, &constantBuffer);
-  if (FAILED(result)) 
-  {
-    Logger::error("Failed to create constant buffer");
+    list = new Entities::EntityList();
+    entity->addComponent(model);
+    entity->addComponent(transform);
+    list->add(entity);
+    transform2->setPosition({ 1,0,10 });
+    entity2->addComponent(model2);
+    entity2->addComponent(transform2);
+    list->add(entity2);
   }
+  list->update();
+}
 
-  int frames = engine->getTotalFrames();
-  if (frames % 6000 == 0)
-  {
-    setRasterizerFillMode(D3D11_FILL_WIREFRAME);
-  }
-  if (frames % 12000 == 0)
-  {
-    setRasterizerFillMode(D3D11_FILL_SOLID);
-  }
+// free all directX objects from memory
+void Graphics::Renderer::cleanup()
+{
+  constantBuffer->Release();
+}
 
-  // Create vertex buffer
-  ID3D11Buffer* vertexBuffer = nullptr;
-  D3D11_BUFFER_DESC vertexBufferDesc = {};
-  vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  vertexBufferDesc.ByteWidth = sizeof(Vertex) * model->getVerties().size();
-  vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-  vertexBufferDesc.CPUAccessFlags = 0;
-
-  D3D11_SUBRESOURCE_DATA vertexData = {};
-  vertexData.pSysMem = model->getVerties().data();
-  device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
-
-  ID3D11Buffer* indexBuffer = nullptr;
-  D3D11_BUFFER_DESC indexBufferDesc = {};
-  indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  indexBufferDesc.ByteWidth = sizeof(unsigned short) * model->getIndices().size();
-  indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-  indexBufferDesc.CPUAccessFlags = 0;
-
-  D3D11_SUBRESOURCE_DATA indexData = {};
-  indexData.pSysMem = model->getIndices().data();
-  device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
-
-  // set the 
-  UINT stride = sizeof(Vertex);
-  UINT offset = 0;
-  deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-  deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
-  
-  // Update the constant buffer with the matrices
-  ConstantBufferType cbData;
-  cbData.world = DirectX::XMMatrixTranspose(worldMatrix);
-  cbData.view = DirectX::XMMatrixTranspose(viewMatrix);
-  cbData.projection = DirectX::XMMatrixTranspose(perspectiveMatrix);
-
-  // Note: DirectX::XMMATRIX is assuming you're using DirectXMath for your matrix math
-  if (!constantBuffer)
-  {
-    Logger::error("Bad CB buffer");
-  }
-  else
-  {
-    deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &cbData, 0, 0);
-  }
-
-  // Bind the constant buffer to the vertex shader
-  deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+// the beginning of each frame of the render engine
+void Graphics::Renderer::beginFrame()
+{
+  // update the camera
+  camera->update();
 
   // clear the target view for drawing
   clearTargetView();
+}
 
-  // Set render target
-  deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
-
-  // Draw the triangle
-  deviceContext->DrawIndexed(model->getIndices().size(), 0, 0);
-
-  // Present the back buffer to the screen
+// the end of each frame at the renderer engine
+// present the swapchain and draw the objects
+void Graphics::Renderer::endFrame()
+{
+  // present the back buffer to the screen
   swapChain->Present(0, 0);
-
 }
 
 // initialize the d3d device, context and swap chain
@@ -265,7 +212,6 @@ void Graphics::Renderer::createTargetView()
     device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
     backBuffer->Release();
   }
-
 }
 
 // create the viewport for the renderer with given width and height
@@ -281,6 +227,53 @@ void Graphics::Renderer::createViewport()
   viewport.TopLeftX = 0.0f;
   viewport.TopLeftY = 0.0f;
   deviceContext->RSSetViewports(1, &viewport);
+}
+
+void Graphics::Renderer::setRenderTarget()
+{
+  // set render target
+  deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+}
+
+// create a constant buffer that should not be changed
+void Graphics::Renderer::createConstantBuffer()
+{
+  // create a constant buffer
+  ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+  // set up the description of the constant buffer
+  constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+  constantBufferDesc.ByteWidth = sizeof(cbPerObject);
+  constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+  constantBufferDesc.CPUAccessFlags = 0;
+  constantBufferDesc.MiscFlags = 0;
+  constantBufferDesc.StructureByteStride = 0;
+
+  // create the buffer itself
+  device->CreateBuffer(&constantBufferDesc, NULL, &constantBuffer);
+}
+
+// bind the subresource and constant buffer to the renderer
+void Graphics::Renderer::updateConstantBuffer()
+{
+  // update device context sub resource
+  deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &cbData, 0, 0);
+
+  // bind the constant buffer to the vertex shader
+  deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+}
+
+// given the transform matrix, update the cb object's world matrix
+void Graphics::Renderer::updateConstantBufferWorldMatrix(Matrix transformMatrix)
+{
+  cbData.world = DirectX::XMMatrixTranspose(transformMatrix);
+}
+
+// update the view and perspective matrices in the constant buffer using camera
+void Graphics::Renderer::updateConstantBufferCameraMatrices()
+{
+  cbData.view = DirectX::XMMatrixTranspose(camera->getViewMatrix());
+  cbData.projection = DirectX::XMMatrixTranspose(camera->getPerspecitveMatrix());
 }
 
 // create the rasterizer state for defining culling and vertex winding order
@@ -336,4 +329,16 @@ void Graphics::Renderer::setBackgroundColor(float color[4])
 void Graphics::Renderer::setTopology(D3D_PRIMITIVE_TOPOLOGY topology)
 {
   deviceContext->IASetPrimitiveTopology(topology);
+}
+
+// get the device
+ID3D11Device* Graphics::Renderer::getDevice()
+{
+  return device;
+}
+
+// get the device context
+ID3D11DeviceContext* Graphics::Renderer::getDeviceContext()
+{
+  return deviceContext;
 }

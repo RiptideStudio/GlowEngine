@@ -44,12 +44,14 @@ namespace Engine
 
     // get system pointers
     Input::InputSystem* getInputSystem();
+    Graphics::Renderer* getRenderer();
 
     // engine properties
     int getFps();
     int getTotalFrames();
     bool isRunning();
     float getDeltaTime();
+    HWND getWindowHandle();
 
   private:
 

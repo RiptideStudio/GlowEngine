@@ -125,7 +125,9 @@ void Engine::GlowEngine::update()
 // call the renderer updates and render systems
 void Engine::GlowEngine::render()
 {
+  renderer->beginFrame();
   renderer->testUpdate();
+  renderer->endFrame();
 }
 
 // exit the engine and cleanup
@@ -191,12 +193,19 @@ Input::InputSystem* Engine::GlowEngine::getInputSystem()
   return input;
 }
 
+// get the renderer
+Graphics::Renderer* Engine::GlowEngine::getRenderer()
+{
+  return renderer;
+}
+
 // get the engine's FPS
 int Engine::GlowEngine::getFps()
 {
   return fps;
 }
 
+// return the total number frames passed in game
 int Engine::GlowEngine::getTotalFrames()
 {
   return totalFrames;
@@ -214,6 +223,12 @@ float Engine::GlowEngine::getDeltaTime()
   return deltaTime;
 }
 
+// get the window handle
+HWND Engine::GlowEngine::getWindowHandle()
+{
+  return windowHandle;
+}
+
 // windows message callback
 LRESULT Engine::GlowEngine::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -221,12 +236,12 @@ LRESULT Engine::GlowEngine::windowProc(HWND hWnd, UINT message, WPARAM wParam, L
   {
     // when a key is first triggered, set the keystate to active
   case WM_KEYDOWN:
-    input->keyTriggered(wParam);
+    input->onKeyTriggered(wParam);
     break;
 
     // when a key is released, you should reset the keystate and call "released"
   case WM_KEYUP:
-    input->keyReleased(wParam);
+    input->onKeyRelease(wParam);
     break;
 
     // destroy the window and stop the engine

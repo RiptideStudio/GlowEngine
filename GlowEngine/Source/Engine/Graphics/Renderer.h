@@ -21,6 +21,14 @@ namespace Visual
 namespace Graphics
 {
 
+  // define a constant buffer to be sent to the vertex shader
+  struct cbPerObject
+  {
+    DirectX::XMMATRIX world;
+    DirectX::XMMATRIX view;
+    DirectX::XMMATRIX projection;
+  };
+
   class Renderer
   {
 
@@ -29,11 +37,27 @@ namespace Graphics
 
     void initGraphics();
     void testUpdate(); // temp function for rendering
+    void cleanup(); // release all of the d3d objects
 
+    // frame updates
+    void beginFrame();
+    void endFrame();
+
+    
     void createDeviceAndSwapChain();
     void loadShaders();
     void createTargetView();
     void createViewport();
+    void setRenderTarget();
+
+    // constant buffer - this needs to be set using the model's properties
+    void createConstantBuffer();
+    // the constant buffer needs to be updated whenever a model is being rendered
+    void updateConstantBuffer();
+    // update the transform matrix within the constant buffer
+    void updateConstantBufferWorldMatrix(Matrix world);
+    // update the perspective and camera view matrix
+    void updateConstantBufferCameraMatrices();
 
     // rasterizer states and helpers
     void createRasterizer();
@@ -46,6 +70,9 @@ namespace Graphics
     // set the topology with a default of trianglelist
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+    // get the directX devices for draw calls
+    ID3D11Device* getDevice();
+    ID3D11DeviceContext* getDeviceContext();
 
   private:
 
@@ -74,6 +101,12 @@ namespace Graphics
     // rasterizer
     ID3D11RasterizerState* wireframeRasterizerState;
     D3D11_RASTERIZER_DESC rasterizerDesc;
+
+    // constant buffer
+    ID3D11Buffer* constantBuffer;
+    D3D11_BUFFER_DESC constantBufferDesc;
+
+    cbPerObject cbData; // the actual constant buffer object
 
     // background color
     float backgroundColor[4];

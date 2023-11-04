@@ -54,6 +54,9 @@
     <Filter Include="Source Files\Engine\Systems\Input">
       <UniqueIdentifier>{e791ebaf-5669-4bcc-96f4-d6e362452901}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Entity\EntityList">
+      <UniqueIdentifier>{8a1e5d0c-42e6-4528-973b-ede6e4014687}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -98,9 +101,6 @@
     <ClInclude Include="Source\Engine\Entity\Components\Component.h">
       <Filter>Source Files\Engine\Entity\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Entity\Components\Model\Model.h">
-      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h">
       <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
     </ClInclude>
@@ -109,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Input\Input.h">
       <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Physical\Model.h">
+      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h">
+      <Filter>Source Files\Engine\Entity\EntityList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Input\Input.cpp">
       <Filter>Source Files\Engine\Systems\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\EntityList\EntityList.cpp">
+      <Filter>Source Files\Engine\Entity\EntityList</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

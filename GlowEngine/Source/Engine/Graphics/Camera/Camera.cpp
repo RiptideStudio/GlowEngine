@@ -8,12 +8,13 @@
 
 #include "stdafx.h"
 #include "Camera.h"
+#include "Engine/GlowEngine.h"
+#include "Engine/Graphics/Renderer.h"
 
 // initialize the position and coordinate system of camera
-Visual::Camera::Camera(HWND handle)
+Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   :
-  windowHandle(handle),
-  fov(10.f)
+  fov(100.f)
 {
   position = { 0 };
   rotation = 0;
@@ -25,12 +26,14 @@ Visual::Camera::Camera(HWND handle)
   windowHeight = 720;
   windowWidth = 1280;
   aspectRatio = windowWidth / windowHeight;
+  engine = EngineInstance::getEngine();
+  renderer = renderEngine;
+  windowHandle = engine->getWindowHandle();
 }
 
 // update the camera - this is essentially the camera controller
 void Visual::Camera::update()
 {
-  
   // determine the target point (where we are looking)
   target = DirectX::XMVectorAdd(position, { 0,0,1,0 });
 
@@ -44,6 +47,9 @@ void Visual::Camera::update()
 
   // transformation
   viewMatrix = DirectX::XMMatrixLookAtLH(position, target, upDirection);
+
+  // update the renderer's view and perspective matrices
+  renderer->updateConstantBufferCameraMatrices();
 }
 
 // get the view matrix

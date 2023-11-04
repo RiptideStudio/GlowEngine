@@ -24,6 +24,11 @@ namespace Components
     bool isDirty();
     // get the transform matrix
     const Matrix& getTransformMatrix();
+    // update the transform - all this does is determine if we need to update the matrix
+    void update();
+
+    // getters and setters
+    void setPosition(Vector3D pos);
 
   private:
 
