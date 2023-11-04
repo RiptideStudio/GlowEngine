@@ -20,6 +20,7 @@ namespace Entities
 
     Entity();
     virtual ~Entity();
+
     void update();
     void addComponent(Components::Component* component);
     template <typename T>
@@ -39,7 +40,6 @@ namespace Entities
 
     int id;
     bool destroyed;
-
     std::string name;
 
     std::vector<Components::Component*> components; // entity component list

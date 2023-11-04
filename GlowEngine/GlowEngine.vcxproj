@@ -34,6 +34,7 @@
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
+    <ClInclude Include="Source\Game\SceneSystem\Scene.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
@@ -80,6 +81,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Game\SceneSystem\Scene.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp" />

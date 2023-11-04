@@ -17,6 +17,7 @@ namespace Components
 
   public:
     Transform();
+    Transform(Vector3D pos_, Vector3D scale_, Vector3D rotation_);
 
     // we want to avoid doing this as much as possible
     void recalculateMatrix();

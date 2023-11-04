@@ -34,6 +34,34 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
 // update the camera - this is essentially the camera controller
 void Visual::Camera::update()
 {
+  // debug
+  Engine::GlowEngine* engine = EngineInstance::getEngine();
+  Input::InputSystem* input = engine->getInputSystem();
+
+  if (input->keyDown('A'))
+  {
+    position = DirectX::XMVectorAdd(position, { 0.005f,0,0 });
+  }
+  if (input->keyDown('D'))
+  {
+    position = DirectX::XMVectorAdd(position, { -0.005f,0,0 });
+  }
+  if (input->keyDown('W'))
+  {
+    position = DirectX::XMVectorAdd(position, { 0,0,0.005f });
+  }
+  if (input->keyDown('S'))
+  {
+    position = DirectX::XMVectorAdd(position, { 0,0,-0.005f });
+  }
+  if (input->keyDown(VK_SPACE))
+  {
+    position = DirectX::XMVectorAdd(position, { 0, -0.005f,0 });
+  }
+  if (input->keyDown(VK_SHIFT))
+  {
+    position = DirectX::XMVectorAdd(position, { 0, 0.005f,0 });
+  }
   // determine the target point (where we are looking)
   target = DirectX::XMVectorAdd(position, { 0,0,1,0 });
 

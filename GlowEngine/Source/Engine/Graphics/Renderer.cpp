@@ -53,27 +53,7 @@ void Graphics::Renderer::initGraphics()
 // test render update for messing with models and such
 void Graphics::Renderer::testUpdate()
 {
-  // use a test model class - hardcode everything to test
-  static Entities::EntityList* list;
-  static Entities::Entity* entity = new Entities::Entity();
-  static Entities::Entity* entity2 = new Entities::Entity();
-  static Components::Model* model = new Components::Model();
-  static Components::Model* model2 = new Components::Model();
-  static Components::Transform* transform = new Components::Transform();
-  static Components::Transform* transform2 = new Components::Transform();
 
-  if (!list)
-  {
-    list = new Entities::EntityList();
-    entity->addComponent(model);
-    entity->addComponent(transform);
-    list->add(entity);
-    transform2->setPosition({ 1,0,10 });
-    entity2->addComponent(model2);
-    entity2->addComponent(transform2);
-    list->add(entity2);
-  }
-  list->update();
 }
 
 // free all directX objects from memory

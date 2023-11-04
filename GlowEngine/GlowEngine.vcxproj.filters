@@ -57,6 +57,9 @@
     <Filter Include="Source Files\Engine\Entity\EntityList">
       <UniqueIdentifier>{8a1e5d0c-42e6-4528-973b-ede6e4014687}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\SceneSystem">
+      <UniqueIdentifier>{da33c589-cc58-4c9b-8aa7-a50b5f65066e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -116,6 +119,9 @@
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h">
       <Filter>Source Files\Engine\Entity\EntityList</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\SceneSystem\Scene.h">
+      <Filter>Source Files\Game\SceneSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -165,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Entity\EntityList\EntityList.cpp">
       <Filter>Source Files\Engine\Entity\EntityList</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\SceneSystem\Scene.cpp">
+      <Filter>Source Files\Game\SceneSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

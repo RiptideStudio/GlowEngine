@@ -22,6 +22,17 @@ Components::Transform::Transform()
   type = ComponentType::transform;
 }
 
+Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotation_)
+  :
+  position(pos_),
+  scale(scale_),
+  rotation(rotation_),
+  dirty(true)
+{
+  transformMatrix = {};
+  type = ComponentType::transform;
+}
+
 // reclaculate the world matrix
 void Components::Transform::recalculateMatrix()
 {
@@ -41,7 +52,7 @@ void Components::Transform::recalculateMatrix()
   transformMatrix = scaleMatrix * rotationMatrix * translationMatrix;
 
   // reset dirty flag
-  // dirty = false;
+  dirty = false;
 }
 
 // if matrix is dirty
@@ -64,7 +75,8 @@ void Components::Transform::update()
   {
     recalculateMatrix();
   }
-  // debug
+
+  // debug and test rotate
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   Input::InputSystem* input = engine->getInputSystem();
   if (input->keyDown('R'))
@@ -72,15 +84,7 @@ void Components::Transform::update()
     rotation.x += 0.001f;
     rotation.y += 0.001f;
     rotation.z += 0.001f;
-  }
-
-  if (input->keyDown('W'))
-  {
-    position.z += .01f;
-  }
-  if (input->keyDown('S'))
-  {
-    position.z -= .01f;
+    dirty = true;
   }
 }
 

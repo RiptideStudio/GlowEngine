@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "GlowEngine.h"
 #include "Engine/Graphics/Renderer.h"
+#include "Game/SceneSystem/Scene.h"
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -26,6 +27,7 @@ Engine::GlowEngine::GlowEngine()
   // create systems
   input = new Input::InputSystem();
 }
+static SceneSystem::Scene* scene;
 
 // start the engine - returns false if failed, true on success
 bool Engine::GlowEngine::start()
@@ -42,7 +44,7 @@ bool Engine::GlowEngine::start()
   }
 
   // success
-  Logger::write("Success");
+  Logger::write("Done!");
   return true;
 }
 
@@ -66,6 +68,9 @@ bool Engine::GlowEngine::run()
 
   // run the engine
   running = true;
+
+  scene = new SceneSystem::Scene();
+  scene->init();
 
   while (running)
   {
@@ -92,7 +97,7 @@ bool Engine::GlowEngine::run()
     if (totalTime >= frameTime)
     {
       // set the delta time
-      deltaTime = totalTime;     
+      deltaTime = totalTime; 
       // update all systems
       update();
       // render all systems
@@ -126,7 +131,7 @@ void Engine::GlowEngine::update()
 void Engine::GlowEngine::render()
 {
   renderer->beginFrame();
-  renderer->testUpdate();
+  scene->update();
   renderer->endFrame();
 }
 
