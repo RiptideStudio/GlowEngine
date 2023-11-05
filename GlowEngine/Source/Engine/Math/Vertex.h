@@ -11,10 +11,20 @@
 namespace GlowMath
 {
 
+  // define vertex struct
   struct Vertex
   {
-    // position
-    float x, y, z;
+    float x, y, z; // vertices
+    float r, g, b, a; // color
+    float nx, ny, nz; // normals
+  };
+
+  // define index struct
+  struct Index 
+  {
+    int vertexIndex; // this is the index of each vertex
+    int textureIndex; // texture coordinate index
+    int normalIndex; // normal vertex index
   };
 
 }

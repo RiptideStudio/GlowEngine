@@ -21,8 +21,12 @@ namespace Entities
     Entity();
     virtual ~Entity();
 
+    // update all of an entity's components
     void update();
+    // add a new component
     void addComponent(Components::Component* component);
+
+    // get a component of a certain type
     template <typename T>
     T* getComponent(Components::ComponentType type)
     {
@@ -47,5 +51,8 @@ namespace Entities
   private:
 
   };
+
+  // create an entity with already made components
+  Entities::Entity* createEntity(Vector3D pos, std::string modelName);
 
 }

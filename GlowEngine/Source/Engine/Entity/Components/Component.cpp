@@ -15,6 +15,7 @@ Components::Component::Component()
   :
   parent(nullptr)
 {
+
 }
 
 // get the type

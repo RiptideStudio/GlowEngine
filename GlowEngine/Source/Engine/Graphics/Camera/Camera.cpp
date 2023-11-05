@@ -21,7 +21,7 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   viewMatrix = {};
   perspectiveMatrix = {};
   target = {};
-  upDirection = { 0,1,0 };
+  upDirection = { 0,-1,0 };
   viewDistance = 500; // default 500 view distance
   windowHeight = 720;
   windowWidth = 1280;
@@ -34,33 +34,38 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
 // update the camera - this is essentially the camera controller
 void Visual::Camera::update()
 {
+  float camSpd = 10.f*engine->getDeltaTime();
   // debug
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   Input::InputSystem* input = engine->getInputSystem();
 
+  if (input->keyDown('E'))
+  {
+    target = DirectX::XMVectorAdd(target, { camSpd,0,0 });
+  }
   if (input->keyDown('A'))
   {
-    position = DirectX::XMVectorAdd(position, { 0.005f,0,0 });
+    position = DirectX::XMVectorAdd(position, { -camSpd,0,0 });
   }
   if (input->keyDown('D'))
   {
-    position = DirectX::XMVectorAdd(position, { -0.005f,0,0 });
+    position = DirectX::XMVectorAdd(position, { camSpd,0,0 });
   }
   if (input->keyDown('W'))
   {
-    position = DirectX::XMVectorAdd(position, { 0,0,0.005f });
+    position = DirectX::XMVectorAdd(position, { 0,0,camSpd });
   }
   if (input->keyDown('S'))
   {
-    position = DirectX::XMVectorAdd(position, { 0,0,-0.005f });
+    position = DirectX::XMVectorAdd(position, { 0,0,-camSpd });
   }
   if (input->keyDown(VK_SPACE))
   {
-    position = DirectX::XMVectorAdd(position, { 0, -0.005f,0 });
+    position = DirectX::XMVectorAdd(position, { 0, camSpd,0 });
   }
   if (input->keyDown(VK_SHIFT))
   {
-    position = DirectX::XMVectorAdd(position, { 0, 0.005f,0 });
+    position = DirectX::XMVectorAdd(position, { 0, -camSpd,0 });
   }
   // determine the target point (where we are looking)
   target = DirectX::XMVectorAdd(position, { 0,0,1,0 });
@@ -71,7 +76,7 @@ void Visual::Camera::update()
   upDirection = DirectX::XMVector3Cross(forward, right);
 
   // update the perspective matrix
-  perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.01f, viewDistance);
+  perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.1f, viewDistance);
 
   // transformation
   viewMatrix = DirectX::XMMatrixLookAtLH(position, target, upDirection);

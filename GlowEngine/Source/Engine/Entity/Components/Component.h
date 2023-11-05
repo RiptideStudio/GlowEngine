@@ -19,7 +19,8 @@ namespace Components
   enum ComponentType
   {
     transform,
-    model
+    sprite2D,
+    sprite3D
   };
 
   class Component
@@ -28,7 +29,6 @@ namespace Components
     public:
       Component();
 
-      virtual void init() {};
       virtual void update() {};
       virtual void render() {};
       virtual void exit() {};
@@ -43,6 +43,7 @@ namespace Components
     protected:
       
       Entities::Entity* parent;
+      std::string name;
       ComponentType type;
       
     private:

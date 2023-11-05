@@ -13,6 +13,7 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files
 #include <windows.h>
+#include "Windows/Resource.h"
 
 // directX math
 #include <DirectXMath.h>
@@ -36,14 +37,12 @@
 
 using namespace GlowMath;
 
-// rendering
-#include "Windows/Resource.h"
-
 // systems
 #include "Engine/Systems/Logger/Log.h"
 #include "Engine/Systems/Input/Input.h"
 
 // components
-#include "Engine/Entity/Components/Physical/Model.h"
+#include "Engine/Graphics/Models/Model.h"
 #include "Engine/Entity/Components/Physical/Transform.h"
+#include "Engine/Entity/Components/Visual/Sprite3D.h"
 #include "Engine/Entity/Components/Component.h"

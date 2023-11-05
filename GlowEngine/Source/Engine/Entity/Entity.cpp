@@ -41,3 +41,12 @@ void Entities::Entity::addComponent(Components::Component* component)
   component->setParent(this);
   this->components.push_back(component);
 }
+
+// create an entity and populate it with common components
+Entities::Entity* Entities::createEntity(Vector3D pos, std::string modelName)
+{
+  Entities::Entity* entity = new Entities::Entity();
+  entity->addComponent(new Components::Transform(pos, { 1,1,1 }, { 0,0,0 }));
+  entity->addComponent(new Components::Sprite3D(modelName));
+  return entity;
+}

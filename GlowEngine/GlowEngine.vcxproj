@@ -21,19 +21,24 @@
   <ItemGroup>
     <ClInclude Include="Source\Engine\EngineInstance.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Component.h" />
-    <ClInclude Include="Source\Engine\Entity\Components\Physical\Model.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Sprite3D.h" />
     <ClInclude Include="Source\Engine\Entity\Entity.h" />
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h" />
     <ClInclude Include="Source\Engine\GlowEngine.h" />
     <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h" />
+    <ClInclude Include="Source\Engine\Graphics\Models\Model.h" />
+    <ClInclude Include="Source\Engine\Graphics\Models\ModelLibrary.h" />
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
+    <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
+    <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
     <ClInclude Include="Source\Engine\Systems\Input\Input.h" />
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
+    <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
     <ClInclude Include="Source\Game\SceneSystem\Scene.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
@@ -47,12 +52,10 @@
     <ClCompile Include="Source\Engine\Entity\Components\Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Entity\Components\Physical\Model.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Sprite3D.cpp" />
     <ClCompile Include="Source\Engine\Entity\Entity.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -65,9 +68,15 @@
     <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Models\Model.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Models\ModelLibrary.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
     <ClCompile Include="Source\Engine\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -83,10 +92,15 @@
     <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Game\SceneSystem\Scene.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\stdafx.cpp" />
+    <ClCompile Include="Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Stubs\stub.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -197,7 +211,7 @@
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <AdditionalIncludeDirectories>C:\Users\calle\Desktop\GlowEngine\GlowEngine\Source</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

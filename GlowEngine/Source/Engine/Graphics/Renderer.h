@@ -29,6 +29,17 @@ namespace Graphics
     DirectX::XMMATRIX projection;
   };
 
+  // define a point light buffer
+  struct LightBuffer
+  {
+    DirectX::XMFLOAT3 lightDirection; // Ensure 16-byte aligned if you add more fields.
+    float padding;
+    DirectX::XMFLOAT3 lightColor;
+    float padding2;
+    DirectX::XMFLOAT3 cameraPosition; // Ensure 16-byte aligned if you add more fields.
+    float padding3;
+  };
+
   class Renderer
   {
 
@@ -49,6 +60,9 @@ namespace Graphics
     void createTargetView();
     void createViewport();
     void setRenderTarget();
+    void createBlendState();
+    void createDepthStencil();
+    void createLightBuffer();
 
     // constant buffer - this needs to be set using the model's properties
     void createConstantBuffer();
@@ -107,6 +121,18 @@ namespace Graphics
     D3D11_BUFFER_DESC constantBufferDesc;
 
     cbPerObject cbData; // the actual constant buffer object
+
+    // lighting buffer
+    ID3D11Buffer* lightBuffer;
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+    // blend state
+    ID3D11BlendState* blendState;
+
+    // depth stencil
+    ID3D11DepthStencilView* depthStencilView;
+    ID3D11Texture2D* depthStencilBuffer;
+    ID3D11DepthStencilState* depthStencilState;
 
     // background color
     float backgroundColor[4];

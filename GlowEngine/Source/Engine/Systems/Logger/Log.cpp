@@ -27,7 +27,7 @@ void Logger::error(const std::string text)
   {
     // write text 
     std::cerr << text << std::endl;
-    file << "<Error> " << text << std::endl;
+    file << "<ERROR> " << text << std::endl;
   }
 }
 

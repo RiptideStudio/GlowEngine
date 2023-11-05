@@ -7,7 +7,6 @@
 */
 
 #pragma once
-#include "Engine/Entity/Components/Component.h"
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
 #include <d3dcompiler.h>
@@ -20,10 +19,10 @@ namespace Graphics
   class Renderer;
 }
 
-namespace Components
+namespace Models
 {
 
-  class Model : public Component
+  class Model
   {
 
     // enum for primitive 3D models (cubes, spheres, etc.)
@@ -35,15 +34,17 @@ namespace Components
     };
 
   public:
+
     Model();
+    Model(const std::string fileName);
+
+    void init();
 
     // loading a model will either load the vertices based on its ModelType or load a .obj file
     // if no .obj file is found, it will default to the ModelType
     void load(const std::string fileName);
-    // load an object by its primitive ModelType
-    void loadPrimitive();
     // get vertices and indices container
-    const std::vector<GlowMath::Vertex>& getVerties();
+    const std::vector<GlowMath::Vertex>& getVerticies();
     const std::vector<unsigned short>& getIndices();
 
     // create the vertex buffer for a model
@@ -53,6 +54,9 @@ namespace Components
     // get the buffers for read only
     ID3D11Buffer* getVertexBuffer();
     ID3D11Buffer* getIndexBuffer();
+
+    // model helper functions
+    void setColor(const float(&color)[4]);
 
     // render a model
     void render();

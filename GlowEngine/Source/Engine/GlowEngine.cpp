@@ -8,8 +8,9 @@
 
 #include "stdafx.h"
 #include "GlowEngine.h"
-#include "Engine/Graphics/Renderer.h"
 #include "Game/SceneSystem/Scene.h"
+#include "Engine/Graphics/Renderer.h"
+#include "Engine/Graphics/Models/ModelLibrary.h"
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -24,7 +25,7 @@ Engine::GlowEngine::GlowEngine()
   windowClassName = L"Otherglow Window";
   windowName = L"Otherglow";
   fps = 60;
-  // create systems
+  // create early systems
   input = new Input::InputSystem();
 }
 static SceneSystem::Scene* scene;
@@ -68,7 +69,8 @@ bool Engine::GlowEngine::run()
 
   // run the engine
   running = true;
-
+  modelLibrary = new Models::ModelLibrary();
+  modelLibrary->init();
   scene = new SceneSystem::Scene();
   scene->init();
 
@@ -202,6 +204,12 @@ Input::InputSystem* Engine::GlowEngine::getInputSystem()
 Graphics::Renderer* Engine::GlowEngine::getRenderer()
 {
   return renderer;
+}
+
+// get model library
+Models::ModelLibrary* Engine::GlowEngine::getModelLibrary()
+{
+    return modelLibrary;
 }
 
 // get the engine's FPS

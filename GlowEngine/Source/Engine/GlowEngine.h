@@ -8,10 +8,15 @@
 
 #pragma once
 
-// forward declare renderer
+// forward declare systems
 namespace Graphics
 {
   class Renderer;
+}
+
+namespace Models
+{
+  class ModelLibrary;
 }
 
 namespace Engine
@@ -45,6 +50,7 @@ namespace Engine
     // get system pointers
     Input::InputSystem* getInputSystem();
     Graphics::Renderer* getRenderer();
+    Models::ModelLibrary* getModelLibrary();
 
     // engine properties
     int getFps();
@@ -67,6 +73,7 @@ namespace Engine
     // system pointers
     Graphics::Renderer* renderer;
     Input::InputSystem* input;
+    Models::ModelLibrary* modelLibrary;
 
     // core engine properties (fps, delta time)
     bool running;

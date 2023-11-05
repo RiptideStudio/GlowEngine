@@ -75,17 +75,10 @@ void Components::Transform::update()
   {
     recalculateMatrix();
   }
-
-  // debug and test rotate
-  Engine::GlowEngine* engine = EngineInstance::getEngine();
-  Input::InputSystem* input = engine->getInputSystem();
-  if (input->keyDown('R'))
-  {
-    rotation.x += 0.001f;
-    rotation.y += 0.001f;
-    rotation.z += 0.001f;
+  rotation.x += 0.0005f;
+  rotation.y -= 0.0003f;
+  rotation.z += 0.0005f;
     dirty = true;
-  }
 }
 
 // set the position

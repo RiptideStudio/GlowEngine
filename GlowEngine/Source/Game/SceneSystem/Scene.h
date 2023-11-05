@@ -7,11 +7,8 @@
 */
 
 #pragma once
-
-namespace Entities
-{
-  class EntityList;
-}
+#include "Engine/Entity/EntityList/EntityList.h"
+#include "Engine/Entity/Entity.h"
 
 namespace SceneSystem
 {

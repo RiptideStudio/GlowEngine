@@ -60,6 +60,15 @@
     <Filter Include="Source Files\Game\SceneSystem">
       <UniqueIdentifier>{da33c589-cc58-4c9b-8aa7-a50b5f65066e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Models">
+      <UniqueIdentifier>{9d1d2d1d-d856-4e73-9912-743408b81327}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Entity\Components\Visual">
+      <UniqueIdentifier>{6b43ca13-c8b0-4091-943f-1e20e7d8ce15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Textures">
+      <UniqueIdentifier>{9e24ff97-d4cb-43a8-8adc-b348864d07fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -113,14 +122,29 @@
     <ClInclude Include="Source\Engine\Systems\Input\Input.h">
       <Filter>Source Files\Engine\Systems\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Entity\Components\Physical\Model.h">
-      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h">
       <Filter>Source Files\Engine\Entity\EntityList</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\SceneSystem\Scene.h">
       <Filter>Source Files\Game\SceneSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h">
+      <Filter>Source Files\Engine\Systems\Parsing</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Models\Model.h">
+      <Filter>Source Files\Engine\Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Models\ModelLibrary.h">
+      <Filter>Source Files\Engine\Graphics\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Sprite3D.h">
+      <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h">
+      <Filter>Source Files\Engine\Graphics\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h">
+      <Filter>Source Files\Engine\Graphics\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,9 +184,6 @@
     <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
       <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Entity\Components\Physical\Model.cpp">
-      <Filter>Source Files\Engine\Entity\Components\Physical</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
       <Filter>Source Files\Engine\Graphics\Camera</Filter>
     </ClCompile>
@@ -174,6 +195,24 @@
     </ClCompile>
     <ClCompile Include="Source\Game\SceneSystem\Scene.cpp">
       <Filter>Source Files\Game\SceneSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
+      <Filter>Source Files\Engine\Systems\Parsing</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Models\Model.cpp">
+      <Filter>Source Files\Engine\Graphics\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Models\ModelLibrary.cpp">
+      <Filter>Source Files\Engine\Graphics\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Sprite3D.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp">
+      <Filter>Source Files\Engine\Graphics\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp">
+      <Filter>Source Files\Engine\Graphics\Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

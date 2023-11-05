@@ -25,7 +25,7 @@ Graphics::Renderer::Renderer(HWND handle)
 {
   engine = EngineInstance::getEngine();
   // init graphics
-  float bgCol[4] = { 0,0,0,0 };
+  float bgCol[4] = { 0.05,0.05,0.1,0.25 };
   setBackgroundColor(bgCol);
   initGraphics();
   // init camera, which needs access to the renderer
@@ -37,16 +37,19 @@ void Graphics::Renderer::initGraphics()
 {
   // create each component of the pipeline starting device and swap chain
   createDeviceAndSwapChain();
-  loadShaders();
   createTargetView();
+  loadShaders();
+  createBlendState();
   createViewport();
   setRenderTarget();
   createRasterizer();
+  createDepthStencil();
   setTopology();
   createConstantBuffer();
+  createLightBuffer();
 
   // set the rasterizer to wireframe for testing
-  setRasterizerFillMode(D3D11_FILL_WIREFRAME);
+  // setRasterizerFillMode(D3D11_FILL_WIREFRAME);
 }
 
 
@@ -70,6 +73,23 @@ void Graphics::Renderer::beginFrame()
 
   // clear the target view for drawing
   clearTargetView();
+
+  // set the render target and clear depth buffer
+  setRenderTarget();
+
+  // Write to the buffer
+  LightBuffer* dataPtr = (LightBuffer*)mappedResource.pData;
+  dataPtr->lightDirection = DirectX::XMFLOAT3(sinf(engine->getTotalFrames()/1000.f), cosf(engine->getTotalFrames() / 1000.f), -sinf(engine->getTotalFrames() / 1000.f));
+  dataPtr->lightColor = DirectX::XMFLOAT3(0.25f, 0.2f, 0.22f);
+  dataPtr->cameraPosition = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+  float bgCol[4] = { 0.2,0.2,0.5 };
+  setBackgroundColor(bgCol);
+  // Unmap the buffer to apply changes
+  deviceContext->Unmap(lightBuffer, 0);
+
+  // Set the buffer in the shader
+  deviceContext->PSSetConstantBuffers(1, 1, &lightBuffer);
+  // Or VSSetConstantBuffers, depending on where you use it
 }
 
 // the end of each frame at the renderer engine
@@ -166,7 +186,9 @@ void Graphics::Renderer::loadShaders()
   // Define the input layout
   D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
   {
-      { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+      { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+      { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+      { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 }
   };
 
   // Create the input layout
@@ -209,10 +231,126 @@ void Graphics::Renderer::createViewport()
   deviceContext->RSSetViewports(1, &viewport);
 }
 
+// set the render target
 void Graphics::Renderer::setRenderTarget()
 {
+  // clear depth buffer
+  deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
   // set render target
-  deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+  deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+}
+
+// create a blend state so we can have alpha
+void Graphics::Renderer::createBlendState()
+{
+  D3D11_BLEND_DESC blendDesc = { 0 };
+  blendDesc.RenderTarget[0].BlendEnable = TRUE;
+  blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+  blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+  blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+  blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+  blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+  blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+  ID3D11BlendState* pBlendState = NULL;
+  device->CreateBlendState(&blendDesc, &pBlendState);
+  deviceContext->OMSetBlendState(pBlendState, NULL, 0xffffffff);
+}
+
+// create a depth stencil to define stencil tests and depth ordering
+void Graphics::Renderer::createDepthStencil()
+{
+  D3D11_TEXTURE2D_DESC depthStencilDesc;
+
+  depthStencilDesc.Width = 1280; // Your render target width
+  depthStencilDesc.Height = 720; // Your render target height
+  depthStencilDesc.MipLevels = 1;
+  depthStencilDesc.ArraySize = 1;
+  depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+  depthStencilDesc.SampleDesc.Count = 1; // Change if using MSAA
+  depthStencilDesc.SampleDesc.Quality = 0; // Change if using MSAA
+  depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+  depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+  depthStencilDesc.CPUAccessFlags = 0;
+  depthStencilDesc.MiscFlags = 0;
+
+  HRESULT hr = device->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
+  if (FAILED(hr))
+  {
+    Logger::error("Failed to create depth stencil texture");
+  }
+
+  // Create the depth stencil view
+  D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+  ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+  depthStencilViewDesc.Format = depthStencilDesc.Format;
+  depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+  depthStencilViewDesc.Texture2D.MipSlice = 0;
+
+  hr = device->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
+
+  if (FAILED(hr))
+  {
+    Logger::error("Failed to create depth stencil view");
+  }
+
+  // describe the depth stencil state
+  D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
+  ZeroMemory(&depthStencilStateDesc, sizeof(depthStencilStateDesc));
+
+  depthStencilStateDesc.DepthEnable = true;
+  depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+  depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+  depthStencilStateDesc.StencilEnable = true;
+  depthStencilStateDesc.StencilReadMask = 0xFF;
+  depthStencilStateDesc.StencilWriteMask = 0xFF;
+
+  depthStencilStateDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+  depthStencilStateDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+  depthStencilStateDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+  depthStencilStateDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+  depthStencilStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+  depthStencilStateDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+  depthStencilStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+  depthStencilStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+  hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
+  if (FAILED(hr))
+  {
+    // Handle error
+  }
+
+  deviceContext->OMSetDepthStencilState(depthStencilState, 1);
+}
+
+// setup a light buffer
+void Graphics::Renderer::createLightBuffer()
+{
+  // create a constant buffer
+  D3D11_BUFFER_DESC lightBufferDesc = {};
+  lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+  lightBufferDesc.ByteWidth = sizeof(LightBuffer);
+  lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+  lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+  lightBufferDesc.MiscFlags = 0;
+  lightBufferDesc.StructureByteStride = 0;
+
+  HRESULT result = device->CreateBuffer(&lightBufferDesc, nullptr, &lightBuffer);
+  if (FAILED(result)) {
+    Logger::error("Failed to create light buff");
+  }
+  // map it
+  ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+  HRESULT mapResult = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+  if (FAILED(mapResult)) {
+    // Handle error
+  }
+
+
 }
 
 // create a constant buffer that should not be changed
@@ -263,7 +401,7 @@ void Graphics::Renderer::createRasterizer()
   // define the rasterizer state description
   ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 
-  rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME; // Set the fill mode to wireframe
+  rasterizerDesc.FillMode = D3D11_FILL_SOLID; // Set the fill mode to wireframe
   rasterizerDesc.CullMode = D3D11_CULL_NONE;      // No culling to see all the lines
   rasterizerDesc.FrontCounterClockwise = false;   // Define the front-facing side
   rasterizerDesc.DepthClipEnable = true;          // Enable depth clipping

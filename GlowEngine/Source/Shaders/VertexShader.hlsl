@@ -11,12 +11,16 @@ cbuffer ConstantBufferType : register(b0)
 struct VertexInputType
 {
     float4 position : POSITION;
+    float4 color : COLOR;
+    float3 normal : NORMAL;
 };
 
 // this is where data is passed to the pixel shader
 struct PixelInputType
 {
     float4 position : SV_POSITION;
+    float4 color : COLOR;
+    float3 normal : NORMAL;
 };
 
 // main entrypoint
@@ -26,7 +30,13 @@ PixelInputType main(VertexInputType input)
     // Transform the vertex position from model space to clip space
     float4 worldPosition = mul(input.position, worldMatrix);
     float4 viewPosition = mul(worldPosition, viewMatrix);
+    
+    // set pixel shader output position
     output.position = mul(viewPosition, projectionMatrix);
+    // set pixel shader color
+    output.color = input.color;
+    // set the normals
+    output.normal = normalize(mul(input.normal, (float3x3) worldMatrix));
 
     return output;
 }
