@@ -73,6 +73,9 @@ namespace Graphics
     // update the perspective and camera view matrix
     void updateConstantBufferCameraMatrices();
 
+    // unbind a texture 
+    void unBindTexture();
+
     // rasterizer states and helpers
     void createRasterizer();
     void setRasterizerFillMode(D3D11_FILL_MODE fillMode = D3D11_FILL_WIREFRAME);

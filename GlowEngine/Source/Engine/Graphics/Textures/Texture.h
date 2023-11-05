@@ -18,11 +18,42 @@ namespace Textures
   {
 
   public:
+
     Texture();
 
+    // load an image file given a name
+    void load(std::string fileName);
+
+    // create the sprite's texture resource
+    void createTextureResource();
+
+    // get the texture resources
+    ID3D11Texture2D** getTexture2D() { return &texture2D; }
+    ID3D11ShaderResourceView** getTextureView() { return &textureView; }
+    D3D11_SUBRESOURCE_DATA& getTextureSubResource() { return subResource; }
+    D3D11_TEXTURE2D_DESC& getTextureDesc() { return textureDesc; }
+
+
+    // get base texture properties
+    int getHeight() { return height; }
+    int getWidth() { return width; }
+    unsigned char* getData() { return data; }
+
   private:
+
     Textures::TextureLibrary* textureLibrary;
     std::string name;
+    unsigned char* data; // texture data
+
+    int width;
+    int height;
+    int channels; // color channels, rgba
+
+    // d3d texture object
+    ID3D11Texture2D* texture2D;
+    ID3D11ShaderResourceView* textureView;
+    D3D11_SUBRESOURCE_DATA subResource;
+    D3D11_TEXTURE2D_DESC textureDesc;
 
   };
 

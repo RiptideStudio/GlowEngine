@@ -18,6 +18,7 @@ Models::ModelLibrary::ModelLibrary()
 void Models::ModelLibrary::init()
 {
   add("Cube", new Models::Model("Data/Models/Cube/Cube.obj"));
+  add("Plane", new Models::Model("Data/Models/Plane/Plane.obj"));
   add("Cylinder", new Models::Model("Data/Models/Cylinder/Cylinder.obj"));
   add("IcoSphere", new Models::Model("Data/Models/IcoSphere/IcoSphere.obj"));
   add("Monkey", new Models::Model("Data/Models/Objects/Monkey.obj"));

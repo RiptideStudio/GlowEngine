@@ -39,6 +39,8 @@ bool Parse::ObjectLoader::open(const std::string filePath)
 void Parse::ObjectLoader::parse()
 {
   std::vector<Vector3D> temp_normals;
+  std::vector<Vector3D> temp_uvs;
+
   // loop through each line within the file and check for a prefix of data
   std::string line;
   while (std::getline(file, line)) 
@@ -47,6 +49,7 @@ void Parse::ObjectLoader::parse()
     std::istringstream iss(line);
     std::string prefix;
     iss >> prefix;
+    static int toggle = 0; // This will alternate between 0 and 1
 
     // load each vertex
     if (prefix == "v") 
@@ -59,6 +62,13 @@ void Parse::ObjectLoader::parse()
       iss >> vertex.x >> vertex.y >> vertex.z;
 
       vertices.push_back(vertex);
+    }
+    // load texture coordinates
+    else if (prefix == "vt")
+    {
+      Vector3D uv;
+      iss >> uv.x >> uv.y;
+      temp_uvs.push_back(uv);
     }
     // vertex normals
     else if (prefix == "vn")
@@ -85,20 +95,34 @@ void Parse::ObjectLoader::parse()
 
         // adjust for OBJ's 1-based indexing
         idx.vertexIndex--;
+        idx.textureIndex--;
         idx.normalIndex--;
+
+        if (idx.textureIndex >= 0 && idx.textureIndex < temp_uvs.size())
+        {
+          Vertex vertex = vertices[idx.vertexIndex];
+          Vector3D uv = temp_uvs[idx.textureIndex];
+          vertex.tx = uv.x;
+          vertex.ty = uv.y;
+          // Since this vertex now has a unique combination of position, normal, and texcoord,
+          // we should add it to the vertices list and use the new index in the index buffer.
+          vertices.push_back(vertex);
+          idx.vertexIndex = vertices.size() - 1;
+        }
 
         faceVertices.push_back(idx); // add this vertex index to the current face
       }
       // we want flat shading
-      if (!faceVertices.empty() && faceVertices[0].normalIndex >= 0) {
+      if (!faceVertices.empty() && faceVertices[0].normalIndex >= 0) 
+      {
         Vector3D faceNormal = temp_normals[faceVertices[0].normalIndex];
 
-        for (const auto& fv : faceVertices) {
+        for (const auto& fv : faceVertices) 
+        {
           Vertex newVertex = vertices[fv.vertexIndex];
           newVertex.nx = faceNormal.x;
           newVertex.ny = faceNormal.y;
           newVertex.nz = faceNormal.z;
-
           vertices.push_back(newVertex);
           vertexIndices.push_back(vertices.size() - 1);
         }

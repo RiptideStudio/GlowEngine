@@ -4,6 +4,7 @@ struct PixelInputType
     float4 position : SV_POSITION;
     float4 color : COLOR;
     float3 normal : NORMAL;
+    float2 texcoord : TEXCOORD;
 };
 
 // light buffer
@@ -14,19 +15,26 @@ cbuffer LightBufferType : register(b1)
     float3 cameraPosition;
 };
 
+// texture sampler
+Texture2D shaderTexture;
+SamplerState SampleType;
+
 // main entrypoint
 float4 main(PixelInputType input) : SV_TARGET
 {
-    // Normalize the normal vector
-    float3 normalizedNormal = normalize(input.normal);
+    // get the texture color
+    float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     
     // Calculate diffuse lighting
-    float diffuseFactor = max(dot(normalizedNormal, -lightDirection), 0.2);
-    float3 diffuseColor = diffuseFactor * lightColor * float3(2.25, 2, 2);
+    float diffuseFactor = max(dot(input.normal, lightDirection), 0.2);
+    float3 diffuseColor = diffuseFactor * lightColor * float3(4,4,4);
 
     // Combine the vertex color with the diffuse lighting
     float4 finalColor = input.color * float4(diffuseColor, 1);
 
-    // return input.color;
-    return finalColor;
+    if (textureColor.x == 0)
+    {
+        return finalColor;
+    }
+    return textureColor * finalColor;
 }

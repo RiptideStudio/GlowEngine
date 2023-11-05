@@ -12,6 +12,8 @@
 #include "Camera/Camera.h"
 #include "Engine/Entity/Entity.h"
 #include "Engine/Entity/EntityList/EntityList.h"
+#include "Engine/Graphics/Textures/Texture.h"
+#include "Engine/Graphics/Textures/stb_image.h"
 #include <filesystem>
 
 // initialize the graphics renderer properties
@@ -23,12 +25,13 @@ Graphics::Renderer::Renderer(HWND handle)
   camera(nullptr),
   constantBuffer(nullptr)
 {
+  // engine
   engine = EngineInstance::getEngine();
-  // init graphics
-  float bgCol[4] = { 0.05,0.05,0.1,0.25 };
+  // graphics
+  float bgCol[4] = { 0.2,0.2,0.5 };
   setBackgroundColor(bgCol);
   initGraphics();
-  // init camera, which needs access to the renderer
+  // camera
   camera = new Visual::Camera(this);
 }
 
@@ -52,13 +55,6 @@ void Graphics::Renderer::initGraphics()
   // setRasterizerFillMode(D3D11_FILL_WIREFRAME);
 }
 
-
-// test render update for messing with models and such
-void Graphics::Renderer::testUpdate()
-{
-
-}
-
 // free all directX objects from memory
 void Graphics::Renderer::cleanup()
 {
@@ -77,19 +73,18 @@ void Graphics::Renderer::beginFrame()
   // set the render target and clear depth buffer
   setRenderTarget();
 
+  // SHADER TEST //
   // Write to the buffer
   LightBuffer* dataPtr = (LightBuffer*)mappedResource.pData;
-  dataPtr->lightDirection = DirectX::XMFLOAT3(sinf(engine->getTotalFrames()/1000.f), cosf(engine->getTotalFrames() / 1000.f), -sinf(engine->getTotalFrames() / 1000.f));
-  dataPtr->lightColor = DirectX::XMFLOAT3(0.25f, 0.2f, 0.22f);
-  dataPtr->cameraPosition = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-  float bgCol[4] = { 0.2,0.2,0.5 };
-  setBackgroundColor(bgCol);
+  // dataPtr->lightDirection = DirectX::XMFLOAT3(sinf(engine->getTotalFrames()/1000.f), cosf(engine->getTotalFrames() / 1000.f), -sinf(engine->getTotalFrames() / 1000.f));
+  dataPtr->lightDirection = DirectX::XMFLOAT3({.5,-1,-1});
+  dataPtr->lightColor = DirectX::XMFLOAT3(0.2f, 0.2f, 0.22f);
+
   // Unmap the buffer to apply changes
   deviceContext->Unmap(lightBuffer, 0);
 
   // Set the buffer in the shader
   deviceContext->PSSetConstantBuffers(1, 1, &lightBuffer);
-  // Or VSSetConstantBuffers, depending on where you use it
 }
 
 // the end of each frame at the renderer engine
@@ -188,7 +183,8 @@ void Graphics::Renderer::loadShaders()
   {
       { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
       { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-      { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+      { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+      { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 }
   };
 
   // Create the input layout
@@ -321,7 +317,6 @@ void Graphics::Renderer::createDepthStencil()
   hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
   if (FAILED(hr))
   {
-    // Handle error
   }
 
   deviceContext->OMSetDepthStencilState(depthStencilState, 1);
@@ -343,14 +338,12 @@ void Graphics::Renderer::createLightBuffer()
   if (FAILED(result)) {
     Logger::error("Failed to create light buff");
   }
-  // map it
+
   ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
   HRESULT mapResult = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-  if (FAILED(mapResult)) {
-    // Handle error
+  if (FAILED(mapResult)) 
+  {
   }
-
-
 }
 
 // create a constant buffer that should not be changed
@@ -392,6 +385,13 @@ void Graphics::Renderer::updateConstantBufferCameraMatrices()
 {
   cbData.view = DirectX::XMMatrixTranspose(camera->getViewMatrix());
   cbData.projection = DirectX::XMMatrixTranspose(camera->getPerspecitveMatrix());
+}
+
+// set the texture resource to nullptr which means no texture
+void Graphics::Renderer::unBindTexture()
+{
+  ID3D11ShaderResourceView* nullSRV[] = { nullptr };
+  deviceContext->PSSetShaderResources(0, 1, nullSRV);
 }
 
 // create the rasterizer state for defining culling and vertex winding order

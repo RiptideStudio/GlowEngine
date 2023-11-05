@@ -30,6 +30,7 @@
     <ClInclude Include="Source\Engine\Graphics\Models\Model.h" />
     <ClInclude Include="Source\Engine\Graphics\Models\ModelLibrary.h" />
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
+    <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />

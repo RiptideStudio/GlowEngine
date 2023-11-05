@@ -11,22 +11,27 @@
 #include "Engine/GlowEngine.h"
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Entity/Entity.h"
+#include "Engine/Graphics/Textures/Texture.h"
 
 // overloaded constructor to take in a model
 Components::Sprite3D::Sprite3D(const std::string modelName)
   : Component(),
   renderer(nullptr),
-  model(nullptr)
+  model(nullptr),
+  texture(nullptr)
 {
   setModel(modelName);
   init();
+  texture = new Textures::Texture();
+
 }
 
 // base Sprite3D constructor to give pointers to renderer
 Components::Sprite3D::Sprite3D()
   : Component(),
   renderer(nullptr),
-  model(nullptr)
+  model(nullptr),
+  texture(nullptr)
 {
   init();
 }
@@ -35,7 +40,7 @@ Components::Sprite3D::Sprite3D()
 void Components::Sprite3D::init()
 {
   type = ComponentType::sprite3D;
-  name = "Sprite3D";
+  name = "Sprite-3D";
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
 }
@@ -49,7 +54,19 @@ void Components::Sprite3D::render()
   {
     return;
   }
-  
+
+  // check if this sprite has a texture
+  if (texture)
+  {
+    // apply our texture
+    renderer->getDeviceContext()->PSSetShaderResources(0, 1, texture->getTextureView());
+  }
+  else
+  {
+    // unbind the shader resource and reset texture
+    renderer->unBindTexture();
+  }
+
   // update the constant buffer's world matrix
   renderer->updateConstantBufferWorldMatrix(transform->getTransformMatrix());
 

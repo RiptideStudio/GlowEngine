@@ -13,6 +13,11 @@ namespace Graphics
   class Renderer;
 }
 
+namespace Textures
+{
+  class Texture;
+}
+
 namespace Components
 {
 
@@ -48,6 +53,7 @@ namespace Components
     float alpha;
 
     Models::Model* model;
+    Textures::Texture* texture;
     Graphics::Renderer* renderer;
 
   };

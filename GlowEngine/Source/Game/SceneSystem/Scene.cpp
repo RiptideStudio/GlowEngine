@@ -19,26 +19,27 @@ SceneSystem::Scene::Scene()
 // test for entities
 void SceneSystem::Scene::init()
 {
-  entityList->add(Entities::createEntity({ 0,0,5 }, "Monkey"));
+  entityList->add(Entities::createEntity({ 0,0,3 }, { 3,3,3 }, "Monkey"));
+  entityList->add(Entities::createEntity({ -10,-10,-5 }, { 100,1,100 }, "Plane"));
 
-  for (float i = 0; i < 25; i += 2)
+  for (float i = 0; i < 50; i += 2)
   {
-    for (float j = 0; j < 25; j += 2)
+    for (float j = 0; j < 50; j += 2)
     {
       Entities::Entity* entity = new Entities::Entity();
       Components::Sprite3D* sprite = new Components::Sprite3D();
 
       if ((int)i % 5 == 0)
       {
-        sprite->setModel("Monkey");
+        sprite->setModel("Cube");
       }
       else if((int)j % 5 == 0)
       {
-        sprite->setModel("Monkey");
+        sprite->setModel("IcoSphere");
       }
       else
       {
-        sprite->setModel("Monkey");
+        sprite->setModel("Cylinder");
       }
       sprite->setColor({ sinf(i), sinf(j), cosf(i), 1});
 

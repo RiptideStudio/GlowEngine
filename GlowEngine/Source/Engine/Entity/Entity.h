@@ -53,6 +53,6 @@ namespace Entities
   };
 
   // create an entity with already made components
-  Entities::Entity* createEntity(Vector3D pos, std::string modelName);
+  Entities::Entity* createEntity(Vector3D pos, Vector3D scale, std::string modelName);
 
 }

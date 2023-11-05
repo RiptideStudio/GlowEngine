@@ -2,7 +2,7 @@
 /
 // filename: Vertex.h
 // author: Callen Betts
-// brief: defines Vertex class
+// brief: defines Vertex and Index structs
 /
 */
 
@@ -17,12 +17,13 @@ namespace GlowMath
     float x, y, z; // vertices
     float r, g, b, a; // color
     float nx, ny, nz; // normals
+    float tx, ty; // texture coordinates
   };
 
   // define index struct
   struct Index 
   {
-    int vertexIndex; // this is the index of each vertex
+    int vertexIndex; // vertex index
     int textureIndex; // texture coordinate index
     int normalIndex; // normal vertex index
   };

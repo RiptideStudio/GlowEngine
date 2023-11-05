@@ -75,10 +75,12 @@ void Components::Transform::update()
   {
     recalculateMatrix();
   }
-  rotation.x += 0.0005f;
-  rotation.y -= 0.0003f;
-  rotation.z += 0.0005f;
+  if (EngineInstance::getEngine()->getInputSystem()->keyDown('R'))
+  {
+    rotation.x += 0.0008f;
+    rotation.z += 0.0008f;
     dirty = true;
+  }
 }
 
 // set the position

@@ -13,6 +13,7 @@ struct VertexInputType
     float4 position : POSITION;
     float4 color : COLOR;
     float3 normal : NORMAL;
+    float2 texcoord : TEXCOORD;
 };
 
 // this is where data is passed to the pixel shader
@@ -21,6 +22,7 @@ struct PixelInputType
     float4 position : SV_POSITION;
     float4 color : COLOR;
     float3 normal : NORMAL;
+    float2 texcoord : TEXCOORD;
 };
 
 // main entrypoint
@@ -37,6 +39,8 @@ PixelInputType main(VertexInputType input)
     output.color = input.color;
     // set the normals
     output.normal = normalize(mul(input.normal, (float3x3) worldMatrix));
+    // set the texcoord
+    output.texcoord = input.texcoord;
 
     return output;
 }

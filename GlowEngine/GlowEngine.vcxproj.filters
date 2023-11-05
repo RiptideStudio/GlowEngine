@@ -146,6 +146,9 @@
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h">
       <Filter>Source Files\Engine\Graphics\Textures</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h">
+      <Filter>Source Files\Engine\Graphics\Textures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
