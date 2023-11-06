@@ -18,25 +18,53 @@
 // default constructor
 Textures::Texture::Texture()
 {
-  textureLibrary = nullptr;
+  init();
+}
+
+// overloaded constructor to load an image immediately
+Textures::Texture::Texture(std::string name)
+{
+  init();
+  load(name);
+}
+
+// initialize texture properties
+void Textures::Texture::init()
+{
+  // give textures a pointer to the texture library
+  Engine::GlowEngine* engine = EngineInstance::getEngine();
+  textureLibrary = engine->getTextureLibrary();
+  renderer = engine->getRenderer();
   texture2D = nullptr;
   textureView = nullptr;
   textureDesc = {};
-  load("Assets/StoneBrick.png");
 }
 
 // load a texture given a filename 
 // this will search the texture library and fetch the resource, or create it if it does not exist
 void Textures::Texture::load(std::string fileName)
 {
-  stbi_set_flip_vertically_on_load(true);
-  // load the file
-  data = stbi_load(fileName.c_str(), &width, &height, &channels, 0);
-  if (!data) 
+  // check the texture library to see if we have a texture
+  Textures::Texture* texture = textureLibrary->get(fileName);
+  if (texture)
   {
-    // if data was invalid
-    Logger::error("Failed to load texture "+fileName);
+    // found texture, set pointer
+    *this = *texture;
+    return;
   }
+  else
+  {
+    // could not find texture
+    data = stbi_load(fileName.c_str(), &width, &height, &channels, 4);
+    if (!data)
+    {
+      // if data was invalid
+      Logger::error("Failed to load texture " + fileName);
+    }
+  }
+
+  // set properties
+  name = fileName;
 
   // create/update the texture resource
   createTextureResource();
@@ -60,7 +88,7 @@ void Textures::Texture::createTextureResource()
   subResource.SysMemPitch = width * 4;
   subResource.SysMemSlicePitch = 0;
 
-  // create the texture and shader resource view
-  EngineInstance::getEngine()->getRenderer()->getDevice()->CreateTexture2D(&textureDesc, &subResource, &texture2D);
-  EngineInstance::getEngine()->getRenderer()->getDevice()->CreateShaderResourceView(texture2D, nullptr, &textureView);
+  // create the texture
+  renderer->getDevice()->CreateTexture2D(&textureDesc, &subResource, &texture2D);
+  renderer->getDevice()->CreateShaderResourceView(texture2D, nullptr, &textureView);
 }

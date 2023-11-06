@@ -28,7 +28,7 @@ Graphics::Renderer::Renderer(HWND handle)
   // engine
   engine = EngineInstance::getEngine();
   // graphics
-  float bgCol[4] = { 0.2,0.2,0.5 };
+  float bgCol[4] = { 0,0,0.1 };
   setBackgroundColor(bgCol);
   initGraphics();
   // camera
@@ -76,15 +76,16 @@ void Graphics::Renderer::beginFrame()
   // SHADER TEST //
   // Write to the buffer
   LightBuffer* dataPtr = (LightBuffer*)mappedResource.pData;
-  // dataPtr->lightDirection = DirectX::XMFLOAT3(sinf(engine->getTotalFrames()/1000.f), cosf(engine->getTotalFrames() / 1000.f), -sinf(engine->getTotalFrames() / 1000.f));
+  dataPtr->lightDirection = DirectX::XMFLOAT3(sinf(engine->getTotalFrames()/1000.f), cosf(engine->getTotalFrames() / 1000.f), -sinf(engine->getTotalFrames() / 1000.f));
   dataPtr->lightDirection = DirectX::XMFLOAT3({.5,-1,-1});
-  dataPtr->lightColor = DirectX::XMFLOAT3(0.2f, 0.2f, 0.22f);
+  dataPtr->lightColor = DirectX::XMFLOAT3(0.2f, 0.2f, 0.2f);
 
   // Unmap the buffer to apply changes
   deviceContext->Unmap(lightBuffer, 0);
 
   // Set the buffer in the shader
   deviceContext->PSSetConstantBuffers(1, 1, &lightBuffer);
+  lightBuffer->Release();
 }
 
 // the end of each frame at the renderer engine

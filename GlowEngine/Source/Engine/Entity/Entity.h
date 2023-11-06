@@ -23,6 +23,8 @@ namespace Entities
 
     // update all of an entity's components
     void update();
+    // render an entity's components
+    void render();
     // add a new component
     void addComponent(Components::Component* component);
 
@@ -51,8 +53,5 @@ namespace Entities
   private:
 
   };
-
-  // create an entity with already made components
-  Entities::Entity* createEntity(Vector3D pos, Vector3D scale, std::string modelName);
 
 }

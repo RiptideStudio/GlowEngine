@@ -8,9 +8,10 @@
 
 #include "stdafx.h"
 #include "GlowEngine.h"
-#include "Game/SceneSystem/Scene.h"
+#include "Game/Scene/Scene.h"
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Graphics/Models/ModelLibrary.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -22,13 +23,12 @@ Engine::GlowEngine::GlowEngine()
   frameTime(0),
   renderer(nullptr)
 {
+  EngineInstance::setup(this);
   windowClassName = L"Otherglow Window";
   windowName = L"Otherglow";
   fps = 60;
-  // create early systems
-  input = new Input::InputSystem();
 }
-static SceneSystem::Scene* scene;
+static Scene::Scene* scene;
 
 // start the engine - returns false if failed, true on success
 bool Engine::GlowEngine::start()
@@ -43,6 +43,11 @@ bool Engine::GlowEngine::start()
     Logger::error("Invalid window handle");
     return false;
   }
+
+  // create early systems
+  createCoreSystems();
+  // create later systems
+  createLaterSystems();
 
   // success
   Logger::write("Done!");
@@ -59,6 +64,8 @@ bool Engine::GlowEngine::run()
   // calculate delta time
   float dt = 0.f;
   float totalTime = 0.f;
+  float frameCount = 0;
+  float fpsTimer = 0;
 
   // windows messages
   MSG msg = {};
@@ -69,15 +76,15 @@ bool Engine::GlowEngine::run()
 
   // run the engine
   running = true;
-  modelLibrary = new Models::ModelLibrary();
-  modelLibrary->init();
-  scene = new SceneSystem::Scene();
-  scene->init();
 
   while (running)
   {
-    // Handle window messages
-    // use GetMessage() if you want to stop updates when not focused in window
+    // terminate engine on escape
+    if (input->keyDown(VK_ESCAPE))
+    {
+      stop();
+    }
+    // windows messages
     if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
     {
       TranslateMessage(&msg);
@@ -88,31 +95,30 @@ bool Engine::GlowEngine::run()
       }
     }
 
-    // calculate delta time and frames finished
+    // calculate the delta time
     QueryPerformanceCounter(&currTime);
-    dt = static_cast<float>(currTime.QuadPart - prevTime.QuadPart) / frequency.QuadPart;
+    deltaTime = static_cast<float>(currTime.QuadPart - prevTime.QuadPart) / frequency.QuadPart;
     prevTime = currTime;
-    totalTime += dt;
-    deltaTime = totalTime;
+    fpsTimer += deltaTime;
+    frameCount++;
 
-    // Check if it's time to update the screen + input
-    if (totalTime >= frameTime)
+    // update systems
+    update();
+    // render systems
+    render();
+
+    if (fpsTimer >= 1.0f)
     {
-      // set the delta time
-      deltaTime = totalTime; 
-      // update all systems
-      update();
-      // render all systems
-      render();
-      // finish game frame and calculate delta time
-      totalFrames++;
-      totalTime -= frameTime;
+      int fps = frameCount;
+      frameCount = 0;
+      fpsTimer -= 1.0f;
+
+      Logger::write("Real FPS: "+std::to_string(fps));
     }
-    totalTime = 0;
-  }
+  } 
 
   // stop running
-  running = false;
+  stop();
   return static_cast<int>(msg.wParam);
 }
 
@@ -126,14 +132,21 @@ void Engine::GlowEngine::stop()
 // update all systems
 void Engine::GlowEngine::update()
 {
-
+  input->update();
+  scene->update();
+  scene->updateEntities();
 }
 
 // call the renderer updates and render systems
 void Engine::GlowEngine::render()
 {
+  // start render frame update
   renderer->beginFrame();
-  scene->update();
+
+  // render all systems
+  scene->renderEntities();
+
+  // end renderer frame and present screen
   renderer->endFrame();
 }
 
@@ -143,6 +156,29 @@ void Engine::GlowEngine::exit()
   cleanUp();
 }
 
+// create systems that need to be initialized first
+void Engine::GlowEngine::createCoreSystems()
+{
+  // input
+  input = new Input::InputSystem();
+  // setup renderer
+  renderer = new Graphics::Renderer(windowHandle);
+}
+
+// create systems dependent on core systems
+void Engine::GlowEngine::createLaterSystems()
+{
+  // model library
+  modelLibrary = new Models::ModelLibrary();
+  modelLibrary->load();
+  // texture library
+  textureLibrary = new Textures::TextureLibrary();
+  textureLibrary->load();
+  // scene system
+  scene = new Scene::Scene();
+}
+
+// setup the window
 void Engine::GlowEngine::setupWindow()
 {
 
@@ -182,64 +218,13 @@ void Engine::GlowEngine::setupWindow()
     RECT rect = { 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
     AdjustWindowRect(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE);
     SetWindowPos(windowHandle, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
-    // setup renderer
-    renderer = new Graphics::Renderer(windowHandle);
   }
-
 }
 
 // called on engine exit
 void Engine::GlowEngine::cleanUp()
 {
   Logger::write("Cleaning up...");
-}
-
-// get the input system
-Input::InputSystem* Engine::GlowEngine::getInputSystem()
-{
-  return input;
-}
-
-// get the renderer
-Graphics::Renderer* Engine::GlowEngine::getRenderer()
-{
-  return renderer;
-}
-
-// get model library
-Models::ModelLibrary* Engine::GlowEngine::getModelLibrary()
-{
-    return modelLibrary;
-}
-
-// get the engine's FPS
-int Engine::GlowEngine::getFps()
-{
-  return fps;
-}
-
-// return the total number frames passed in game
-int Engine::GlowEngine::getTotalFrames()
-{
-  return totalFrames;
-}
-
-// get whether or not the engine is running
-bool Engine::GlowEngine::isRunning()
-{
-  return running;
-}
-
-// get delta time
-float Engine::GlowEngine::getDeltaTime()
-{
-  return deltaTime;
-}
-
-// get the window handle
-HWND Engine::GlowEngine::getWindowHandle()
-{
-  return windowHandle;
 }
 
 // windows message callback

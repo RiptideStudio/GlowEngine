@@ -10,7 +10,7 @@
 #include "Engine/Entity/EntityList/EntityList.h"
 #include "Engine/Entity/Entity.h"
 
-namespace SceneSystem
+namespace Scene
 {
 
   class Scene
@@ -24,7 +24,17 @@ namespace SceneSystem
     virtual void update();
     virtual void exit();
 
+    void updateEntities();
+    void renderEntities();
+
+    // create an entity directly to this scene with already made components
+    Entities::Entity* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
+
   private:
+
+    // system pointers
+    Engine::GlowEngine* engine;
+    Input::InputSystem* input;
 
     std::string name;
     Entities::EntityList* entityList;

@@ -9,20 +9,37 @@
 #include "stdafx.h"
 #include "ModelLibrary.h"
 #include "Engine/Systems/Parsing/ObjectLoader.h"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 Models::ModelLibrary::ModelLibrary()
 {
 }
 
-// add preset models (cube, sphere, cylinder, etc)
-void Models::ModelLibrary::init()
+// loop through our assets and load all of our 
+void Models::ModelLibrary::load(std::string directoryPath)
 {
-  add("Cube", new Models::Model("Data/Models/Cube/Cube.obj"));
-  add("Plane", new Models::Model("Data/Models/Plane/Plane.obj"));
-  add("Cylinder", new Models::Model("Data/Models/Cylinder/Cylinder.obj"));
-  add("IcoSphere", new Models::Model("Data/Models/IcoSphere/IcoSphere.obj"));
-  add("Monkey", new Models::Model("Data/Models/Objects/Monkey.obj"));
-  add("Tree", new Models::Model("Data/Models/Objects/Tree.obj"));
+  // 1. check if the directory exists and if it is a directory
+  if (fs::is_directory(directoryPath) && fs::exists(directoryPath))
+  {
+    // 2. loop through each folder within the directory
+    for (const auto& entry : fs::recursive_directory_iterator(directoryPath))
+    {
+      if (fs::exists(entry) && fs::is_regular_file(entry))
+      {
+        // 3. model detected, add it to the library
+        std::string fileName = entry.path().stem().string();
+        std::string filePath = entry.path().string();
+        std::string fileType = entry.path().extension().string();
+        // 4. check that the file is of type ".obj"
+        if (fileType == ".obj")
+        {
+          add(fileName, new Models::Model(filePath));
+        }
+      }
+    }
+  }
 }
 
 // add a model to the library

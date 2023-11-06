@@ -14,9 +14,6 @@ static Engine::GlowEngine* engine = new Engine::GlowEngine();
 
 int main()
 {
-  // setup the engine
-  EngineInstance::setup(engine);
-
   // start the engine
   if (engine->start())
   {

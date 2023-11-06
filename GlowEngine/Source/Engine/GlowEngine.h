@@ -9,15 +9,9 @@
 #pragma once
 
 // forward declare systems
-namespace Graphics
-{
-  class Renderer;
-}
-
-namespace Models
-{
-  class ModelLibrary;
-}
+namespace Graphics { class Renderer; }
+namespace Models { class ModelLibrary; }
+namespace Textures { class TextureLibrary; }
 
 namespace Engine
 {
@@ -37,6 +31,11 @@ namespace Engine
     void render();
     void exit();
 
+    // create core systems
+    void createCoreSystems();
+    // create systems dependent on core systems
+    void createLaterSystems();
+
     // setup window
     void setupWindow();
 
@@ -48,16 +47,17 @@ namespace Engine
     void cleanUp();
 
     // get system pointers
-    Input::InputSystem* getInputSystem();
-    Graphics::Renderer* getRenderer();
-    Models::ModelLibrary* getModelLibrary();
+    Input::InputSystem* getInputSystem() { return input; }
+    Graphics::Renderer* getRenderer() { return renderer; }
+    Models::ModelLibrary* getModelLibrary() { return modelLibrary; }
+    Textures::TextureLibrary* getTextureLibrary() { return textureLibrary; }
 
-    // engine properties
-    int getFps();
-    int getTotalFrames();
-    bool isRunning();
-    float getDeltaTime();
-    HWND getWindowHandle();
+    // get engine properties
+    int getFps() { return fps; }
+    int getTotalFrames() { return totalFrames; }
+    bool isRunning() { return running; }
+    float getDeltaTime() { return deltaTime; }
+    HWND getWindowHandle() { return windowHandle; }
 
   private:
 
@@ -74,6 +74,7 @@ namespace Engine
     Graphics::Renderer* renderer;
     Input::InputSystem* input;
     Models::ModelLibrary* modelLibrary;
+    Textures::TextureLibrary* textureLibrary;
 
     // core engine properties (fps, delta time)
     bool running;

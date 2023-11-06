@@ -16,13 +16,14 @@
 // base constructor
 Entities::EntityList::EntityList()
 {
-  // no-op
+  size = 0;
 }
 
 // add a given entity to the list
 void Entities::EntityList::add(Entities::Entity* entity)
 {
   activeList.push_back(entity);
+  size++;
 }
 
 // update a list of entities
@@ -33,4 +34,19 @@ void Entities::EntityList::update()
   {
     entity->update();
   }
+}
+
+// update a list of entities
+void Entities::EntityList::render()
+{
+  // render all entities in the list
+  for (auto entity : activeList)
+  {
+    entity->render();
+  }
+}
+
+void Entities::EntityList::clear()
+{
+  activeList.clear();
 }

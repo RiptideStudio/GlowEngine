@@ -25,10 +25,15 @@ namespace Entities
     void add(Entities::Entity* entity);
     void update();
     void render();
+    void clear();
+
+    int getSize() { return size; }
 
   private:
     std::vector<Entities::Entity*> activeList;
     std::vector<Entities::Entity*> deferredList;
+
+    int size;
 
   };
 

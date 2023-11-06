@@ -8,11 +8,18 @@
 
 #pragma once
 
+namespace Textures
+{
+  class TextureLibrary;
+}
+
+namespace Graphics
+{
+  class Renderer;
+}
 
 namespace Textures
 {
-
-  class TextureLibrary; // forward declare
 
   class Texture
   {
@@ -20,6 +27,10 @@ namespace Textures
   public:
 
     Texture();
+    Texture(std::string name);
+
+    // initialize a texture
+    void init();
 
     // load an image file given a name
     void load(std::string fileName);
@@ -48,6 +59,9 @@ namespace Textures
     int width;
     int height;
     int channels; // color channels, rgba
+
+    // renderer
+    Graphics::Renderer* renderer;
 
     // d3d texture object
     ID3D11Texture2D* texture2D;

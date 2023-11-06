@@ -13,17 +13,18 @@
 #include "Engine/Entity/Entity.h"
 #include "Engine/Graphics/Textures/Texture.h"
 
-// overloaded constructor to take in a model
-Components::Sprite3D::Sprite3D(const std::string modelName)
+// overloaded constructor to take in a model and a texture
+Components::Sprite3D::Sprite3D(const std::string modelName, const std::string textureName)
   : Component(),
   renderer(nullptr),
-  model(nullptr),
-  texture(nullptr)
+  model(nullptr)
 {
-  setModel(modelName);
   init();
-  texture = new Textures::Texture();
-
+  setModel(modelName);
+  if (textureName != "")
+  {
+    texture = new Textures::Texture(textureName);
+  }
 }
 
 // base Sprite3D constructor to give pointers to renderer
@@ -105,4 +106,11 @@ void Components::Sprite3D::setAlpha(float newAlpha)
 float Components::Sprite3D::getAlpha()
 {
   return alpha;
+}
+
+// set the UV coordinates of the sprite
+void Components::Sprite3D::setUV(float x, float y)
+{
+  uv = x;
+  uy = y;
 }

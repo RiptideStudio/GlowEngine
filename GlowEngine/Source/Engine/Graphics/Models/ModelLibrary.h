@@ -21,8 +21,8 @@ namespace Models
 
     ModelLibrary();
 
-    // initialize the model library with presets
-    void init();
+    // load all of our 3D models
+    void load(std::string directoryPath = "Assets/Models");
 
     // add a model to the map
     void add(std::string name, Models::Model* model);

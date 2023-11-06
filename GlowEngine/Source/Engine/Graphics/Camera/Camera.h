@@ -41,10 +41,11 @@ namespace Visual
     XMVector upDirection;
     float rotation;
 
-    // our field of view
-    float fov; 
-    // how far we can see
-    float viewDistance; 
+    // controller properties
+    float fov; // field of view
+    float viewDistance; // how far we can see
+    float yaw;
+    float pitch;
 
     // window properties
     float windowWidth;

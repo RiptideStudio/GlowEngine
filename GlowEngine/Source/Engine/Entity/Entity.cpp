@@ -31,7 +31,17 @@ void Entities::Entity::update()
   for (auto component : components)
   {
     component->update();
-    component->render();
+  }
+}
+
+// render an entity's components - typically this is a Sprite3D
+void Entities::Entity::render()
+{
+  // get the sprite3D to render
+  Components::Sprite3D* sprite = getComponent<Components::Sprite3D>(Components::ComponentType::sprite3D);
+  if (sprite)
+  {
+    sprite->render();
   }
 }
 
@@ -40,13 +50,4 @@ void Entities::Entity::addComponent(Components::Component* component)
 {
   component->setParent(this);
   this->components.push_back(component);
-}
-
-// create an entity and populate it with common components
-Entities::Entity* Entities::createEntity(Vector3D pos, Vector3D scale, std::string modelName)
-{
-  Entities::Entity* entity = new Entities::Entity();
-  entity->addComponent(new Components::Transform(pos, scale, { 0,0,0 }));
-  entity->addComponent(new Components::Sprite3D(modelName));
-  return entity;
 }

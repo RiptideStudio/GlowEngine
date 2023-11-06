@@ -34,6 +34,7 @@
 // math
 #include "Engine/Math/GlowMath.h"
 #include "Engine/Math/Vertex.h"
+#include "Engine/Math/Random.h"
 
 using namespace GlowMath;
 

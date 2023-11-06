@@ -27,7 +27,7 @@ namespace Components
   public:
 
     // constructors
-    Sprite3D(const std::string modelName);
+    Sprite3D(const std::string modelName, const std::string textureName = "");
     Sprite3D();
 
     // initialize
@@ -48,9 +48,14 @@ namespace Components
     // get alpha
     float getAlpha();
 
+    // uv coordinates
+    void setUV(float x, float y);
+
   private:
 
     float alpha;
+
+    float uv, uy;
 
     Models::Model* model;
     Textures::Texture* texture;

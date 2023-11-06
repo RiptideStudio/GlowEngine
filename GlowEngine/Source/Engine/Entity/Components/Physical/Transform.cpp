@@ -16,20 +16,23 @@ Components::Transform::Transform()
   position({ 0, 0, 10 }),
   scale({ 1, 1, 1}),
   rotation({ 0,0,0 }),
-  dirty(true)
+  dirty(true),
+  anchored(false)
 {
-  transformMatrix = {};
+  recalculateMatrix();
   type = ComponentType::transform;
 }
 
+// initialize the transform with position, scale, and rotation
 Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotation_)
   :
   position(pos_),
   scale(scale_),
   rotation(rotation_),
-  dirty(true)
+  dirty(true),
+  anchored(false)
 {
-  transformMatrix = {};
+  recalculateMatrix();
   type = ComponentType::transform;
 }
 
@@ -67,25 +70,10 @@ const Matrix& Components::Transform::getTransformMatrix()
   return transformMatrix;
 }
 
-// check if the matrix needs to be updated
-void Components::Transform::update()
-{
-  // check for recalculating matrix
-  if (dirty)
-  {
-    recalculateMatrix();
-  }
-  if (EngineInstance::getEngine()->getInputSystem()->keyDown('R'))
-  {
-    rotation.x += 0.0008f;
-    rotation.z += 0.0008f;
-    dirty = true;
-  }
-}
-
 // set the position
 void Components::Transform::setPosition(Vector3D pos)
 {
   position = pos;
+  recalculateMatrix();
 }
 

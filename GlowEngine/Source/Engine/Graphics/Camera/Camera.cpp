@@ -14,13 +14,15 @@
 // initialize the position and coordinate system of camera
 Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   :
-  fov(100.f)
+  fov(150.f),
+  yaw(0),
+  pitch(0)
 {
   position = { 0 };
   rotation = 0;
   viewMatrix = {};
   perspectiveMatrix = {};
-  target = {};
+  target = {0,0,1};
   upDirection = { 0,-1,0 };
   viewDistance = 500; // default 500 view distance
   windowHeight = 720;
@@ -34,30 +36,51 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
 // update the camera - this is essentially the camera controller
 void Visual::Camera::update()
 {
-  float camSpd = 10.f*engine->getDeltaTime();
+
+  float camSpd = 30.f*engine->getDeltaTime();
   // debug
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   Input::InputSystem* input = engine->getInputSystem();
 
-  if (input->keyDown('E'))
-  {
-    target = DirectX::XMVectorAdd(target, { camSpd,0,0 });
-  }
-  if (input->keyDown('A'))
-  {
-    position = DirectX::XMVectorAdd(position, { -camSpd,0,0 });
-  }
-  if (input->keyDown('D'))
-  {
-    position = DirectX::XMVectorAdd(position, { camSpd,0,0 });
-  }
+  float deltaX = input->getMouseDelta().x;
+  float deltaY = input->getMouseDelta().y;
+
+  float mouseSensitivity = 0.1f;
+
+  // Calculate new yaw and pitch values
+  yaw -= deltaX * mouseSensitivity;
+  pitch -= deltaY * mouseSensitivity; // Subtracting to invert Y-axis
+
+  // Constrain the pitch to prevent the camera from flipping
+  pitch = max(-89.0f, min(89.0f, pitch));
+
+  // Convert yaw and pitch to a direction vector
+  DirectX::XMVECTOR forward = DirectX::XMVectorSet(
+    cos(DirectX::XMConvertToRadians(yaw)) * cos(DirectX::XMConvertToRadians(pitch)),
+    sin(DirectX::XMConvertToRadians(pitch)),
+    sin(DirectX::XMConvertToRadians(yaw)) * cos(DirectX::XMConvertToRadians(pitch)),
+    0.0f);
+  forward = DirectX::XMVector3Normalize(forward);
+
+  // Assuming upDirection is the global up, which is usually (0,1,0) for Y-up coordinate systems.
+  DirectX::XMVECTOR right = DirectX::XMVector3Cross({0,-1,0}, forward);
+  right = DirectX::XMVector3Normalize(right);
+
   if (input->keyDown('W'))
   {
-    position = DirectX::XMVectorAdd(position, { 0,0,camSpd });
+    position = DirectX::XMVectorAdd(position, DirectX::XMVectorScale(forward, camSpd));
   }
   if (input->keyDown('S'))
   {
-    position = DirectX::XMVectorAdd(position, { 0,0,-camSpd });
+    position = DirectX::XMVectorSubtract(position, DirectX::XMVectorScale(forward, camSpd));
+  }
+  if (input->keyDown('A'))
+  {
+    position = DirectX::XMVectorAdd(position, DirectX::XMVectorScale(right, camSpd));
+  }
+  if (input->keyDown('D'))
+  {
+    position = DirectX::XMVectorSubtract(position, DirectX::XMVectorScale(right, camSpd));
   }
   if (input->keyDown(VK_SPACE))
   {
@@ -67,22 +90,23 @@ void Visual::Camera::update()
   {
     position = DirectX::XMVectorAdd(position, { 0, -camSpd,0 });
   }
-  // determine the target point (where we are looking)
-  target = DirectX::XMVectorAdd(position, { 0,0,1,0 });
 
-  // get the right, left, and up directions of the camera
-  XMVector forward = DirectX::XMVector3Normalize(DirectX::XMVectorSubtract(target, position));
-  XMVector right = DirectX::XMVector3Normalize(DirectX::XMVector3Cross(upDirection, forward));
+  // Determine the target point based on the new orientation
+  target = DirectX::XMVectorAdd(position, forward);
+
+  // Update the camera's up vector
   upDirection = DirectX::XMVector3Cross(forward, right);
+  upDirection = DirectX::XMVector3Normalize(upDirection);
 
-  // update the perspective matrix
+  // Update the perspective matrix
   perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.1f, viewDistance);
 
-  // transformation
+  // Update the view matrix
   viewMatrix = DirectX::XMMatrixLookAtLH(position, target, upDirection);
 
-  // update the renderer's view and perspective matrices
+  // Update the renderer's view and perspective matrices
   renderer->updateConstantBufferCameraMatrices();
+
 }
 
 // get the view matrix

@@ -25,11 +25,16 @@ namespace Components
     bool isDirty();
     // get the transform matrix
     const Matrix& getTransformMatrix();
-    // update the transform - all this does is determine if we need to update the matrix
-    void update();
+
+    // anchored transforms do not move, and so they calculate their world matrix once and only once
+    bool isAnchored() { return anchored; }
+    // set a transform to be anchored
+    void setAnchored(bool val) { anchored = val; }
 
     // getters and setters
     void setPosition(Vector3D pos);
+    // get position
+    Vector3D getPosition() { return position; }
 
   private:
 
@@ -40,6 +45,7 @@ namespace Components
     Matrix transformMatrix;
 
     bool dirty;
+    bool anchored;
 
   };
 

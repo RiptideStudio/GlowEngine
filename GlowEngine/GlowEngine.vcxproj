@@ -34,13 +34,14 @@
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
+    <ClInclude Include="Source\Engine\Math\Random.h" />
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
     <ClInclude Include="Source\Engine\Systems\Input\Input.h" />
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
-    <ClInclude Include="Source\Game\SceneSystem\Scene.h" />
+    <ClInclude Include="Source\Game\Scene\Scene.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
@@ -96,9 +97,7 @@
     <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Game\SceneSystem\Scene.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\Scene.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
