@@ -7,17 +7,18 @@
 */
 
 #pragma once
+#include "Game/System/System.h"
 
 namespace Input
 {
 
 
-  class InputSystem
+  class InputSystem : public Systems::System
   {
 
   public:
 
-    InputSystem();
+    InputSystem(std::string systemName);
 
     // update the keystates and mouse state
     void update();

@@ -33,6 +33,7 @@
     <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
+    <ClInclude Include="Source\Engine\Graphics\Window\Window.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
     <ClInclude Include="Source\Engine\Math\Random.h" />
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
@@ -45,6 +46,7 @@
     <ClInclude Include="Source\Game\Scene\Scene.h" />
     <ClInclude Include="Source\Game\Scene\SceneSystem.h" />
     <ClInclude Include="Source\Game\System\System.h" />
+    <ClInclude Include="Source\Game\System\SystemInstance.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
@@ -82,6 +84,7 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp" />
     <ClCompile Include="Source\Engine\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -104,6 +107,7 @@
     <ClCompile Include="Source\Game\Scene\Scene.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneSystem.cpp" />
     <ClCompile Include="Source\Game\System\System.cpp" />
+    <ClCompile Include="Source\Game\System\SystemInstance.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

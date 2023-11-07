@@ -55,14 +55,21 @@ namespace Models
     ID3D11Buffer* getVertexBuffer();
     ID3D11Buffer* getIndexBuffer();
 
+    // uv coordinates
+    void setUV(Vector3D coords);
     // model helper functions
     void setColor(const float(&color)[4]);
+
+    // is dirty
+    bool isDirty() { return dirty; }
 
     // render a model
     void render();
 
-  protected:
+  private:
     
+    bool dirty; // recalculate vertices, indices, or texture coords
+
     // give the models access to the renderer/engine
     Engine::GlowEngine* engine;
     Graphics::Renderer* renderer;

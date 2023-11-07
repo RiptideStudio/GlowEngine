@@ -48,14 +48,9 @@ namespace Components
     // get alpha
     float getAlpha();
 
-    // uv coordinates
-    void setUV(float x, float y);
-
   private:
 
     float alpha;
-
-    float uv, uy;
 
     Models::Model* model;
     Textures::Texture* texture;

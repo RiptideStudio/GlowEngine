@@ -90,5 +90,8 @@ void Textures::Texture::createTextureResource()
 
   // create the texture
   renderer->getDevice()->CreateTexture2D(&textureDesc, &subResource, &texture2D);
-  renderer->getDevice()->CreateShaderResourceView(texture2D, nullptr, &textureView);
+  if (texture2D)
+  {
+    renderer->getDevice()->CreateShaderResourceView(texture2D, nullptr, &textureView);
+  }
 }

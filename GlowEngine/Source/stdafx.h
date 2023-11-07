@@ -42,6 +42,7 @@ using namespace GlowMath;
 #include "Engine/Systems/Logger/Log.h"
 #include "Engine/Systems/Input/Input.h"
 #include "Game/System/System.h"
+#include "Game/System/SystemInstance.h"
 
 // components
 #include "Engine/Graphics/Models/Model.h"

@@ -41,6 +41,7 @@ void Models::Model::init()
   renderer = engine->getRenderer(); // models need the renderer to draw
   device = renderer->getDevice();
   deviceContext = renderer->getDeviceContext();
+  dirty = true;
 }
 
 // parse a .obj file and load its vertex data into the model
@@ -119,6 +120,18 @@ void Models::Model::updateIndexBuffer()
 ID3D11Buffer* Models::Model::getIndexBuffer()
 {
   return indexBuffer;
+}
+
+// set the texture coordinates to scale with a vector for tiling
+void Models::Model::setUV(Vector3D coords)
+{
+  for (auto& v : vertices)
+  {
+    v.tx *= coords.x;
+    v.ty *= coords.y;
+  }
+  updateVertexBuffer();
+  dirty = false;
 }
 
 // set a model's color

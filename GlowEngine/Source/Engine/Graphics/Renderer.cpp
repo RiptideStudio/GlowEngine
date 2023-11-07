@@ -23,7 +23,8 @@ Graphics::Renderer::Renderer(HWND handle)
   pixelShader(nullptr),
   vertexShader(nullptr),
   camera(nullptr),
-  constantBuffer(nullptr)
+  constantBuffer(nullptr),
+  sampler(nullptr)
 {
   // engine
   engine = EngineInstance::getEngine();
@@ -49,6 +50,7 @@ void Graphics::Renderer::initGraphics()
   createDepthStencil();
   setTopology();
   createConstantBuffer();
+  createSamplerState();
   createLightBuffer();
 
   // set the rasterizer to wireframe for testing
@@ -76,9 +78,11 @@ void Graphics::Renderer::beginFrame()
   // SHADER TEST //
   // Write to the buffer
   LightBuffer* dataPtr = (LightBuffer*)mappedResource.pData;
-  dataPtr->lightDirection = DirectX::XMFLOAT3(sinf(engine->getTotalFrames()/1000.f), cosf(engine->getTotalFrames() / 1000.f), -sinf(engine->getTotalFrames() / 1000.f));
-  dataPtr->lightDirection = DirectX::XMFLOAT3({.5,-1,-1});
+  dataPtr->lightDirection = DirectX::XMFLOAT3({.5,0.75,1});
   dataPtr->lightColor = DirectX::XMFLOAT3(0.2f, 0.2f, 0.2f);
+  DirectX::XMFLOAT3 cameraPosition;
+  DirectX::XMStoreFloat3(&cameraPosition, camera->getPosition());
+  dataPtr->cameraPosition = cameraPosition;
 
   // Unmap the buffer to apply changes
   deviceContext->Unmap(lightBuffer, 0);
@@ -86,6 +90,9 @@ void Graphics::Renderer::beginFrame()
   // Set the buffer in the shader
   deviceContext->PSSetConstantBuffers(1, 1, &lightBuffer);
   lightBuffer->Release();
+  
+  // bind the texture sampler
+  deviceContext->PSSetSamplers(0, 1, &sampler);
 }
 
 // the end of each frame at the renderer engine
@@ -345,6 +352,22 @@ void Graphics::Renderer::createLightBuffer()
   if (FAILED(mapResult)) 
   {
   }
+}
+
+// create a sampler state for sampling textures
+// the address mode should be wrap by default
+void Graphics::Renderer::createSamplerState()
+{
+  D3D11_SAMPLER_DESC sampDesc;
+  ZeroMemory(&sampDesc, sizeof(sampDesc));
+  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+  sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+  sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+  sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+  sampDesc.MinLOD = 0;
+  sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+  device->CreateSamplerState(&sampDesc, &sampler);
 }
 
 // create a constant buffer that should not be changed

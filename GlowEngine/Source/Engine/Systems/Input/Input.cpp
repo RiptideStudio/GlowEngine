@@ -11,7 +11,8 @@
 #include "Engine/GlowEngine.h"
 #include "Engine/EngineInstance.h"
 
-Input::InputSystem::InputSystem()
+Input::InputSystem::InputSystem(std::string systemName) 
+  : System(systemName)
 {
   windowHandle = EngineInstance::getEngine()->getWindowHandle();
   previousMousePosition = { 0 };

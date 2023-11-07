@@ -17,7 +17,7 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   fov(150.f),
   yaw(0),
   pitch(0),
-  cameraSpeed(35.f),
+  cameraSpeed(20),
   mouseSensitivity(0.1f)
 {
   position = { 0 };
@@ -28,7 +28,7 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   upDirection = { 0,-1,0 };
   right = { 0,0,0 };
   forward = { 0,0,1 };
-  viewDistance = 500;
+  viewDistance = 150;
   windowHeight = 720;
   windowWidth = 1280;
   aspectRatio = windowWidth / windowHeight;

@@ -12,15 +12,30 @@
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  // createEntity({ 0,0,4 }, { 3,3,-3 }, { 0 }, "Monkey", "StoneBrick");
-  createEntity({ -10,-10,-5 }, { 100,100,100 }, { 0,0,0 }, "Plane", "StoneBrick");
-  createEntity({ -50,-10,50 }, { 100,100,100 }, { 0, 0, 1.57 }, "Plane", "StoneBrick");
+  createEntity({ 0,-10,4 }, { 1,1,1 }, { 0 }, "Crystal", "Crystal");
+  createEntity({ -10,-10,-5 }, { 100,100,100 }, { 0 }, "Plane", "Cobblestone");
+
+  for (int i = 0; i < 15; ++i)
+  {
+    for (int j = 0; j < 15; ++j)
+    {
+      float randomX = randomRange(-50, 50);
+      float randomZ = randomRange(-50, 50);
+      float randomScale = randomRange(1.f, 3.f);
+
+      float y = -10;
+      Vector3D randomPos = { randomX,y,randomZ };
+      Vector3D scale = { randomScale ,randomScale ,randomScale };
+      Entities::Entity* e = createEntity(randomPos, scale, { 0,0,0 }, "Crystal", "Crystal");
+      Components::Sprite3D* sprite = e->getComponent<Components::Sprite3D>(Components::ComponentType::sprite3D);
+      sprite->setColor({1,1,1+i*.1f,1});
+    }
+  }
 }
 
 void Scene::ForestScene::update()
 {
   updateEntities();
-
   // hotkeys for stress testing
   if (input->keyDown('G'))
   {
@@ -32,7 +47,7 @@ void Scene::ForestScene::update()
     float randomRoty = randomRange(0, 360);
     float randomRotz = randomRange(0, 360);
     // createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Monkey", "StoneBrick");
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "CircleCube", "Rock");
+    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "CircleCube", "Schilling");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
   if (input->keyDown('H'))

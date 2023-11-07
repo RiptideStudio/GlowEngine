@@ -59,6 +59,11 @@ void Components::Sprite3D::render()
   // check if this sprite has a texture
   if (texture)
   {
+    // change the UVs
+    if (model->isDirty())
+    {
+      model->setUV(transform->getScale());
+    }
     // apply our texture
     renderer->getDeviceContext()->PSSetShaderResources(0, 1, texture->getTextureView());
   }
@@ -106,11 +111,4 @@ void Components::Sprite3D::setAlpha(float newAlpha)
 float Components::Sprite3D::getAlpha()
 {
   return alpha;
-}
-
-// set the UV coordinates of the sprite
-void Components::Sprite3D::setUV(float x, float y)
-{
-  uv = x;
-  uy = y;
 }

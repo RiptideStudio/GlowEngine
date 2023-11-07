@@ -8,6 +8,14 @@
 
 #include "stdafx.h"
 #include "SceneSystem.h"
+#include "ForestScene/ForestScene.h"
+
+Scene::SceneSystem::SceneSystem(std::string systemName) 
+  : System(systemName)
+{
+  scenes.push_back(new ForestScene());
+  currentScene = scenes.at(0);
+}
 
 // update all entities within the scene
 void Scene::SceneSystem::update()

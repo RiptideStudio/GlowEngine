@@ -30,11 +30,16 @@ namespace Components
     bool isAnchored() { return anchored; }
     // set a transform to be anchored
     void setAnchored(bool val) { anchored = val; }
+    // set dirty
+    void setDirty(bool val) { dirty = val; }
 
     // getters and setters
     void setPosition(Vector3D pos);
     // get position
     Vector3D getPosition() { return position; }
+
+    // get scale
+    Vector3D getScale() { return scale; }
 
   private:
 

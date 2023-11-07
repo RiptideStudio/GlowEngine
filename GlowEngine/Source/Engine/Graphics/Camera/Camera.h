@@ -32,6 +32,9 @@ namespace Visual
     // get the perspective matrix
     const Matrix& getPerspecitveMatrix();
 
+    // get the position
+    XMVector getPosition() { return position; }
+
   private:
 
     // renderer

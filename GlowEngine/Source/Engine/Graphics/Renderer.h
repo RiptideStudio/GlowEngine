@@ -47,7 +47,6 @@ namespace Graphics
     Renderer(HWND handle);
 
     void initGraphics();
-    void testUpdate(); // temp function for rendering
     void cleanup(); // release all of the d3d objects
 
     // frame updates
@@ -63,6 +62,7 @@ namespace Graphics
     void createBlendState();
     void createDepthStencil();
     void createLightBuffer();
+    void createSamplerState();
 
     // constant buffer - this needs to be set using the model's properties
     void createConstantBuffer();
@@ -119,6 +119,9 @@ namespace Graphics
     ID3D11RasterizerState* wireframeRasterizerState;
     D3D11_RASTERIZER_DESC rasterizerDesc;
 
+    // sampler
+    ID3D11SamplerState* sampler;
+    
     // constant buffer
     ID3D11Buffer* constantBuffer;
     D3D11_BUFFER_DESC constantBufferDesc;

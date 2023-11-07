@@ -8,7 +8,6 @@
 
 #pragma once
 #include "Game/Scene/Scene.h"
-#include "ForestScene/ForestScene.h"
 
 namespace Scene
 {
@@ -18,13 +17,9 @@ namespace Scene
 
   public:
 
-    // call the constructor as well as the base system constructor
-    SceneSystem(std::string systemName) : System(systemName)
-    {
-      currentScene = static_cast<Scene*>(new ForestScene());
-      scenes.push_back(currentScene);
-    }
-    
+    // constructor
+    SceneSystem(std::string systemName);
+
     // update the entities in all scenes
     void update();
     // render the entities in all scenes

@@ -20,6 +20,7 @@ struct VertexInputType
 struct PixelInputType
 {
     float4 position : SV_POSITION;
+    float4 worldPos : WORLDPOS;
     float4 color : COLOR;
     float3 normal : NORMAL;
     float2 texcoord : TEXCOORD;
@@ -32,9 +33,9 @@ PixelInputType main(VertexInputType input)
     // Transform the vertex position from model space to clip space
     float4 worldPosition = mul(input.position, worldMatrix);
     float4 viewPosition = mul(worldPosition, viewMatrix);
-    
     // set pixel shader output position
     output.position = mul(viewPosition, projectionMatrix);
+    output.worldPos = worldPosition;
     // set pixel shader color
     output.color = input.color;
     // set the normals
