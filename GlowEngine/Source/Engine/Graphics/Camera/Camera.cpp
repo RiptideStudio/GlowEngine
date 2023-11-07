@@ -16,7 +16,9 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   :
   fov(150.f),
   yaw(0),
-  pitch(0)
+  pitch(0),
+  cameraSpeed(35.f),
+  mouseSensitivity(0.1f)
 {
   position = { 0 };
   rotation = 0;
@@ -24,48 +26,80 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   perspectiveMatrix = {};
   target = {0,0,1};
   upDirection = { 0,-1,0 };
-  viewDistance = 500; // default 500 view distance
+  right = { 0,0,0 };
+  forward = { 0,0,1 };
+  viewDistance = 500;
   windowHeight = 720;
   windowWidth = 1280;
   aspectRatio = windowWidth / windowHeight;
   engine = EngineInstance::getEngine();
   renderer = renderEngine;
   windowHandle = engine->getWindowHandle();
+  input = engine->getInputSystem();
 }
 
 // update the camera - this is essentially the camera controller
 void Visual::Camera::update()
 {
+  // stop camera functionality if we are not focused in the window
+  if (!input->isFocused())
+  {
+    return;
+  }
 
-  float camSpd = 30.f*engine->getDeltaTime();
-  // debug
-  Engine::GlowEngine* engine = EngineInstance::getEngine();
-  Input::InputSystem* input = engine->getInputSystem();
+  // update our camera controller - this handles input and calculates our forward direction, right, and target
+  cameraController();
 
+  // Determine the target point based on the new orientation
+  target = DirectX::XMVectorAdd(position, forward);
+
+  // Update the camera's up vector
+  upDirection = DirectX::XMVector3Cross(forward, right);
+  upDirection = DirectX::XMVector3Normalize(upDirection);
+
+  // Update the perspective matrix
+  perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.1f, viewDistance);
+
+  // Update the view matrix
+  viewMatrix = DirectX::XMMatrixLookAtLH(position, target, upDirection);
+
+  // Update the renderer's view and perspective matrices
+  renderer->updateConstantBufferCameraMatrices();
+}
+
+// controls our camera using input - this is currently debug, as we don't have a player
+// class yet
+void Visual::Camera::cameraController()
+{
+  // multiply our camera speed by delta time
+  float camSpd = cameraSpeed * engine->getDeltaTime();
+
+  // get the mouse delta so we can look around
   float deltaX = input->getMouseDelta().x;
   float deltaY = input->getMouseDelta().y;
 
-  float mouseSensitivity = 0.1f;
-
-  // Calculate new yaw and pitch values
+  // calculate the pitch and yaw - this determines how our camera rotates
   yaw -= deltaX * mouseSensitivity;
-  pitch -= deltaY * mouseSensitivity; // Subtracting to invert Y-axis
+  pitch -= deltaY * mouseSensitivity;
 
-  // Constrain the pitch to prevent the camera from flipping
+  // make sure we cannot look behind us
   pitch = max(-89.0f, min(89.0f, pitch));
 
-  // Convert yaw and pitch to a direction vector
-  DirectX::XMVECTOR forward = DirectX::XMVectorSet(
+  // convert the yaw and pitch to a direction vector
+  forward = DirectX::XMVectorSet(
     cos(DirectX::XMConvertToRadians(yaw)) * cos(DirectX::XMConvertToRadians(pitch)),
     sin(DirectX::XMConvertToRadians(pitch)),
     sin(DirectX::XMConvertToRadians(yaw)) * cos(DirectX::XMConvertToRadians(pitch)),
     0.0f);
+
+  // calculate the forward direction - this is where our camera is "looking"
   forward = DirectX::XMVector3Normalize(forward);
 
-  // Assuming upDirection is the global up, which is usually (0,1,0) for Y-up coordinate systems.
-  DirectX::XMVECTOR right = DirectX::XMVector3Cross({0,-1,0}, forward);
+  // calculate the right vector from us using the global up direction (0,-1,0)
+  right = DirectX::XMVector3Cross({ 0,-1,0 }, forward);
   right = DirectX::XMVector3Normalize(right);
 
+  // keyboard input for debug movement
   if (input->keyDown('W'))
   {
     position = DirectX::XMVectorAdd(position, DirectX::XMVectorScale(forward, camSpd));
@@ -90,23 +124,6 @@ void Visual::Camera::update()
   {
     position = DirectX::XMVectorAdd(position, { 0, -camSpd,0 });
   }
-
-  // Determine the target point based on the new orientation
-  target = DirectX::XMVectorAdd(position, forward);
-
-  // Update the camera's up vector
-  upDirection = DirectX::XMVector3Cross(forward, right);
-  upDirection = DirectX::XMVector3Normalize(upDirection);
-
-  // Update the perspective matrix
-  perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.1f, viewDistance);
-
-  // Update the view matrix
-  viewMatrix = DirectX::XMMatrixLookAtLH(position, target, upDirection);
-
-  // Update the renderer's view and perspective matrices
-  renderer->updateConstantBufferCameraMatrices();
-
 }
 
 // get the view matrix

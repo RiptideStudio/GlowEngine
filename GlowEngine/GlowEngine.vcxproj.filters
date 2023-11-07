@@ -69,6 +69,12 @@
     <Filter Include="Source Files\Game\Scene">
       <UniqueIdentifier>{da33c589-cc58-4c9b-8aa7-a50b5f65066e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\System">
+      <UniqueIdentifier>{a730c774-ac3f-4724-8fd1-e7e83609c536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scene\ForestScene">
+      <UniqueIdentifier>{b416d8e4-05f9-4eff-b10b-7c09aa8575cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -152,6 +158,15 @@
     <ClInclude Include="Source\Engine\Math\Random.h">
       <Filter>Source Files\Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Scene\SceneSystem.h">
+      <Filter>Source Files\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\System\System.h">
+      <Filter>Source Files\Game\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Scene\ForestScene\ForestScene.h">
+      <Filter>Source Files\Game\Scene\ForestScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -219,6 +234,15 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Scene\Scene.cpp">
       <Filter>Source Files\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\SceneSystem.cpp">
+      <Filter>Source Files\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\System\System.cpp">
+      <Filter>Source Files\Game\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Scene\ForestScene\ForestScene.cpp">
+      <Filter>Source Files\Game\Scene\ForestScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

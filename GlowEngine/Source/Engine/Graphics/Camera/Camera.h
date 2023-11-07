@@ -22,7 +22,10 @@ namespace Visual
   public:
     Camera(Graphics::Renderer* renderEngine);
 
+    // update the camera properties
     void update();
+    // camera controller
+    void cameraController();
 
     // get the view matrix
     const Matrix& getViewMatrix();
@@ -34,11 +37,14 @@ namespace Visual
     // renderer
     Graphics::Renderer* renderer;
     Engine::GlowEngine* engine;
+    Input::InputSystem* input;
 
     // camera properties
     XMVector position;
     XMVector target;
     XMVector upDirection;
+    XMVector forward;
+    XMVector right;
     float rotation;
 
     // controller properties
@@ -46,6 +52,8 @@ namespace Visual
     float viewDistance; // how far we can see
     float yaw;
     float pitch;
+    float cameraSpeed;
+    float mouseSensitivity;
 
     // window properties
     float windowWidth;

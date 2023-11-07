@@ -41,7 +41,10 @@
     <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
+    <ClInclude Include="Source\Game\Scene\ForestScene\ForestScene.h" />
     <ClInclude Include="Source\Game\Scene\Scene.h" />
+    <ClInclude Include="Source\Game\Scene\SceneSystem.h" />
+    <ClInclude Include="Source\Game\System\System.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
@@ -97,7 +100,10 @@
     <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Game\Scene\ForestScene\ForestScene.cpp" />
     <ClCompile Include="Source\Game\Scene\Scene.cpp" />
+    <ClCompile Include="Source\Game\Scene\SceneSystem.cpp" />
+    <ClCompile Include="Source\Game\System\System.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

@@ -26,7 +26,7 @@ float4 main(PixelInputType input) : SV_TARGET
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     
     // Calculate diffuse lighting
-    float diffuseFactor = max(dot(input.normal, lightDirection), 0.4);
+    float diffuseFactor = max(dot(input.normal, lightDirection), 0.5);
     float3 diffuseColor = diffuseFactor * lightColor * float3(2.25,2,2.25);
 
     // Combine the vertex color with the diffuse lighting

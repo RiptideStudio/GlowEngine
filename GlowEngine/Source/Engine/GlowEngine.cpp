@@ -12,6 +12,11 @@
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Graphics/Models/ModelLibrary.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
+#include "Game/Scene/SceneSystem.h"
+
+// define the systems vector here
+// this way we can access it from the base system class
+std::vector<Systems::System*> SystemInstance::systems;
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -28,7 +33,6 @@ Engine::GlowEngine::GlowEngine()
   windowName = L"Otherglow";
   fps = 60;
 }
-static Scene::Scene* scene;
 
 // start the engine - returns false if failed, true on success
 bool Engine::GlowEngine::start()
@@ -129,12 +133,17 @@ void Engine::GlowEngine::stop()
   running = false;
 }
 
-// update all systems
+// loop through and update each system
 void Engine::GlowEngine::update()
 {
+  // update input 
   input->update();
-  scene->update();
-  scene->updateEntities();
+
+  // update all systems
+  for (auto system : SystemInstance::getSystems())
+  {
+    system->update();
+  }
 }
 
 // call the renderer updates and render systems
@@ -144,7 +153,7 @@ void Engine::GlowEngine::render()
   renderer->beginFrame();
 
   // render all systems
-  scene->renderEntities();
+  sceneSystem->render();
 
   // end renderer frame and present screen
   renderer->endFrame();
@@ -175,7 +184,7 @@ void Engine::GlowEngine::createLaterSystems()
   textureLibrary = new Textures::TextureLibrary();
   textureLibrary->load();
   // scene system
-  scene = new Scene::Scene();
+  sceneSystem = new Scene::SceneSystem("SceneSystem");
 }
 
 // setup the window
@@ -245,7 +254,6 @@ LRESULT Engine::GlowEngine::windowProc(HWND hWnd, UINT message, WPARAM wParam, L
     // destroy the window and stop the engine
   case WM_DESTROY:
     PostQuitMessage(0);
-    stop();
     break;
   default:
     return DefWindowProc(hWnd, message, wParam, lParam);
@@ -268,4 +276,10 @@ LRESULT Engine::GlowEngine::windowProcStatic(HWND hWnd, UINT message, WPARAM wPa
   }
   
   return enginePtr->windowProc(hWnd, message, wParam, lParam);
+}
+
+// add a system to the system list
+void SystemInstance::addSystem(Systems::System* system)
+{
+  systems.push_back(system);
 }

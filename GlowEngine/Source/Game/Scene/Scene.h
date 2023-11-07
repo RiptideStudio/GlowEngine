@@ -9,6 +9,7 @@
 #pragma once
 #include "Engine/Entity/EntityList/EntityList.h"
 #include "Engine/Entity/Entity.h"
+#include "Engine/GlowEngine.h"
 
 namespace Scene
 {
@@ -20,9 +21,11 @@ namespace Scene
 
     Scene();
 
-    virtual void init();
-    virtual void update();
-    virtual void exit();
+    virtual void init() {};
+    virtual void update() {};
+    virtual void exit() {};
+
+    virtual void render();
 
     void updateEntities();
     void renderEntities();
@@ -30,7 +33,7 @@ namespace Scene
     // create an entity directly to this scene with already made components
     Entities::Entity* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
 
-  private:
+  protected:
 
     // system pointers
     Engine::GlowEngine* engine;

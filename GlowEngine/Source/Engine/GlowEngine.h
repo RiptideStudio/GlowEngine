@@ -12,6 +12,7 @@
 namespace Graphics { class Renderer; }
 namespace Models { class ModelLibrary; }
 namespace Textures { class TextureLibrary; }
+namespace Scene { class SceneSystem; }
 
 namespace Engine
 {
@@ -51,6 +52,7 @@ namespace Engine
     Graphics::Renderer* getRenderer() { return renderer; }
     Models::ModelLibrary* getModelLibrary() { return modelLibrary; }
     Textures::TextureLibrary* getTextureLibrary() { return textureLibrary; }
+    Scene::SceneSystem* getSceneSystem() { return sceneSystem; }
 
     // get engine properties
     int getFps() { return fps; }
@@ -75,6 +77,7 @@ namespace Engine
     Input::InputSystem* input;
     Models::ModelLibrary* modelLibrary;
     Textures::TextureLibrary* textureLibrary;
+    Scene::SceneSystem* sceneSystem;
 
     // core engine properties (fps, delta time)
     bool running;
@@ -84,5 +87,23 @@ namespace Engine
     float deltaTime;
 
   };
-
 }
+
+// define an instance of the system list so we can access and create systems in
+// the base class
+class SystemInstance
+{
+
+public:
+
+  // add a system to the vector - system base class constructor does this automatically
+  static void addSystem(Systems::System* system);
+  // get the systems vector
+  static std::vector<Systems::System*> getSystems() { return systems; }
+
+private:
+
+  // engine contains a vector of systems
+  static std::vector<Systems::System*> systems;
+
+};

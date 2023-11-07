@@ -18,6 +18,7 @@ Input::InputSystem::InputSystem()
   currentMousePosition = { 0 };
   mouseDelta = { 0 };
   scroll = 0;
+  focused = true;
 }
 
 // update the input state
@@ -31,16 +32,34 @@ void Input::InputSystem::update()
     mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
   }
 
-  // focus the mouse in the center of the screen
-  RECT clientRect;
-  GetClientRect(windowHandle, &clientRect);
-  POINT center = { (clientRect.right - clientRect.left) / 2, (clientRect.bottom - clientRect.top) / 2 };
-  ClientToScreen(windowHandle, &center);
-  SetCursorPos(center.x, center.y);
+  // toggle the focus
+  if (keyDown('F'))
+  {
+    focused = true;
+  }
+  // toggle the focus
+  if (keyDown('P'))
+  {
+    focused = false;
+  }
+  if (focused)
+  {
+    ShowCursor(false);
+    // focus the mouse in the center of the screen
+    RECT clientRect;
+    GetClientRect(windowHandle, &clientRect);
+    POINT center = { (clientRect.right - clientRect.left) / 2, (clientRect.bottom - clientRect.top) / 2 };
+    ClientToScreen(windowHandle, &center);
+    SetCursorPos(center.x, center.y);
 
-  // update previous mouse position to the center
-  previousMousePosition.x = center.x;
-  previousMousePosition.y = center.y;
+    // update previous mouse position to the center
+    previousMousePosition.x = center.x;
+    previousMousePosition.y = center.y;
+  }
+  else
+  {
+    ShowCursor(true);
+  }
 }
 
 // set a key state to active

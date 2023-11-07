@@ -37,6 +37,9 @@ namespace Input
     // if a key was triggered
     bool keyTriggered(int key);
 
+    // if we are focused on this window
+    bool isFocused() { return focused; }
+
   private:
 
     // mouse data
@@ -44,6 +47,8 @@ namespace Input
     POINT mouseDelta;
     POINT currentMousePosition;
     POINT previousMousePosition;
+
+    bool focused;
 
     HWND windowHandle;
 
