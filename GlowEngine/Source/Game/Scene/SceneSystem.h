@@ -25,6 +25,9 @@ namespace Scene
     // render the entities in all scenes
     void render();
 
+    // set the current scene
+    void setCurrentScene(Scene* scene);
+
     // exit a scene
     void exitCurrentScene();
 

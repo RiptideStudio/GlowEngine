@@ -40,6 +40,9 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
 void Components::Transform::recalculateMatrix()
 {
   // rotation matrix
+  rotation.x *= 1 / 52.7;
+  rotation.y *= 1 / 52.7;
+  rotation.z *= 1 / 52.7;
   Matrix rotationMatrixX = DirectX::XMMatrixRotationX(rotation.x);
   Matrix rotationMatrixY = DirectX::XMMatrixRotationY(rotation.y);
   Matrix rotationMatrixZ = DirectX::XMMatrixRotationZ(rotation.z);

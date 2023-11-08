@@ -18,6 +18,11 @@ Scene::Scene::Scene()
   name = "Scene";
 }
 
+// exit a given scene
+void Scene::Scene::exit()
+{
+  entityList->clear();
+}
 
 // render a scene
 void Scene::Scene::render()

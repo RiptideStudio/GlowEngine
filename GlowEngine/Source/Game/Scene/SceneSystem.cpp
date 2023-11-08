@@ -29,6 +29,21 @@ void Scene::SceneSystem::render()
   currentScene->render();
 }
 
+// set the current scene
+void Scene::SceneSystem::setCurrentScene(Scene* scene)
+{
+  // check if the scene was valid first
+  if (!scene)
+  {
+    Logger::error("Scene " + scene->getName() + "was invalid");
+    return;
+  }
+  // exit the scene
+  currentScene->exit();
+  // set the current scene
+  currentScene = scene;
+}
+
 // exit the current scene
 void Scene::SceneSystem::exitCurrentScene()
 {

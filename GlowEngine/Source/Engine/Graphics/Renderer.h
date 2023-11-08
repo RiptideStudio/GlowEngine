@@ -64,6 +64,9 @@ namespace Graphics
     void createLightBuffer();
     void createSamplerState();
 
+    // shadow mapping
+    void createShadowMap();
+
     // constant buffer - this needs to be set using the model's properties
     void createConstantBuffer();
     // the constant buffer needs to be updated whenever a model is being rendered
@@ -101,6 +104,10 @@ namespace Graphics
     ID3D11DeviceContext* deviceContext;
     IDXGISwapChain* swapChain;
     ID3D11RenderTargetView* renderTargetView;
+
+    // shadow mapping
+    ID3D11Texture2D* shadowMap;
+    ID3D11DepthStencilView* shadowMapDSV;
 
     // shaders
     ID3D11PixelShader* pixelShader;

@@ -12,23 +12,32 @@
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  createEntity({ 0,-10,4 }, { 1,1,1 }, { 0 }, "Crystal", "Crystal");
-  createEntity({ -10,-10,-5 }, { 100,100,100 }, { 0 }, "Plane", "Cobblestone");
+  createEntity({ -10,-10,-5 }, { 100,100,100 }, { 0 }, "Plane", "Stone");
+  createEntity({ -10,15,-5 }, { 5,25,5 }, { 0 }, "Cube", "Cobblestone");
+  createEntity({ 10,0,-5 }, { 40,15,2 }, { 0 }, "Cube", "Cobblestone");
 
   for (int i = 0; i < 15; ++i)
   {
     for (int j = 0; j < 15; ++j)
     {
-      float randomX = randomRange(-50, 50);
-      float randomZ = randomRange(-50, 50);
-      float randomScale = randomRange(1.f, 3.f);
+      float randomX = randomRange(-100, 100);
+      float randomZ = randomRange(-100, 100);
+      float randomScale = randomRange(.5f, 2.f);
 
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      Entities::Entity* e = createEntity(randomPos, scale, { 0,0,0 }, "Crystal", "Crystal");
+      Entities::Entity* e = createEntity(randomPos, scale, { randomRange(-30.f,30.f),0,randomRange(-30.f,30.f) }, "Crystal", "Cobblestone2");
+       randomX = randomRange(-100, 100);
+       randomZ = randomRange(-100, 100);
+
+       y = -10;
+        randomScale = randomRange(.4f, 1.f);
+
+       randomPos = { randomX,y,randomZ };
+       scale = { randomScale ,randomScale ,randomScale };
+      Entities::Entity* e2 = createEntity(randomPos, scale, { randomRange(-30.f,30.f),0,randomRange(-30.f,30.f)}, "IcoSphere", "Cobblestone2");
       Components::Sprite3D* sprite = e->getComponent<Components::Sprite3D>(Components::ComponentType::sprite3D);
-      sprite->setColor({1,1,1+i*.1f,1});
     }
   }
 }

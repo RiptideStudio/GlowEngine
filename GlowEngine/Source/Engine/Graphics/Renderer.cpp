@@ -352,6 +352,7 @@ void Graphics::Renderer::createLightBuffer()
   if (FAILED(mapResult)) 
   {
   }
+
 }
 
 // create a sampler state for sampling textures
@@ -360,7 +361,7 @@ void Graphics::Renderer::createSamplerState()
 {
   D3D11_SAMPLER_DESC sampDesc;
   ZeroMemory(&sampDesc, sizeof(sampDesc));
-  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
   sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
   sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
   sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -368,6 +369,54 @@ void Graphics::Renderer::createSamplerState()
   sampDesc.MinLOD = 0;
   sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
   device->CreateSamplerState(&sampDesc, &sampler);
+}
+
+// create a shadow map
+void Graphics::Renderer::createShadowMap()
+{
+  D3D11_TEXTURE2D_DESC depthTexDesc;
+  ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));
+  depthTexDesc.Width = 1280;
+  depthTexDesc.Height = 720;
+  depthTexDesc.MipLevels = 1;
+  depthTexDesc.ArraySize = 1;
+  depthTexDesc.Format = DXGI_FORMAT_R32_TYPELESS; // Use a typeless format for more flexibility
+  depthTexDesc.SampleDesc.Count = 1;
+  depthTexDesc.SampleDesc.Quality = 0;
+  depthTexDesc.Usage = D3D11_USAGE_DEFAULT;
+  depthTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE; // Bind as depth stencil and shader resource
+  depthTexDesc.CPUAccessFlags = 0;
+  depthTexDesc.MiscFlags = 0;
+
+  device->CreateTexture2D(&depthTexDesc, NULL, &shadowMap);
+
+  D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+  ZeroMemory(&dsvDesc, sizeof(dsvDesc));
+  dsvDesc.Format = DXGI_FORMAT_D32_FLOAT; // Use a format that includes a depth component
+  dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+  dsvDesc.Texture2D.MipSlice = 0;
+
+  device->CreateDepthStencilView(shadowMap, &dsvDesc, &shadowMapDSV);
+
+  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+  ZeroMemory(&srvDesc, sizeof(srvDesc));
+  srvDesc.Format = DXGI_FORMAT_R32_FLOAT; // Match the format for the shader resource
+  srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  srvDesc.Texture2D.MostDetailedMip = 0;
+  srvDesc.Texture2D.MipLevels = 1;
+
+  ID3D11ShaderResourceView* shadowMapSRV;
+  device->CreateShaderResourceView(shadowMap, &srvDesc, &shadowMapSRV);
+
+  D3D11_VIEWPORT shadowViewport;
+  shadowViewport.Width = static_cast<float>(1280);
+  shadowViewport.Height = static_cast<float>(720);
+  shadowViewport.MinDepth = 0.0f;
+  shadowViewport.MaxDepth = 1.0f;
+  shadowViewport.TopLeftX = 0;
+  shadowViewport.TopLeftY = 0;
+
+  deviceContext->RSSetViewports(1, &shadowViewport);
 }
 
 // create a constant buffer that should not be changed

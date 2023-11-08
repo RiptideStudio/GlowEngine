@@ -20,7 +20,7 @@ struct VertexInputType
 struct PixelInputType
 {
     float4 position : SV_POSITION;
-    float4 worldPos : WORLDPOS;
+    float4 worldPos : WORLDPOS; // we can't access sv_position
     float4 color : COLOR;
     float3 normal : NORMAL;
     float2 texcoord : TEXCOORD;

@@ -23,12 +23,16 @@ namespace Scene
 
     virtual void init() {};
     virtual void update() {};
-    virtual void exit() {};
+
+    // exit a scene
+    void exit();
 
     virtual void render();
 
     void updateEntities();
     void renderEntities();
+
+    std::string getName() { return name; }
 
     // create an entity directly to this scene with already made components
     Entities::Entity* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
