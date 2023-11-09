@@ -28,7 +28,7 @@ float4 main(PixelInputType input) : SV_TARGET
     
     // Calculate diffuse lighting
     float diffuseFactor = max(dot(input.normal, lightDirection), 0.5);
-    float3 diffuseColor = diffuseFactor * lightColor * float3(2.25,2,2.25);
+    float3 diffuseColor = diffuseFactor * lightColor * float3(2,2,2);
 
     // Combine the vertex color with the diffuse lighting
     float4 finalColor = input.color * float4(diffuseColor, 1);
@@ -37,11 +37,11 @@ float4 main(PixelInputType input) : SV_TARGET
     float distance = length(cameraPosition - input.worldpos.xyz);
 
     // Compute the fog factor based on the distance
-    float wideness = 125;
-    float fogFactor = clamp((wideness - distance) / (wideness - wideness/6), 0.1, 1.0);
+    float wideness = 100;
+    float fogFactor = clamp((wideness - distance) / (wideness - wideness/6), 0.15, 1.0);
     
     // Interpolate between the object's color and the fog color
-    finalColor = lerp(float4(0,0,0.1,1), finalColor, fogFactor);
+    finalColor = lerp(float4(0,0,0,1), finalColor, fogFactor);
     
     // check for textures, if not just return the color
     if (textureColor.x == 0)

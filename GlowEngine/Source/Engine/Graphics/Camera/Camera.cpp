@@ -14,7 +14,7 @@
 // initialize the position and coordinate system of camera
 Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   :
-  fov(150.f),
+  fov(250.f),
   yaw(0),
   pitch(0),
   cameraSpeed(20),
@@ -28,7 +28,7 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   upDirection = { 0,-1,0 };
   right = { 0,0,0 };
   forward = { 0,0,1 };
-  viewDistance = 150;
+  viewDistance = 250;
   windowHeight = 720;
   windowWidth = 1280;
   aspectRatio = windowWidth / windowHeight;
