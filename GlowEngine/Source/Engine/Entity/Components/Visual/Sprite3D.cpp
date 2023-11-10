@@ -21,10 +21,7 @@ Components::Sprite3D::Sprite3D(const std::string modelName, const std::string te
 {
   init();
   setModel(modelName);
-  if (textureName != "")
-  {
-    texture = new Textures::Texture(textureName);
-  }
+  setTextures();
 }
 
 // base Sprite3D constructor to give pointers to renderer
@@ -57,20 +54,13 @@ void Components::Sprite3D::render()
   }
 
   // check if this sprite has a texture
-  if (texture)
+  if (!textures.empty())
   {
     // change the UVs
     if (model->isDirty())
     {
       model->setUV(transform->getScale());
     }
-    // apply our texture
-    renderer->getDeviceContext()->PSSetShaderResources(0, 1, texture->getTextureView());
-  }
-  else
-  {
-    // unbind the shader resource and reset texture
-    renderer->unBindTexture();
   }
 
   // update the constant buffer's world matrix
@@ -79,8 +69,23 @@ void Components::Sprite3D::render()
   // bind the constant buffer and update subresource
   renderer->updateConstantBuffer();
 
-  // render the model
-  model->render();
+  // loop through textures given model names
+  for (auto name : model->getModelNames())
+  {
+    if (textures[name])
+    {
+      renderer->getDeviceContext()->PSSetShaderResources(0, 1, textures[name]->getTextureView());
+    }
+    else
+    {
+      // unbind the shader resource and reset texture
+      renderer->unBindTexture();
+    }
+
+
+    // render the model
+    model->render(name);
+  }
 }
 
 // set this model given a name
@@ -93,6 +98,18 @@ void Components::Sprite3D::setModel(const std::string modelName)
 void Components::Sprite3D::setColor(const float(&color)[4])
 {
   model->setColor(color);
+}
+
+// set the textures this sprite uses based on the model
+void Components::Sprite3D::setTextures()
+{
+  if (model->getTextureModelNames().size() > 0)
+  {
+    for (int i = 0; i < model->getObjects(); ++i)
+    {
+      textures[model->getModelNames()[i]] = new Textures::Texture(model->getTextureModelNames()[i]);
+    }
+  }
 }
 
 // get the Sprite3D's model

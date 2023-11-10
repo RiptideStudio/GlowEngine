@@ -14,7 +14,7 @@
 // initialize the position and coordinate system of camera
 Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   :
-  fov(250.f),
+  fov(200.f),
   yaw(0),
   pitch(0),
   cameraSpeed(20),

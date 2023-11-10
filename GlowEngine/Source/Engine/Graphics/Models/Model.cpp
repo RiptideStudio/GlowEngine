@@ -16,9 +16,7 @@
 // construct a new base model
 Models::Model::Model()
   :
-  modelType(ModelType::Cube),
-  indexBuffer(nullptr),
-  vertexBuffer(nullptr)
+  modelType(ModelType::Cube)
 {
   init();
 }
@@ -26,9 +24,7 @@ Models::Model::Model()
 // construct a model given a filename
 Models::Model::Model(const std::string fileName)
   :
-  modelType(ModelType::Cube),
-  indexBuffer(nullptr),
-  vertexBuffer(nullptr)
+  modelType(ModelType::Cube)
 {
   init();
   load(fileName);
@@ -42,6 +38,7 @@ void Models::Model::init()
   device = renderer->getDevice();
   deviceContext = renderer->getDeviceContext();
   dirty = true;
+  objects = 1;
 }
 
 // parse a .obj file and load its vertex data into the model
@@ -49,32 +46,40 @@ void Models::Model::init()
 void Models::Model::load(const std::string fileName)
 {
 
-  // query the model library to see if we can get a clone
+  // query the model library to see if we can get the model's data
   Models::ModelLibrary* library = engine->getModelLibrary();
   Models::Model* model = library->get(fileName);
 
   if (model)
   {
     // if the model is in the library
-    indices = model->getIndices();
-    vertices = model->getVerticies();
+    modelVertices = model->getModelVertices();
+    modelIndices = model->getModelIndices();
+    modelNames = model->getModelNames();
+    textureNames = model->getTextureModelNames();
+    objects = model->getObjects();
   }
   else // if it is not in the library
   {
     // parse a 3D model
     Parse::ObjectLoader modelData;
+    // parse model data
     modelData.open(fileName);
     modelData.parse();
 
-    // store the indices and vertices
-    indices = modelData.getVertexIndices();
-    vertices = modelData.getVertices();
+    // store the indices and vertices given the map of object data
+    modelVertices = modelData.getModelVertices();
+    modelIndices = modelData.getModelIndices();
+    modelNames = modelData.getModelNames();
+    objects = modelData.getObjects();
+    textureNames = modelData.getTextureModelNames();
   }
-
+  
   // update the buffers for index and vertex data
   // this will also create them if they don't exist
   updateVertexBuffer();
   updateIndexBuffer();
+
 }
 
 // get vertices contianer
@@ -92,45 +97,49 @@ const std::vector<unsigned short>& Models::Model::getIndices()
 // creates the vertex buffer or updates it 
 void Models::Model::updateVertexBuffer()
 {
-  D3D11_BUFFER_DESC vertexBufferDesc = {};
-  vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
-  vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-  vertexBufferDesc.CPUAccessFlags = 0;
+  for (auto name : modelNames)
+  {
+    D3D11_BUFFER_DESC vertexBufferDesc = {};
+    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    vertexBufferDesc.ByteWidth = sizeof(Vertex) * modelVertices[name].size();
+    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    vertexBufferDesc.CPUAccessFlags = 0;
 
-  D3D11_SUBRESOURCE_DATA vertexData = {};
-  vertexData.pSysMem = vertices.data();
-  renderer->getDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+    D3D11_SUBRESOURCE_DATA vertexData = {};
+    vertexData.pSysMem = modelVertices[name].data();
+    renderer->getDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffers[name]);
+  }
 }
 
 // creates a model's index buffer or updates it 
 void Models::Model::updateIndexBuffer()
 {
-  D3D11_BUFFER_DESC indexBufferDesc = {};
-  indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  indexBufferDesc.ByteWidth = sizeof(unsigned short) * indices.size();
-  indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-  indexBufferDesc.CPUAccessFlags = 0;
+  for (auto name : modelNames)
+  {
+    D3D11_BUFFER_DESC indexBufferDesc = {};
+    indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    indexBufferDesc.ByteWidth = sizeof(unsigned short) * modelIndices[name].size();
+    indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    indexBufferDesc.CPUAccessFlags = 0;
 
-  D3D11_SUBRESOURCE_DATA indexData = {};
-  indexData.pSysMem = indices.data();
-  renderer->getDevice()->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
-}
-
-// get the index buffer for read
-ID3D11Buffer* Models::Model::getIndexBuffer()
-{
-  return indexBuffer;
+    D3D11_SUBRESOURCE_DATA indexData = {};
+    indexData.pSysMem = modelIndices[name].data();
+    renderer->getDevice()->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffers[name]);
+  }
 }
 
 // set the texture coordinates to scale with a vector for tiling
 void Models::Model::setUV(Vector3D coords)
 {
-  for (auto& v : vertices)
+  for (auto name : modelNames)
   {
-    v.tx *= coords.x;
-    v.ty *= coords.y;
+    for (auto& v : modelVertices[name])
+    {
+      v.tx *= coords.x;
+      v.ty *= coords.y;
+    }
   }
+
   updateVertexBuffer();
   dirty = false;
 }
@@ -150,19 +159,13 @@ void Models::Model::setColor(const float (&col)[4])
   updateVertexBuffer();
 }
 
-// get the vertex buffer for read
-ID3D11Buffer* Models::Model::getVertexBuffer()
-{
-  return vertexBuffer;
-}
-
 // render a model
-void Models::Model::render()
+void Models::Model::render(std::string name)
 {
-  // bind the vertex buffer and index buffer
-  deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-  deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+  // set the index and vertex buffers
+  deviceContext->IASetVertexBuffers(0, 1, &vertexBuffers[name], &stride, &offset);
+  deviceContext->IASetIndexBuffer(indexBuffers[name], DXGI_FORMAT_R16_UINT, 0);
 
   // draw the triangle
-  deviceContext->DrawIndexed(indices.size(), 0, 0);
+  deviceContext->DrawIndexed(modelIndices[name].size(), 0, 0);
 }

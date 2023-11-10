@@ -12,8 +12,8 @@
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  createEntity({ -10,-10,-5 }, { 100,100,100 }, { 0 }, "Plane", "Moss");
-  createEntity({ 10,-10,-5 }, { 10,10,10 }, { 0 }, "Tree2", "Leaves");
+  createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Moss");
+  createEntity({ 10,-10,-5 }, { 1,1,1 }, { 0 }, "Campfire", "Leaves");
 
   for (int i = 0; i < 15; ++i)
   {
@@ -21,7 +21,7 @@ void Scene::ForestScene::init()
     {
       float randomX = randomRange(-100, 100);
       float randomZ = randomRange(-100, 100);
-      float randomScale = randomRange(11.5f, 12.f);
+      float randomScale = randomRange(1.5f, 2.f);
 
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };

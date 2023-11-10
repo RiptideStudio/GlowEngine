@@ -39,6 +39,8 @@ namespace Components
     void setModel(const std::string modelName);
     // model helper functions
     void setColor(const float(&color)[4]);
+    // set a sprite's texture map to the model's texture names
+    void setTextures();
 
     // get the model
     Models::Model* getModel();
@@ -53,6 +55,7 @@ namespace Components
     float alpha;
 
     Models::Model* model;
+    std::map<std::string, Textures::Texture*> textures; // map of textures to objects
     Textures::Texture* texture;
     Graphics::Renderer* renderer;
 

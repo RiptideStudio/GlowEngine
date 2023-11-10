@@ -29,7 +29,7 @@ Graphics::Renderer::Renderer(HWND handle)
   // engine
   engine = EngineInstance::getEngine();
   // graphics
-  float bgCol[4] = { 0,0,0 };
+  float bgCol[4] = { 0.4,0.3,0.325 };
   setBackgroundColor(bgCol);
   initGraphics();
   // camera
@@ -78,7 +78,7 @@ void Graphics::Renderer::beginFrame()
   // SHADER TEST //
   // Write to the buffer
   LightBuffer* dataPtr = (LightBuffer*)mappedResource.pData;
-  dataPtr->lightDirection = DirectX::XMFLOAT3({.5,0.75,1});
+  dataPtr->lightDirection = DirectX::XMFLOAT3({.75,0.75,.75});
   dataPtr->lightColor = DirectX::XMFLOAT3(0.2f, 0.2f, 0.2f);
   DirectX::XMFLOAT3 cameraPosition;
   DirectX::XMStoreFloat3(&cameraPosition, camera->getPosition());

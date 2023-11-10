@@ -6,6 +6,22 @@
 /
 */
 
+/* 
+
+HOW IT WORKS:
+
+// we have a map of the different vertices and indices for each object
+// this is because a model might be exported with several objects "attached"
+// for example, if we have two cubes in blender and we want to export them, it will only render the original cube
+//  or the first cube it read. By having a map of the different objects that were exported, we can individually save
+//  and keep track of each one's vertices and indices. The map will store the object's name (for example, "cube1" and "cube2")
+//  and each of that object's respective data.
+//
+// modelVertices refers to the actual map of all of the object's vertices 
+// modelIndices refers to the map of all the object's indices, rather than individual objects
+
+*/
+
 #pragma once
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
@@ -47,13 +63,21 @@ namespace Models
     const std::vector<GlowMath::Vertex>& getVerticies();
     const std::vector<unsigned short>& getIndices();
 
+    // get the model vertex map
+    const std::map<std::string, std::vector<Vertex>>& getModelVertices() { return modelVertices; }
+    // model indices
+    const std::map<std::string, std::vector<unsigned short>>& getModelIndices() { return modelIndices; }
+    // get the model names - this is so we can iterate over each name and get them from the map
+    const std::vector<std::string>& getModelNames() { return modelNames; }
+    // get the texture names
+    std::vector<std::string> getTextureModelNames() { return textureNames; }
+    // get the number of objects
+    int getObjects() { return objects; }
+
     // create the vertex buffer for a model
     void updateVertexBuffer();
     // create the index buffer for a model
     void updateIndexBuffer();
-    // get the buffers for read only
-    ID3D11Buffer* getVertexBuffer();
-    ID3D11Buffer* getIndexBuffer();
 
     // uv coordinates
     void setUV(Vector3D coords);
@@ -64,7 +88,7 @@ namespace Models
     bool isDirty() { return dirty; }
 
     // render a model
-    void render();
+    void render(std::string name);
 
   private:
     
@@ -76,17 +100,28 @@ namespace Models
 
     // all inherited objects have these properties
     ModelType modelType;
-    ID3D11Buffer* vertexBuffer;
-    ID3D11Buffer* indexBuffer;
     ID3D11Device* device;
     ID3D11DeviceContext* deviceContext;
+
+    // we need our models to have maps of buffers which contain the vertex and index data
+    std::map<std::string, ID3D11Buffer*> vertexBuffers;
+    std::map<std::string, ID3D11Buffer*> indexBuffers;
 
     // define the vertex stride and offset
     UINT stride = sizeof(Vertex);
     UINT offset = 0;
 
     // define the vertices and indices containers
-    std::vector<GlowMath::Vertex> vertices;
+    // we have a map of the different vertices and indices for each object
+    std::map<std::string, std::vector<Vertex>> modelVertices;
+    std::map<std::string, std::vector<unsigned short>> modelIndices;
+    std::vector<std::string> modelNames;
+    std::vector<std::string> textureNames;
+
+    int objects; // how many objects are in the model
+
+    // will be deprecated soon
+    std::vector<Vertex> vertices;
     std::vector<unsigned short> indices;
 
   };
