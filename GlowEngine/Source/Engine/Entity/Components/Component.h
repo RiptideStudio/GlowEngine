@@ -16,15 +16,19 @@ namespace Entities
 namespace Components
 {
 
-  enum ComponentType
-  {
-    transform,
-    sprite2D,
-    sprite3D
-  };
 
   class Component
   {
+    public:
+
+    enum ComponentType
+    {
+      Transform,
+      Behavior,
+      Sprite2D,
+      Sprite3D,
+      None
+    };
 
     public:
       Component();

@@ -40,7 +40,7 @@ namespace Components
     // model helper functions
     void setColor(const float(&color)[4]);
     // set a sprite's texture map to the model's texture names
-    void setTextures();
+    void setTextures(std::string singleTextureName);
 
     // get the model
     Models::Model* getModel();

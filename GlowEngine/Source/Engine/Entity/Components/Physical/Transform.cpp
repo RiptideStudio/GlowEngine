@@ -20,7 +20,7 @@ Components::Transform::Transform()
   anchored(false)
 {
   recalculateMatrix();
-  type = ComponentType::transform;
+  type = ComponentType::Transform;
 }
 
 // initialize the transform with position, scale, and rotation
@@ -33,16 +33,17 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
   anchored(false)
 {
   recalculateMatrix();
-  type = ComponentType::transform;
+  type = ComponentType::Transform;
 }
 
 // reclaculate the world matrix
 void Components::Transform::recalculateMatrix()
 {
   // rotation matrix
-  rotation.x *= 1 / 52.7;
-  rotation.y *= 1 / 52.7;
-  rotation.z *= 1 / 52.7;
+  rotation.x *= 1 / 52.7f;
+  rotation.y *= 1 / 52.7f;
+  rotation.z *= 1 / 52.7f;
+
   Matrix rotationMatrixX = DirectX::XMMatrixRotationX(rotation.x);
   Matrix rotationMatrixY = DirectX::XMMatrixRotationY(rotation.y);
   Matrix rotationMatrixZ = DirectX::XMMatrixRotationZ(rotation.z);
@@ -72,11 +73,3 @@ const Matrix& Components::Transform::getTransformMatrix()
 {
   return transformMatrix;
 }
-
-// set the position
-void Components::Transform::setPosition(Vector3D pos)
-{
-  position = pos;
-  recalculateMatrix();
-}
-

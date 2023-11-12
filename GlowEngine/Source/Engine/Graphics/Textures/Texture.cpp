@@ -22,10 +22,10 @@ Textures::Texture::Texture()
 }
 
 // overloaded constructor to load an image immediately
-Textures::Texture::Texture(std::string name)
+Textures::Texture::Texture(std::string texName)
 {
   init();
-  load(name);
+  load(texName);
 }
 
 // initialize texture properties
@@ -44,32 +44,31 @@ void Textures::Texture::init()
 // this will search the texture library and fetch the resource, or create it if it does not exist
 void Textures::Texture::load(std::string fileName)
 {
-  // check the texture library to see if we have a texture
-  Textures::Texture* texture = textureLibrary->get(fileName);
-  if (texture)
+  // get the texture from the library
+  Textures::Texture* tex = textureLibrary->get(fileName);
+  if (tex)
   {
-    // found texture, set pointer
-    *this = *texture;
+    *this = *tex;
     return;
   }
-  else
-  {
-    // could not find texture
-    data = stbi_load(fileName.c_str(), &width, &height, &channels, 4);
-    if (!data)
-    {
-      // if data was invalid
-      Logger::error("Failed to load texture " + fileName);
-    }
-  }
+}
 
-  // set properties
-  name = fileName;
+// create the texture data - we call this whenever we 
+void Textures::Texture::createTexture(std::string filePath)
+{
+  // could not find texture
+  data = stbi_load(filePath.c_str(), &width, &height, &channels, 4);
+  if (!data)
+  {
+    // if data was invalid
+    Logger::error("Failed to load texture " + filePath);
+  }
 
   // create/update the texture resource
   createTextureResource();
 }
 
+// create the directX texture description
 void Textures::Texture::createTextureResource()
 {
   // setup the texture description and resource

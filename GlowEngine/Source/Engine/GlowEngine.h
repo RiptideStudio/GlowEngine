@@ -13,6 +13,7 @@ namespace Graphics { class Renderer; class Window; }
 namespace Models { class ModelLibrary; }
 namespace Textures { class TextureLibrary; }
 namespace Scene { class SceneSystem; }
+namespace Meshes { class MeshLibrary; }
 
 namespace Engine
 {
@@ -47,6 +48,7 @@ namespace Engine
     Textures::TextureLibrary* getTextureLibrary() { return textureLibrary; }
     Scene::SceneSystem* getSceneSystem() { return sceneSystem; }
     Graphics::Window* getWindow() { return window; }
+    Meshes::MeshLibrary* getMeshLibrary() { return meshLibrary; }
 
     // get engine properties
     int getFps() { return fps; }
@@ -66,6 +68,7 @@ namespace Engine
     Input::InputSystem* input;
     Models::ModelLibrary* modelLibrary;
     Textures::TextureLibrary* textureLibrary;
+    Meshes::MeshLibrary* meshLibrary;
     Scene::SceneSystem* sceneSystem;
 
     // core engine properties (fps, delta time)

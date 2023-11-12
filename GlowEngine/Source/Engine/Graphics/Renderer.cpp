@@ -16,6 +16,10 @@
 #include "Engine/Graphics/Textures/stb_image.h"
 #include <filesystem>
 
+// define the amount of max lights we can have
+#define MAXLIGHTS 8
+static PointLight pointLightsArray[MAXLIGHTS];
+
 // initialize the graphics renderer properties
 Graphics::Renderer::Renderer(HWND handle)
   :
@@ -24,7 +28,8 @@ Graphics::Renderer::Renderer(HWND handle)
   vertexShader(nullptr),
   camera(nullptr),
   constantBuffer(nullptr),
-  sampler(nullptr)
+  sampler(nullptr),
+  lights(0)
 {
   // engine
   engine = EngineInstance::getEngine();
@@ -90,7 +95,18 @@ void Graphics::Renderer::beginFrame()
   // Set the buffer in the shader
   deviceContext->PSSetConstantBuffers(1, 1, &lightBuffer);
   lightBuffer->Release();
+
+  // Update the GPU constant buffer
+  D3D11_MAPPED_SUBRESOURCE mappedResource;
+  deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+  memcpy(mappedResource.pData, pointLightsArray, sizeof(PointLightBuffer)*MAXLIGHTS);
+  deviceContext->Unmap(pointLightBuffer, 0);
+
+  // bind the constant buffer to the shader
+  deviceContext->PSSetConstantBuffers(0, 1, &pointLightBuffer);
   
+
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
 }
@@ -353,6 +369,15 @@ void Graphics::Renderer::createLightBuffer()
   {
   }
 
+  // create light description
+  D3D11_BUFFER_DESC cbd;
+  ZeroMemory(&cbd, sizeof(D3D11_BUFFER_DESC));
+  cbd.Usage = D3D11_USAGE_DYNAMIC;
+  cbd.ByteWidth = sizeof(PointLightBuffer);
+  cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+  cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+  device->CreateBuffer(&cbd, nullptr, &pointLightBuffer);
 }
 
 // create a sampler state for sampling textures
@@ -520,6 +545,13 @@ void Graphics::Renderer::setBackgroundColor(float color[4])
 void Graphics::Renderer::setTopology(D3D_PRIMITIVE_TOPOLOGY topology)
 {
   deviceContext->IASetPrimitiveTopology(topology);
+}
+
+// add a new active point light
+void Graphics::Renderer::addPointLight(PointLight buff)
+{
+  pointLightsArray[lights] = buff;
+  lights++;
 }
 
 // get the device

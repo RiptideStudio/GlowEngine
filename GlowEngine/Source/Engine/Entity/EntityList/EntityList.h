@@ -32,6 +32,7 @@ namespace Entities
   private:
     std::vector<Entities::Entity*> activeList;
     std::vector<Entities::Entity*> deferredList;
+    std::vector<Entities::Entity*> destroyList;
 
     int size;
 

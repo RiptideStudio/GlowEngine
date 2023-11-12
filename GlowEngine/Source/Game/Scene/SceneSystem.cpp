@@ -14,7 +14,7 @@ Scene::SceneSystem::SceneSystem(std::string systemName)
   : System(systemName)
 {
   scenes.push_back(new ForestScene());
-  currentScene = scenes.at(0);
+  currentScene = nullptr;
 }
 
 // update all entities within the scene
@@ -29,6 +29,11 @@ void Scene::SceneSystem::render()
   currentScene->render();
 }
 
+void Scene::SceneSystem::init()
+{
+  setCurrentScene(scenes.at(0));
+}
+
 // set the current scene
 void Scene::SceneSystem::setCurrentScene(Scene* scene)
 {
@@ -38,10 +43,16 @@ void Scene::SceneSystem::setCurrentScene(Scene* scene)
     Logger::error("Scene " + scene->getName() + "was invalid");
     return;
   }
-  // exit the scene
-  currentScene->exit();
+  if (currentScene)
+  {
+    // exit the scene
+    currentScene->exit();
+  }
+
   // set the current scene
   currentScene = scene;
+  // initialize the new scene
+  currentScene->init();
 }
 
 // exit the current scene

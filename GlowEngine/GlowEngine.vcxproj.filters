@@ -78,6 +78,18 @@
     <Filter Include="Source Files\Engine\Graphics\Window">
       <UniqueIdentifier>{465f5b7a-eb8b-463c-bc6c-93332681a2e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Particles">
+      <UniqueIdentifier>{4d99596a-b8b6-44a6-a161-7923885334d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Behaviors">
+      <UniqueIdentifier>{094130be-fa54-4fff-811b-a79efdbd6a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Meshes">
+      <UniqueIdentifier>{65ab98be-7fbd-4801-9e65-c70a7c07f224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Lighting">
+      <UniqueIdentifier>{b726d471-2581-4b3f-a769-e6afe41b0851}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -176,6 +188,30 @@
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h">
       <Filter>Source Files\Engine\Graphics\Window</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Particles\Particle.h">
+      <Filter>Source Files\Engine\Graphics\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Particles\ParticleEmitter.h">
+      <Filter>Source Files\Engine\Graphics\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Behaviors\Behavior.h">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Behaviors\ParticleBehavior.h">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Meshes\Mesh.h">
+      <Filter>Source Files\Engine\Graphics\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Meshes\MeshLibrary.h">
+      <Filter>Source Files\Engine\Graphics\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Actor.h">
+      <Filter>Source Files\Engine\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h">
+      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -258,6 +294,30 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp">
       <Filter>Source Files\Engine\Graphics\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Particles\Particle.cpp">
+      <Filter>Source Files\Engine\Graphics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Particles\ParticleEmitter.cpp">
+      <Filter>Source Files\Engine\Graphics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Behaviors\Behavior.cpp">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Behaviors\ParticleBehavior.cpp">
+      <Filter>Source Files\Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Meshes\Mesh.cpp">
+      <Filter>Source Files\Engine\Graphics\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Meshes\MeshLibrary.cpp">
+      <Filter>Source Files\Engine\Graphics\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Actor.cpp">
+      <Filter>Source Files\Engine\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

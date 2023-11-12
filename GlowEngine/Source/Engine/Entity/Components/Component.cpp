@@ -15,11 +15,11 @@ Components::Component::Component()
   :
   parent(nullptr)
 {
-
+  type = ComponentType::None;
 }
 
 // get the type
-const Components::ComponentType Components::Component::getType()
+const Components::Component::ComponentType Components::Component::getType()
 {
   return type;
 }

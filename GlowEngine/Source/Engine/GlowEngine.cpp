@@ -14,6 +14,7 @@
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include "Game/Scene/SceneSystem.h"
 #include "Engine/Graphics/Window/Window.h"
+#include "Engine/Graphics/Meshes/MeshLibrary.h"
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -170,6 +171,9 @@ void Engine::GlowEngine::createCoreSystems()
 // create systems dependent on core systems
 void Engine::GlowEngine::createLaterSystems()
 {
+  // mesh library
+  meshLibrary = new Meshes::MeshLibrary();
+  meshLibrary->load();
   // model library
   modelLibrary = new Models::ModelLibrary();
   modelLibrary->load();
@@ -178,6 +182,7 @@ void Engine::GlowEngine::createLaterSystems()
   textureLibrary->load();
   // scene system
   sceneSystem = new Scene::SceneSystem("SceneSystem");
+  sceneSystem->init();
 }
 
 // called on engine exit

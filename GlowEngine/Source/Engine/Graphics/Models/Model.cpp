@@ -12,6 +12,9 @@
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Systems/Parsing/ObjectLoader.h"
 #include "Engine/Graphics/Models/ModelLibrary.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
+#include "Engine/Graphics/Meshes/MeshLibrary.h"
+#include "Engine/Graphics/Meshes/Mesh.h"
 
 // construct a new base model
 Models::Model::Model()
@@ -39,6 +42,7 @@ void Models::Model::init()
   deviceContext = renderer->getDeviceContext();
   dirty = true;
   objects = 1;
+  shadowBuffer = nullptr;
 }
 
 // parse a .obj file and load its vertex data into the model
@@ -52,12 +56,10 @@ void Models::Model::load(const std::string fileName)
 
   if (model)
   {
-    // if the model is in the library
-    modelVertices = model->getModelVertices();
-    modelIndices = model->getModelIndices();
-    modelNames = model->getModelNames();
-    textureNames = model->getTextureModelNames();
-    objects = model->getObjects();
+    // if the model is in the library, just swap pointers
+    // this is only possible because the model data (vertices, indices) isn't ever dynamically changed
+    // if we ever need a new unique model, we will need to perform a deep copy
+    *this = *model;
   }
   else // if it is not in the library
   {
@@ -73,12 +75,12 @@ void Models::Model::load(const std::string fileName)
     modelNames = modelData.getModelNames();
     objects = modelData.getObjects();
     textureNames = modelData.getTextureModelNames();
+
+    // update the buffers for index and vertex data
+    // this will also create them if they don't exist
+    updateVertexBuffer();
+    updateIndexBuffer();
   }
-  
-  // update the buffers for index and vertex data
-  // this will also create them if they don't exist
-  updateVertexBuffer();
-  updateIndexBuffer();
 
 }
 
@@ -94,9 +96,25 @@ const std::vector<unsigned short>& Models::Model::getIndices()
   return indices;
 }
 
+ID3D11Buffer* Models::Model::getVertexBuffer(int index)
+{
+  return vertexBuffers[getModelNames()[index]];
+}
+
+ID3D11Buffer* Models::Model::getIndexBuffer(int index)
+{
+  return indexBuffers[getModelNames()[index]];
+}
+
+void Models::Model::renderShadow()
+{
+
+}
+
 // creates the vertex buffer or updates it 
 void Models::Model::updateVertexBuffer()
 {
+  // update the model buffers
   for (auto name : modelNames)
   {
     D3D11_BUFFER_DESC vertexBufferDesc = {};
@@ -109,6 +127,18 @@ void Models::Model::updateVertexBuffer()
     vertexData.pSysMem = modelVertices[name].data();
     renderer->getDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffers[name]);
   }
+  // update the shadow buffer
+  Meshes::Mesh* shadowMesh = engine->getMeshLibrary()->get("Quad");
+
+  D3D11_BUFFER_DESC shadowBufferDesc = {};
+  shadowBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+  shadowBufferDesc.ByteWidth = sizeof(Vertex) * shadowMesh->getVertices().size();
+  shadowBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+  shadowBufferDesc.CPUAccessFlags = 0;
+
+  D3D11_SUBRESOURCE_DATA vertexData = {};
+  vertexData.pSysMem = shadowMesh->getVertices().data();
+  renderer->getDevice()->CreateBuffer(&shadowBufferDesc, &vertexData, &shadowBuffer);
 }
 
 // creates a model's index buffer or updates it 
@@ -148,24 +178,28 @@ void Models::Model::setUV(Vector3D coords)
 void Models::Model::setColor(const float (&col)[4])
 {
   // loop through the vertices and set color
-  for (auto& vertex : vertices)
+  for (auto name : modelNames)
   {
-    vertex.r = col[0];
-    vertex.g = col[1];
-    vertex.b = col[2];
-    vertex.a = col[3];
+    for (auto& vertex : modelVertices[name])
+    {
+      vertex.r = col[0];
+      vertex.g = col[1];
+      vertex.b = col[2];
+      vertex.a = col[3];
+    }
   }
+
   // update the vertex buffer
   updateVertexBuffer();
 }
 
 // render a model
-void Models::Model::render(std::string name)
+void Models::Model::render()
 {
   // set the index and vertex buffers
-  deviceContext->IASetVertexBuffers(0, 1, &vertexBuffers[name], &stride, &offset);
-  deviceContext->IASetIndexBuffer(indexBuffers[name], DXGI_FORMAT_R16_UINT, 0);
+  deviceContext->IASetVertexBuffers(0, 1, &vertexBuffers[getModelNames()[objectIndex]], &stride, &offset);
+  deviceContext->IASetIndexBuffer(indexBuffers[getModelNames()[objectIndex]], DXGI_FORMAT_R16_UINT, 0);
 
   // draw the triangle
-  deviceContext->DrawIndexed(modelIndices[name].size(), 0, 0);
+  deviceContext->DrawIndexed(modelIndices[getModelNames()[objectIndex]].size(), 0, 0);
 }

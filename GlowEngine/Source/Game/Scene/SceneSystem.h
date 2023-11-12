@@ -24,6 +24,8 @@ namespace Scene
     void update();
     // render the entities in all scenes
     void render();
+    // initialize
+    void init();
 
     // set the current scene
     void setCurrentScene(Scene* scene);
@@ -41,6 +43,7 @@ namespace Scene
 
     // we have a vector of scenes that we iteratively update
     std::vector<Scene*> scenes;
+    std::vector<Scene*> preRegisteredScenes;
 
   };
 

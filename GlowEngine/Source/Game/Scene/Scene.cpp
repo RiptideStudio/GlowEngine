@@ -15,6 +15,7 @@ Scene::Scene::Scene()
   engine = EngineInstance::getEngine();
   input = engine->getInputSystem();
   entityList = new Entities::EntityList();
+  particleList = new Entities::EntityList();
   name = "Scene";
 }
 
@@ -34,28 +35,34 @@ void Scene::Scene::render()
 void Scene::Scene::updateEntities()
 {
   entityList->update();
+  particleList->update();
 }
 
 // render a scene's entities
 void Scene::Scene::renderEntities()
 {
   entityList->render();
+  particleList->render();
 }
 
 // create an entity within a scene that will directly add it to the list
 // easy way to create new entities
-Entities::Entity* Scene::Scene::createEntity(
+Entities::Actor* Scene::Scene::createEntity(
   Vector3D pos, 
   Vector3D scale, 
   Vector3D rotation, 
   std::string modelName, 
   std::string textureName)
 {
-  Entities::Entity* entity = new Entities::Entity();
-  entity->addComponent(new Components::Transform(pos, scale, rotation));
-  entity->addComponent(new Components::Sprite3D(modelName,textureName));
-  entityList->add(entity);
-  return entity;
+  Entities::Actor* actor = new Entities::Actor();
+  actor->setPosition(pos);
+  actor->setScale(scale);
+  actor->setRotation(rotation);
+
+  actor->setModel(modelName);
+  actor->setTexture(textureName);
+
+  return actor;
 }
 
 

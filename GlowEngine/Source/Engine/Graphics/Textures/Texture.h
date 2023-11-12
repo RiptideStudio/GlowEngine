@@ -32,8 +32,11 @@ namespace Textures
     // initialize a texture
     void init();
 
-    // load an image file given a name
+    // find a texture in the library and set it
     void load(std::string fileName);
+
+    // load the actual texture data
+    void createTexture(std::string fileName);
 
     // create the sprite's texture resource
     void createTextureResource();
@@ -44,6 +47,8 @@ namespace Textures
     D3D11_SUBRESOURCE_DATA& getTextureSubResource() { return subResource; }
     D3D11_TEXTURE2D_DESC& getTextureDesc() { return textureDesc; }
 
+    // get the name
+    std::string getName() { return name; }
 
     // get base texture properties
     int getHeight() { return height; }

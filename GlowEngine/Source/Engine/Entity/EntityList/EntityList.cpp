@@ -30,10 +30,30 @@ void Entities::EntityList::add(Entities::Entity* entity)
 void Entities::EntityList::update()
 {
   // update all entities in the active list
-  for (auto entity : activeList)
+  for (auto it = activeList.begin(); it != activeList.end(); )
   {
-    entity->update();
+    // check for destroyed entities
+    if ((*it)->isDestroyed())
+    {
+      destroyList.push_back(*it);
+      // erase the entity from the active list and get the new iterator position
+      it = activeList.erase(it);
+    }
+    else
+    {
+      // update the entity and increment the iterator
+      (*it)->update();
+      ++it;
+    }
   }
+
+  // destroy entities
+  for (auto& entity : destroyList)
+  {
+    entity->~Entity();
+    delete entity;
+  }
+  destroyList.clear();
 }
 
 // update a list of entities

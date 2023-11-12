@@ -8,12 +8,20 @@ struct PixelInputType
     float2 texcoord : TEXCOORD;
 };
 
-// light buffer
+// GPU fog buffer
 cbuffer LightBufferType : register(b1)
 {
     float3 lightDirection;
     float3 lightColor;
     float3 cameraPosition;
+};
+
+// point light buffer
+cbuffer PointLight : register(b0)
+{
+    float3 lightPosition;
+    float padding;
+    float4 color;
 };
 
 // texture sampler
@@ -26,29 +34,50 @@ float4 main(PixelInputType input) : SV_TARGET
     // get the texture color
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     
-    // Calculate diffuse lighting
-    float diffuseFactor = max(dot(input.normal, lightDirection), 0.5);
-    float3 diffuseColor = diffuseFactor * lightColor * float3(2,2,2);
-
-    // Combine the vertex color with the diffuse lighting
-    float4 finalColor = input.color * float4(diffuseColor, 1);
-
-    // Calculate the distance from the camera to the pixel
-    float distance = length(cameraPosition - input.worldpos.xyz);
-
-    // Compute the fog factor based on the distance
-    float wideness = 100;
-    float fogFactor = clamp((wideness - distance) / (wideness - wideness/6), 0.15, 1.0);
+    // test contants
+    float shininess = 0.1f;
+    float constantAttenuation = 1.5f;
+    float linearAttenuation = 0.0045f;
+    float quadraticAttenuation = 0.0075f;
     
-    // Interpolate between the object's color and the fog color
-    finalColor = lerp(float4(0,0,0,1), finalColor, fogFactor);
+    // Calculate vector from pixel to light source
+    float3 pixelToLight = normalize(lightPosition - input.worldpos.xyz);
     
-    // check for textures, if not just return the color
-    if (textureColor.x == 0)
+    // Calculate the diffuse factor
+    float diffuseIntensity = max(dot(input.normal, pixelToLight), 0.0);
+    float3 diffuseLight = diffuseIntensity * color.rgb;
+
+    // Calculate the view vector
+    float3 viewVector = normalize(cameraPosition - input.worldpos.xyz);
+    
+    // Calculate the halfway vector for Blinn-Phong specular highlights
+    float3 halfwayVector = normalize(pixelToLight + viewVector);
+
+    // Calculate the specular factor
+    float specularIntensity = pow(max(dot(input.normal, halfwayVector), 0.1), shininess);
+    float3 specularLight = specularIntensity * color.rgb; // Assuming specular color is white for simplicity
+    
+    // Calculate the final color by combining the diffuse and specular components
+    float3 lightColor = diffuseLight + specularLight;
+    float4 litColor = float4(lightColor, 1) * input.color;
+
+    // Combine the lit color with the texture color, if a texture is present
+    if (textureColor.x != 0)
     {
-        return finalColor;
+        litColor *= textureColor;
     }
+    float distance = length(lightPosition - input.worldpos.xyz);
     
-    // if we have a texture
-    return textureColor * finalColor;
+    // Calculate distance-based attenuation
+    float attenuation = 1.0 / (constantAttenuation + linearAttenuation * distance + quadraticAttenuation * distance * distance);
+    litColor.rgb *= attenuation;
+    
+    // Apply fog based on distance
+    float wideness = 75;
+    float fogFactor = clamp((wideness - distance) / (wideness - wideness / 6), 0.2, 1);
+    litColor = lerp(float4(0.025, 0, 0.075, 1), litColor, fogFactor);
+    
+    // Return the final color
+    return litColor;
 }
+

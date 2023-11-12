@@ -149,7 +149,6 @@ void Parse::ObjectLoader::parse()
 void Parse::ObjectLoader::parseMTL()
 {
   std::string filePath = replaceFileExtension(fileName, ".mtl");
-
   std::ifstream mtl(filePath);
 
   bool open = mtl.is_open();
@@ -159,34 +158,37 @@ void Parse::ObjectLoader::parseMTL()
     std::string line;
     std::string currentMaterialName;
 
+    // read in each line
     while (std::getline(mtl, line))
     {
+      // open the file
       std::istringstream lineStream(line);
       std::string prefix;
       lineStream >> prefix;
 
+      // read in the material name - this is currently unused
       if (prefix == "newmtl")
       {
         lineStream >> currentMaterialName;
       }
       else if (prefix == "map_Kd")
       {
+        // get the texture file path
         std::string textureFilePath;
         lineStream >> textureFilePath;
 
-        // Extract the file name from the full file path
+        // extract the file name from the full file path
         size_t lastSlash = textureFilePath.find_last_of("/\\"); // Handles both forward and backslashes
         std::string textureFileName = textureFilePath.substr(lastSlash + 1);
 
-        // Remove the extension from the texture file name
+        // remove the extension from the texture file name
         size_t lastDot = textureFileName.rfind('.');
         if (lastDot != std::string::npos)
         {
-          // Erase the extension part
           textureFileName.erase(lastDot);
         }
 
-        // Save the texture file name without the path and extension
+        // save the texture file name without the path and extension
         textureNames.push_back(textureFileName);
       }
     }
@@ -198,7 +200,7 @@ void Parse::ObjectLoader::parseMTL()
   }
 
   // match the model's object data order
-  std::reverse(textureNames.begin(), textureNames.end());
+  // std::reverse(textureNames.begin(), textureNames.end());
 }
 
 // delete the parser and its data from memory once we're finished

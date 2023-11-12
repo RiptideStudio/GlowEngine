@@ -17,7 +17,7 @@ namespace Scene
 
   public:
 
-    ForestScene() : Scene() { init(); };
+    ForestScene() : Scene() {};
 
     void init();
     void update();

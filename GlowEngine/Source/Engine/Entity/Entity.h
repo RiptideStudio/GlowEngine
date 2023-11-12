@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Components/Component.h"
+#define getComponentOfType(type, entity) dynamic_cast<Components::type*>(entity->getComponent(Components::Component::ComponentType::type##))
 
 namespace Entities
 {
@@ -27,20 +28,13 @@ namespace Entities
     void render();
     // add a new component
     void addComponent(Components::Component* component);
+    // destroy an entity
+    void destroy();
+    // return if destroyed
+    bool isDestroyed() { return destroyed; }
 
-    // get a component of a certain type
-    template <typename T>
-    T* getComponent(Components::ComponentType type)
-    {
-      for (auto component : components)
-      {
-        if (component->getType() == type)
-        {
-          return dynamic_cast<T*>(component);
-        }
-      }
-      return nullptr;
-    }
+    // get a component
+    Components::Component* getComponent(Components::Component::ComponentType type);
 
   protected:
 

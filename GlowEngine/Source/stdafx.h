@@ -49,3 +49,4 @@ using namespace GlowMath;
 #include "Engine/Entity/Components/Physical/Transform.h"
 #include "Engine/Entity/Components/Visual/Sprite3D.h"
 #include "Engine/Entity/Components/Component.h"
+#include "Engine/Entity/Actor.h"

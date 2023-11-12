@@ -12,6 +12,7 @@
 #pragma comment(lib, "d3d11.lib")
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
+#include "Engine/Graphics/Lighting/LightBuffer.h"
 
 namespace Visual
 {
@@ -27,17 +28,6 @@ namespace Graphics
     DirectX::XMMATRIX world;
     DirectX::XMMATRIX view;
     DirectX::XMMATRIX projection;
-  };
-
-  // define a point light buffer
-  struct LightBuffer
-  {
-    DirectX::XMFLOAT3 lightDirection; // Ensure 16-byte aligned if you add more fields.
-    float padding;
-    DirectX::XMFLOAT3 lightColor;
-    float padding2;
-    DirectX::XMFLOAT3 cameraPosition; // Ensure 16-byte aligned if you add more fields.
-    float padding3;
   };
 
   class Renderer
@@ -90,6 +80,9 @@ namespace Graphics
     // set the topology with a default of trianglelist
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+    // manage point lights
+    void addPointLight(PointLight light);
+
     // get the directX devices for draw calls
     ID3D11Device* getDevice();
     ID3D11DeviceContext* getDeviceContext();
@@ -137,6 +130,7 @@ namespace Graphics
 
     // lighting buffer
     ID3D11Buffer* lightBuffer;
+    ID3D11Buffer* pointLightBuffer;
     D3D11_MAPPED_SUBRESOURCE mappedResource;
 
     // blend state
@@ -154,6 +148,9 @@ namespace Graphics
     Engine::GlowEngine* engine;
     // camera
     Visual::Camera* camera;
+
+    // point lights - the renderer can have a variable amount of point lights
+    int lights;
 
   };
 

@@ -72,12 +72,22 @@ namespace Models
     // get the texture names
     std::vector<std::string> getTextureModelNames() { return textureNames; }
     // get the number of objects
-    int getObjects() { return objects; }
+    const int& getObjects() { return objects; }
+
+    // get the model's buffer index
+    ID3D11Buffer* getVertexBuffer(int index);
+    ID3D11Buffer* getIndexBuffer(int index);
+
+    // render a circular shadow
+    void renderShadow();
 
     // create the vertex buffer for a model
     void updateVertexBuffer();
     // create the index buffer for a model
     void updateIndexBuffer();
+
+    // set the object index to render
+    void setObjectIndex(int index) { objectIndex = index; }
 
     // uv coordinates
     void setUV(Vector3D coords);
@@ -88,7 +98,7 @@ namespace Models
     bool isDirty() { return dirty; }
 
     // render a model
-    void render(std::string name);
+    void render();
 
   private:
     
@@ -107,6 +117,9 @@ namespace Models
     std::map<std::string, ID3D11Buffer*> vertexBuffers;
     std::map<std::string, ID3D11Buffer*> indexBuffers;
 
+    // models have a shadow buffer
+    ID3D11Buffer* shadowBuffer;
+
     // define the vertex stride and offset
     UINT stride = sizeof(Vertex);
     UINT offset = 0;
@@ -119,6 +132,7 @@ namespace Models
     std::vector<std::string> textureNames;
 
     int objects; // how many objects are in the model
+    int objectIndex; // which index of the object we should render
 
     // will be deprecated soon
     std::vector<Vertex> vertices;

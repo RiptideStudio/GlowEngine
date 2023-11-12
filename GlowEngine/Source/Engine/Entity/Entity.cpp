@@ -38,7 +38,7 @@ void Entities::Entity::update()
 void Entities::Entity::render()
 {
   // get the sprite3D to render
-  Components::Sprite3D* sprite = getComponent<Components::Sprite3D>(Components::ComponentType::sprite3D);
+  Components::Sprite3D* sprite = getComponentOfType(Sprite3D, this);
   if (sprite)
   {
     sprite->render();
@@ -50,4 +50,23 @@ void Entities::Entity::addComponent(Components::Component* component)
 {
   component->setParent(this);
   this->components.push_back(component);
+}
+
+// flag an entity for destroy
+void Entities::Entity::destroy()
+{
+  destroyed = true;
+}
+
+// get a component
+Components::Component* Entities::Entity::getComponent(Components::Component::ComponentType type)
+{
+  for (Components::Component* component : components)
+  {
+    if (component->getType() == type)
+    {
+      return component;
+    }
+  }
+  return nullptr;
 }

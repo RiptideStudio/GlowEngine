@@ -33,13 +33,17 @@ namespace Components
     // set dirty
     void setDirty(bool val) { dirty = val; }
 
-    // getters and setters
-    void setPosition(Vector3D pos);
-    // get position
+    // position
+    void setPosition(Vector3D pos) { position = pos; dirty = true; }
     Vector3D getPosition() { return position; }
 
     // get scale
     Vector3D getScale() { return scale; }
+    void setScale(Vector3D newScale) { scale = newScale; dirty = true; }
+
+    // rotation
+    Vector3D getRotation() { return rotation; }
+    void setRotation(Vector3D rot) { rotation = rot; dirty = true; }
 
   private:
 

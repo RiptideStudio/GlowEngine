@@ -12,8 +12,10 @@
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Moss");
-  createEntity({ 10,-10,-5 }, { 1,1,1 }, { 0 }, "Campfire", "Leaves");
+  createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
+  Entities::Actor* campfire = createEntity({ 10,-10,-5 }, { 1,1,1 }, { 0 }, "Campfire", "Wood");
+  campfire->setAsPointLight(true);
+  createEntity({ 10,10,-10 }, { 5,5,5 }, { 0 }, "Monkey", "Wood");
 
   for (int i = 0; i < 15; ++i)
   {
@@ -27,16 +29,15 @@ void Scene::ForestScene::init()
       Vector3D randomPos = { randomX,y,randomZ };
       Vector3D scale = { randomScale ,randomScale ,randomScale };
       Entities::Entity* e = createEntity(randomPos, scale, { 0 }, "Tree2", "Leaves");
-       randomX = randomRange(-100, 100);
-       randomZ = randomRange(-100, 100);
+      randomX = randomRange(-100, 100);
+      randomZ = randomRange(-100, 100);
 
-       y = -10;
-        randomScale = randomRange(.4f, 1.f);
+      y = -10.5;
+      randomScale = randomRange(.4f, 1.f);
 
-       randomPos = { randomX,y,randomZ };
-       scale = { randomScale ,randomScale ,randomScale };
-      Entities::Entity* e2 = createEntity(randomPos, scale, { randomRange(-30.f,30.f),0,randomRange(-30.f,30.f)}, "IcoSphere", "Cobblestone");
-      Components::Sprite3D* sprite = e->getComponent<Components::Sprite3D>(Components::ComponentType::sprite3D);
+      randomPos = { randomX,y,randomZ };
+      scale = { randomScale ,randomScale ,randomScale };
+      Entities::Entity* e2 = createEntity(randomPos, scale, { randomRange(-30.f,30.f),-10,randomRange(-30.f,30.f)}, "Pebble", "Cobblestone");
     }
   }
 }
@@ -47,14 +48,13 @@ void Scene::ForestScene::update()
   // hotkeys for stress testing
   if (input->keyDown('G'))
   {
-    float randomX = randomRange(-100, 100);
-    float randomY = randomRange(0, 100);
-    float randomZ = randomRange(-100, 100);
-    float randomScale = randomRange(1, 5);
-    float randomRotx = randomRange(0, 360);
-    float randomRoty = randomRange(0, 360);
-    float randomRotz = randomRange(0, 360);
-    // createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Monkey", "StoneBrick");
+    float randomX = randomRange(-100.f, 100.f);
+    float randomY = randomRange(0.f, 100.f);
+    float randomZ = randomRange(-100.f, 100.f);
+    float randomScale = randomRange(1.f, 5.f);
+    float randomRotx = randomRange(0.f, 360.f);
+    float randomRoty = randomRange(0.f, 360.f);
+    float randomRotz = randomRange(0.f, 360.f);
     createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "CircleCube", "Schilling");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
@@ -90,8 +90,16 @@ void Scene::ForestScene::update()
   {
     entityList->clear();
   }
+  // create particles
+    Particles::Particle* particle = new Particles::Particle();
+    Vector3D pos = { randomRange(-100,100), randomRange(-15,0), randomRange(-100,100) };
+    Components::Transform* transform = getComponentOfType(Transform, particle);
+    transform->setPosition(pos);
+    particleList->add(particle);
+
 }
 
 void Scene::ForestScene::exit()
 {
+
 }

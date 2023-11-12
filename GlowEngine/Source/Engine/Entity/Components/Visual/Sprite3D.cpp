@@ -12,6 +12,8 @@
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Entity/Entity.h"
 #include "Engine/Graphics/Textures/Texture.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
+
 
 // overloaded constructor to take in a model and a texture
 Components::Sprite3D::Sprite3D(const std::string modelName, const std::string textureName)
@@ -21,7 +23,7 @@ Components::Sprite3D::Sprite3D(const std::string modelName, const std::string te
 {
   init();
   setModel(modelName);
-  setTextures();
+  setTextures(textureName);
 }
 
 // base Sprite3D constructor to give pointers to renderer
@@ -37,7 +39,7 @@ Components::Sprite3D::Sprite3D()
 // initialize the Sprite3D component
 void Components::Sprite3D::init()
 {
-  type = ComponentType::sprite3D;
+  type = ComponentType::Sprite3D;
   name = "Sprite-3D";
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
@@ -47,11 +49,19 @@ void Components::Sprite3D::init()
 void Components::Sprite3D::render()
 {
   // set transform constant buffer
-  Components::Transform* transform = getParent()->getComponent<Components::Transform>(ComponentType::transform);
+  Components::Transform* transform = getComponentOfType(Transform, parent);
   if (!transform)
   {
     return;
   }
+  else
+  {
+    if (transform->isDirty())
+    {
+      transform->recalculateMatrix();
+    }
+  }
+
 
   // check if this sprite has a texture
   if (!textures.empty())
@@ -62,6 +72,11 @@ void Components::Sprite3D::render()
       model->setUV(transform->getScale());
     }
   }
+  else
+  {
+    // unbind the shader resource and reset texture
+    renderer->unBindTexture();
+  }
 
   // update the constant buffer's world matrix
   renderer->updateConstantBufferWorldMatrix(transform->getTransformMatrix());
@@ -69,22 +84,22 @@ void Components::Sprite3D::render()
   // bind the constant buffer and update subresource
   renderer->updateConstantBuffer();
 
-  // loop through textures given model names
-  for (auto name : model->getModelNames())
+  // each models contain several objects, we need to loop through them 
+  for (int i = 0; i < model->getObjects(); ++i)
   {
+    // set the texture - each object in a model might have a different texture
+    std::string name = model->getModelNames()[i];
+
     if (textures[name])
     {
       renderer->getDeviceContext()->PSSetShaderResources(0, 1, textures[name]->getTextureView());
     }
-    else
-    {
-      // unbind the shader resource and reset texture
-      renderer->unBindTexture();
-    }
 
+    // set the object index to be rendered
+    model->setObjectIndex(i);
 
     // render the model
-    model->render(name);
+    model->render();
   }
 }
 
@@ -101,15 +116,32 @@ void Components::Sprite3D::setColor(const float(&color)[4])
 }
 
 // set the textures this sprite uses based on the model
-void Components::Sprite3D::setTextures()
+void Components::Sprite3D::setTextures(std::string singleTextureName)
 {
-  if (model->getTextureModelNames().size() > 0)
+  Textures::TextureLibrary* texLib = EngineInstance::getEngine()->getTextureLibrary();
+
+  // go through each model and set the textures
+  int objects = model->getObjects();
+  int textureNum = model->getTextureModelNames().size(); // how many individual textures we have
+
+  if (textureNum > 1)
   {
-    for (int i = 0; i < model->getObjects(); ++i)
+    for (int i = 0; i < objects; ++i)
     {
-      textures[model->getModelNames()[i]] = new Textures::Texture(model->getTextureModelNames()[i]);
+      std::string modelName = model->getModelNames()[i];
+      std::string textureName = model->getTextureModelNames()[i];
+      textures[modelName] = texLib->get(textureName);
     }
   }
+  else
+  {
+    // any objects that have less than one model should just set all textures to the given one
+    for (int i = 0; i < objects; ++i)
+    {
+      textures[model->getModelNames()[i]] = new Textures::Texture(singleTextureName);
+    }
+  }
+
 }
 
 // get the Sprite3D's model

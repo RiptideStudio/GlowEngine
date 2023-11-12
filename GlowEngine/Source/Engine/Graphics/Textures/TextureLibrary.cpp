@@ -35,7 +35,10 @@ void Textures::TextureLibrary::load(std::string directoryPath)
         // 4. check that the file is an image type (.png and .jpg support)
         if (fileType == ".png" || fileType == ".jpg")
         {
-          add(fileName,new Textures::Texture(filePath));
+          // 5. create the texture and load the data
+          Textures::Texture* newTexture = new Textures::Texture();
+          newTexture->createTexture(filePath);
+          add(fileName, newTexture);
         }
       }
     }
@@ -45,6 +48,7 @@ void Textures::TextureLibrary::load(std::string directoryPath)
 // add a texture to the library
 void Textures::TextureLibrary::add(std::string name, Textures::Texture* texture)
 {
+  // add the texture to the library
   if (texture)
   {
     textures[name] = texture;
@@ -59,6 +63,8 @@ void Textures::TextureLibrary::add(std::string name, Textures::Texture* texture)
 // get a texture from the library
 Textures::Texture* Textures::TextureLibrary::get(std::string name)
 {
+  // if the texture doesn't exist, create it
   Textures::Texture* texture = textures[name];
+  // return the final texture
   return texture;
 }

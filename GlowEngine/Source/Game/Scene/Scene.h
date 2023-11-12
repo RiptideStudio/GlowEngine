@@ -8,6 +8,8 @@
 
 #pragma once
 #include "Engine/Entity/EntityList/EntityList.h"
+#include "Engine/Graphics/Particles/Particle.h"
+#include "Engine/Graphics/Particles/ParticleEmitter.h"
 #include "Engine/Entity/Entity.h"
 #include "Engine/GlowEngine.h"
 
@@ -32,10 +34,13 @@ namespace Scene
     void updateEntities();
     void renderEntities();
 
+    // get a scene's entity container
+    Entities::EntityList* getEntityList() { return entityList; }
+
     std::string getName() { return name; }
 
     // create an entity directly to this scene with already made components
-    Entities::Entity* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
+    Entities::Actor* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
 
   protected:
 
@@ -44,7 +49,11 @@ namespace Scene
     Input::InputSystem* input;
 
     std::string name;
+
+    // entity list
     Entities::EntityList* entityList;
+    // particle list
+    Entities::EntityList* particleList;
 
   };
 
