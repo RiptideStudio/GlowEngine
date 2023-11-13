@@ -20,9 +20,9 @@ void Scene::ForestScene::init()
   monkey->updatePointLight({ 5,-10,-20 }, 2, { 0.5,0.5,5.5,1 });
   monkey->updatePointLight({ 5,-10,0 }, 1, { 5.5,.5,.5,1 });
 
-  for (int i = 0; i < 15; ++i)
+  for (int i = 0; i < 9; ++i)
   {
-    for (int j = 0; j < 15; ++j)
+    for (int j = 0; j < 9; ++j)
     {
       float randomX = randomRange(-100, 100);
       float randomZ = randomRange(-100, 100);
