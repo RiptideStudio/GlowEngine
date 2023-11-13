@@ -14,8 +14,11 @@ void Scene::ForestScene::init()
 {
   createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
   Entities::Actor* campfire = createEntity({ 10,-10,-5 }, { 1,1,1 }, { 0 }, "Campfire", "Wood");
-  campfire->setAsPointLight(true);
-  createEntity({ 10,10,-10 }, { 5,5,5 }, { 0 }, "Monkey", "Wood");
+  Entities::Actor* monkey = createEntity({ 60,-10,-10 }, { 5,5,5 }, { 0 }, "Tree2", "Wood");
+  monkey->setAsPointLight(true);
+  monkey->updatePointLight({ 5,-10,20 }, 1, { .5,3.5,1,1 });
+  monkey->updatePointLight({ 5,-10,-20 }, 2, { 0.5,0.5,5.5,1 });
+  monkey->updatePointLight({ 5,-10,0 }, 1, { 5.5,.5,.5,1 });
 
   for (int i = 0; i < 15; ++i)
   {
@@ -32,12 +35,12 @@ void Scene::ForestScene::init()
       randomX = randomRange(-100, 100);
       randomZ = randomRange(-100, 100);
 
-      y = -10.5;
+      y = -9.5;
       randomScale = randomRange(.4f, 1.f);
 
       randomPos = { randomX,y,randomZ };
       scale = { randomScale ,randomScale ,randomScale };
-      Entities::Entity* e2 = createEntity(randomPos, scale, { randomRange(-30.f,30.f),-10,randomRange(-30.f,30.f)}, "Pebble", "Cobblestone");
+      Entities::Entity* e2 = createEntity(randomPos, scale, { randomRange(-30.f,30.f),-10,randomRange(-30.f,30.f)}, "Rock", "Cobblestone");
     }
   }
 }

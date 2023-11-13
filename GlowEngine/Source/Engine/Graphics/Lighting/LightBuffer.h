@@ -14,6 +14,7 @@
 
 namespace Lighting
 {
+
   // define a GPU fog buffer
   struct LightBuffer
   {
@@ -29,19 +30,18 @@ namespace Lighting
   struct PointLightBuffer
   {
     DirectX::XMFLOAT3 position;
-    float padding;
+    float size;
     DirectX::XMFLOAT4 color;
   };
 
-  // define a point light class that contains the d3d buffer
+  // define a point light class that contains the buffer
   class PointLight
   {
 
   public:
 
-    PointLight();
-
     PointLightBuffer pointLight;
+
   };
 
 }

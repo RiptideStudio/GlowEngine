@@ -34,7 +34,7 @@ Graphics::Renderer::Renderer(HWND handle)
   // engine
   engine = EngineInstance::getEngine();
   // graphics
-  float bgCol[4] = { 0.4,0.3,0.325 };
+  float bgCol[4] = { 0,0,0.025,1 };
   setBackgroundColor(bgCol);
   initGraphics();
   // camera
@@ -80,21 +80,7 @@ void Graphics::Renderer::beginFrame()
   // set the render target and clear depth buffer
   setRenderTarget();
 
-  // SHADER TEST //
-  // Write to the buffer
-  LightBuffer* dataPtr = (LightBuffer*)mappedResource.pData;
-  dataPtr->lightDirection = DirectX::XMFLOAT3({.75,0.75,.75});
-  dataPtr->lightColor = DirectX::XMFLOAT3(0.2f, 0.2f, 0.2f);
-  DirectX::XMFLOAT3 cameraPosition;
-  DirectX::XMStoreFloat3(&cameraPosition, camera->getPosition());
-  dataPtr->cameraPosition = cameraPosition;
-
-  // Unmap the buffer to apply changes
-  deviceContext->Unmap(lightBuffer, 0);
-
-  // Set the buffer in the shader
-  deviceContext->PSSetConstantBuffers(1, 1, &lightBuffer);
-  lightBuffer->Release();
+ 
 
   // Update the GPU constant buffer
   D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -373,7 +359,7 @@ void Graphics::Renderer::createLightBuffer()
   D3D11_BUFFER_DESC cbd;
   ZeroMemory(&cbd, sizeof(D3D11_BUFFER_DESC));
   cbd.Usage = D3D11_USAGE_DYNAMIC;
-  cbd.ByteWidth = sizeof(PointLightBuffer);
+  cbd.ByteWidth = sizeof(PointLightBuffer)*MAXLIGHTS;
   cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
   cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 

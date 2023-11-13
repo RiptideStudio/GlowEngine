@@ -37,7 +37,7 @@ namespace Entities
     // ** Lighting ** //
     void setAsPointLight(bool val);
     void createPointLight();
-    void updatePointLight(Vector3D pos, DirectX::XMFLOAT4 color);
+    void updatePointLight(Vector3D pos, float size, DirectX::XMFLOAT4 color);
 
   private:
 

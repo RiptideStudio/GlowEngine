@@ -20,8 +20,8 @@ Particles::Particle::Particle()
   : Entity(),
   lifeTime(240)
 {
-  addComponent(new Components::Transform({ 0,0,0 }, { .1,.1,.1 }, { 0,0,0 }));
-  addComponent(new Components::Sprite3D("Cube","Sun"));
+  addComponent(new Components::Transform({ 0,0,0 }, { .15,.15,.15 }, { 0,0,0 }));
+  addComponent(new Components::Sprite3D("Sphere","Sun"));
   Components::Sprite3D* s = getComponentOfType(Sprite3D, this);
   s->setColor({ 1,3,1,1 });
   addComponent(new Game::ParticleBehavior());
@@ -40,6 +40,15 @@ void Particles::Particle::simulate()
   rot.x += .5*dt;
   rot.y += .3*dt;
   rot.z += .4*dt;
+  Vector3D scale = transform->getScale();
+  scale.x -= 0.001;
+  scale.y -= 0.001;
+  scale.z -= 0.001;
+  if (scale.x < 0)
+  {
+    destroy();
+  }
+  transform->setScale(scale);
   transform->setRotation(rot);
   lifeTime -= 1;
 

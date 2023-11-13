@@ -32,7 +32,6 @@ Entities::Actor::Actor()
 }
 
 // ** Models ** //
-//
 // set the model
 void Entities::Actor::setModel(std::string name)
 {
@@ -41,7 +40,6 @@ void Entities::Actor::setModel(std::string name)
 }
 
 // ** Textures ** //
-//
 // set the texture
 void Entities::Actor::setTexture(std::string name)
 {
@@ -50,7 +48,6 @@ void Entities::Actor::setTexture(std::string name)
 }
 
 // ** Lighting ** //
-//
 // initialize the point light and set it as active
 void Entities::Actor::setAsPointLight(bool val)
 {
@@ -68,15 +65,16 @@ void Entities::Actor::setAsPointLight(bool val)
 void Entities::Actor::createPointLight()
 {
   light = new PointLight();
-  updatePointLight(getPosition(), { 2,1.5,1,1 });
-  renderer->addPointLight(*light);
+  updatePointLight(getPosition(), 1, { 2.5,1.5,1,1 });
 }
 
 // create a new pointlight data struct and add it to the renderer's list of lights
-void Entities::Actor::updatePointLight(Vector3D pos, DirectX::XMFLOAT4 color)
+void Entities::Actor::updatePointLight(Vector3D pos, float size, DirectX::XMFLOAT4 color)
 {
   light->pointLight.color = color;
   light->pointLight.position = { pos.x,pos.y,pos.z };
+  light->pointLight.size = size;
+  renderer->addPointLight(*light);
 }
 
 
