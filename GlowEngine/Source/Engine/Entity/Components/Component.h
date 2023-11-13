@@ -27,6 +27,7 @@ namespace Components
       Behavior,
       Sprite2D,
       Sprite3D,
+      Animation3D,
       None
     };
 

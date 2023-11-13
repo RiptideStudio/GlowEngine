@@ -21,10 +21,10 @@ Particles::Particle::Particle()
   lifeTime(240)
 {
   addComponent(new Components::Transform({ 0,0,0 }, { .15,.15,.15 }, { 0,0,0 }));
-  addComponent(new Components::Sprite3D("Sphere","Sun"));
+  addComponent(new Components::Sprite3D("Cube","Sun"));
+  addComponent(new Game::ParticleBehavior());
   Components::Sprite3D* s = getComponentOfType(Sprite3D, this);
   s->setColor({ 1,3,1,1 });
-  addComponent(new Game::ParticleBehavior());
 }
 
 // update a particle's simulation based on its properties

@@ -212,6 +212,9 @@
     <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h">
       <Filter>Source Files\Engine\Graphics\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation3D.h">
+      <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -318,6 +321,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp">
       <Filter>Source Files\Engine\Graphics\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation3D.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

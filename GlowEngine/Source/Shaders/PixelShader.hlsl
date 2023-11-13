@@ -44,7 +44,7 @@ float4 main(PixelInputType input) : SV_TARGET
     
     // Test constants for lighting calculations
     float shininess = .0f; // Shininess factor for specular reflection
-    float constantAttenuation = 1.f; // Constant attenuation factor
+    float constantAttenuation = .9f; // Constant attenuation factor
 
     float3 lowResCoords = round(input.worldpos / 3)*3; // this creates the pixelated effect
     
@@ -55,18 +55,18 @@ float4 main(PixelInputType input) : SV_TARGET
     for (int i = 0; i < MAXLIGHTS; ++i)
     {
         // calculate size
-        float linearAttenuation = 0.045f / pointLights[i].size; // Linear attenuation factor
+        float linearAttenuation = 0.0045f / pointLights[i].size; // Linear attenuation factor
         float quadraticAttenuation = 0.05f / pointLights[i].size; // Quadratic attenuation factor
         
         // Calculate vector from pixel to light source
-        float3 pixelToLight = normalize(pointLights[i].lightPosition - input.worldpos);
+        float3 pixelToLight = normalize(pointLights[i].lightPosition - input.worldpos.xyz);
         
         // Calculate the diffuse factor
         float diffuseIntensity = max(dot(input.normal, pixelToLight), 0.0);
         float3 diffuseLight = diffuseIntensity * pointLights[i].color.rgb;
 
         // Calculate the view vector
-        float3 viewVector = normalize(cameraPosition - lowResCoords);
+        float3 viewVector = normalize(cameraPosition - input.worldpos.xyz);
         
         // Calculate the halfway vector for Blinn-Phong specular highlights
         float3 halfwayVector = normalize(pixelToLight + viewVector);
