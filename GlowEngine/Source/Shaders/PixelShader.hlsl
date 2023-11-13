@@ -43,8 +43,8 @@ float4 main(PixelInputType input) : SV_TARGET
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     
     // Test constants for lighting calculations
-    float shininess = .1f; // Shininess factor for specular reflection
-    float constantAttenuation = 1.5f; // Constant attenuation factor
+    float shininess = .0f; // Shininess factor for specular reflection
+    float constantAttenuation = 1.f; // Constant attenuation factor
 
     float3 lowResCoords = round(input.worldpos / 3)*3; // this creates the pixelated effect
     
@@ -98,10 +98,10 @@ float4 main(PixelInputType input) : SV_TARGET
     }
 
     // Apply fog based on distance from the camera to the pixel
-    float fogDistance = length(lowResCoords - input.worldpos.xyz);
+    float fogDistance = length(cameraPosition - input.worldpos.xyz);
     float wideness = 75; // Fog "wideness" factor
-    float fogFactor = clamp((wideness - fogDistance) / (wideness - wideness / 6), 0.15, 1);
-    litColor = lerp(float4(0.025, 0, 0.075, 1), litColor, fogFactor);
+    float fogFactor = clamp((wideness - fogDistance) / (wideness - wideness / 6), 0.2, 1);
+    litColor = lerp(float4(0.025, 0, 0.05, 1), litColor, fogFactor);
     
     return litColor;
 }

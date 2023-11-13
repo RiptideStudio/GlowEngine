@@ -20,5 +20,5 @@ int main()
     return engine->run();
   }
 
-  return -1;
+  return -1; // catastrophic engine failiure
 }

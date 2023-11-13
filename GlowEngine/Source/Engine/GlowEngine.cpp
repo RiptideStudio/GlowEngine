@@ -117,7 +117,6 @@ bool Engine::GlowEngine::run()
   } 
 
   // stop running
-  stop();
   return window->getMessageParam();
 }
 

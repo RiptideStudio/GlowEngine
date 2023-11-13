@@ -36,13 +36,16 @@ namespace Scene
     // retrieve the current scene
     Scene* getCurrentScene() { return currentScene; }
 
+    // add a new scene to the map of scenes
+    void addScene(std::string sceneName);
+
   private:
 
     // the scene that is currently active
     Scene* currentScene;
 
     // we have a vector of scenes that we iteratively update
-    std::vector<Scene*> scenes;
+    std::map<std::string, Scene*> scenes;
     std::vector<Scene*> preRegisteredScenes;
 
   };

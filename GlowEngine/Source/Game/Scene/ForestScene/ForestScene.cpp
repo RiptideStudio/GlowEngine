@@ -13,14 +13,15 @@
 void Scene::ForestScene::init()
 {
   createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  Entities::Actor* campfire = createEntity({ 10,-10,-5 }, { 1,1,1 }, { 0 }, "Campfire", "Wood");
-  Entities::Actor* monkey = createEntity({ 60,-10,-10 }, { 5,5,5 }, { 0 }, "Tree2", "Wood");
+  Entities::Actor* monkey = createEntity({ 10,10,-10 }, { 3,3,3 }, { 0 }, "Monkey", "Wood");
   monkey->setAsPointLight(true);
-  monkey->updatePointLight({ 5,-10,20 }, 1, { .5,3.5,1,1 });
+  monkey->updatePointLight({ 5,-10,20 }, 3, { .5,3.5,1,1 });
+  monkey->updatePointLight({ 5,-10,0 }, 3, { 4.5,.5,.5,1 });
+  monkey->updatePointLight({ 5,-10,-20 }, 3, { .5,.5,4.5,1 });
 
-  for (int i = 0; i < 9; ++i)
+  for (int i = 0; i < 15; ++i)
   {
-    for (int j = 0; j < 9; ++j)
+    for (int j = 0; j < 15; ++j)
     {
       float randomX = randomRange(-100, 100);
       float randomZ = randomRange(-100, 100);

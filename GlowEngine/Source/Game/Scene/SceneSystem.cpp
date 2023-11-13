@@ -13,7 +13,7 @@
 Scene::SceneSystem::SceneSystem(std::string systemName) 
   : System(systemName)
 {
-  scenes.push_back(new ForestScene());
+  addScene("ForestScene");
   currentScene = nullptr;
 }
 
@@ -29,9 +29,10 @@ void Scene::SceneSystem::render()
   currentScene->render();
 }
 
+// initialize the scene system
 void Scene::SceneSystem::init()
 {
-  setCurrentScene(scenes.at(0));
+  setCurrentScene(scenes["ForestScene"]);
 }
 
 // set the current scene
@@ -59,4 +60,10 @@ void Scene::SceneSystem::setCurrentScene(Scene* scene)
 void Scene::SceneSystem::exitCurrentScene()
 {
 
+}
+
+// add a new scene to the map of scenes
+void Scene::SceneSystem::addScene(std::string sceneName)
+{
+  scenes[sceneName] = new ForestScene();
 }
