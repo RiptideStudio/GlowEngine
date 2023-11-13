@@ -13,11 +13,9 @@
 void Scene::ForestScene::init()
 {
   createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  Entities::Actor* monkey = createEntity({ 10,10,-10 }, { 3,3,3 }, { 0 }, "Monkey", "Wood");
+  Entities::Actor* monkey = createEntity({ 10,-10,-10 }, { 0,0,0}, { 0 }, "Monkey", "Wood");
   monkey->setAsPointLight(true);
-  monkey->updatePointLight({ 5,-10,20 }, 3, { .5,3.5,1,1 });
-  monkey->updatePointLight({ 5,-10,0 }, 3, { 4.5,.5,.5,1 });
-  monkey->updatePointLight({ 5,-10,-20 }, 3, { .5,.5,4.5,1 });
+  monkey->updatePointLight({ -20,-10,-5 }, 2, { 2.5,1.5,1,1 });
 
   for (int i = 0; i < 15; ++i)
   {

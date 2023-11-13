@@ -65,7 +65,7 @@ void Entities::Actor::setAsPointLight(bool val)
 void Entities::Actor::createPointLight()
 {
   light = new PointLight();
-  updatePointLight(getPosition(), 1, { 2.5,1.5,1,1 });
+  updatePointLight(getPosition(), 2, { 2.5,1.5,1,1 });
 }
 
 // create a new pointlight data struct and add it to the renderer's list of lights

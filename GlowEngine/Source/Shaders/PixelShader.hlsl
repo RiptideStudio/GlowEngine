@@ -49,7 +49,7 @@ float4 main(PixelInputType input) : SV_TARGET
     float3 lowResCoords = round(input.worldpos / 3)*3; // this creates the pixelated effect
     
     // Initialize final color
-    float3 finalColor = float3(0, 0, 0);
+    float3 finalColor = float3(0,0,0.2);
 
     // Calculate lighting for each point light
     for (int i = 0; i < MAXLIGHTS; ++i)
@@ -59,7 +59,7 @@ float4 main(PixelInputType input) : SV_TARGET
         float quadraticAttenuation = 0.05f / pointLights[i].size; // Quadratic attenuation factor
         
         // Calculate vector from pixel to light source
-        float3 pixelToLight = normalize(pointLights[i].lightPosition - lowResCoords);
+        float3 pixelToLight = normalize(pointLights[i].lightPosition - input.worldpos);
         
         // Calculate the diffuse factor
         float diffuseIntensity = max(dot(input.normal, pixelToLight), 0.0);
@@ -72,7 +72,7 @@ float4 main(PixelInputType input) : SV_TARGET
         float3 halfwayVector = normalize(pixelToLight + viewVector);
 
         // Calculate the specular factor
-        float specularIntensity = pow(max(dot(input.normal, halfwayVector), 0.1), shininess);
+        float specularIntensity = pow(max(dot(input.normal, halfwayVector), 0.0), shininess);
         float3 specularLight = specularIntensity * pointLights[i].color.rgb; // Specular color
 
         // Combine the diffuse and specular components
@@ -97,11 +97,5 @@ float4 main(PixelInputType input) : SV_TARGET
         litColor *= textureColor;
     }
 
-    // Apply fog based on distance from the camera to the pixel
-    float fogDistance = length(cameraPosition - input.worldpos.xyz);
-    float wideness = 75; // Fog "wideness" factor
-    float fogFactor = clamp((wideness - fogDistance) / (wideness - wideness / 6), 0.2, 1);
-    litColor = lerp(float4(0.025, 0, 0.05, 1), litColor, fogFactor);
-    
     return litColor;
 }
