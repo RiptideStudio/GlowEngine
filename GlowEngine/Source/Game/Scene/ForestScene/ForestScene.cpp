@@ -17,8 +17,6 @@ void Scene::ForestScene::init()
   Entities::Actor* monkey = createEntity({ 60,-10,-10 }, { 5,5,5 }, { 0 }, "Tree2", "Wood");
   monkey->setAsPointLight(true);
   monkey->updatePointLight({ 5,-10,20 }, 1, { .5,3.5,1,1 });
-  monkey->updatePointLight({ 5,-10,-20 }, 2, { 0.5,0.5,5.5,1 });
-  monkey->updatePointLight({ 5,-10,0 }, 1, { 5.5,.5,.5,1 });
 
   for (int i = 0; i < 9; ++i)
   {
