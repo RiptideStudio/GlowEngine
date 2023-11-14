@@ -23,7 +23,8 @@
     <ClInclude Include="Source\Engine\Entity\Actor.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Component.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h" />
-    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation3D.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Bone.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Sprite3D.h" />
     <ClInclude Include="Source\Engine\Entity\Entity.h" />
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h" />
@@ -46,8 +47,7 @@
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
     <ClInclude Include="Source\Engine\Systems\Input\Input.h" />
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
-    <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp" />
-    <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp" />
+    <ClInclude Include="Source\Engine\Systems\Parsing\FBXLoader.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
     <ClInclude Include="Source\Game\Behaviors\Behavior.h" />
     <ClInclude Include="Source\Game\Behaviors\ParticleBehavior.h" />
@@ -72,7 +72,8 @@
     <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation3D.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Bone.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Visual\Sprite3D.cpp" />
     <ClCompile Include="Source\Engine\Entity\Entity.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -116,6 +117,7 @@
     <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Parsing\FBXLoader.cpp" />
     <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -286,11 +288,13 @@
       </AdditionalUsingDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include\Assimp\include;$(ProjectDir)Source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>

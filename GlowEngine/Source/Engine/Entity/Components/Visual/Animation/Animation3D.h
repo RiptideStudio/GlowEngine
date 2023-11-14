@@ -12,6 +12,7 @@
 */
 
 #pragma once
+#include "Engine/Entity/Components/Visual/Animation/Bone.h"
 
 namespace Components
 {
@@ -41,6 +42,9 @@ namespace Components
     // called when an animation ends
     virtual void stop() {};
 
+    // load the 3D animation data from an FBX file
+    void loadFBXData();
+
   private:
 
     unsigned int frame; // the current frame of animation
@@ -51,6 +55,10 @@ namespace Components
 
     bool running; // if the animation is running
     bool loop; // if the animation should loop
+
+    // the vector of keyframes and bones
+    std::vector<Bone> bones;
+
 
   };
 

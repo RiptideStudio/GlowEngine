@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "Animation3D.h"
+#include "Engine/Systems/Parsing/FBXLoader.h"
 
 // initialize the animation's base values
 Components::Animation3D::Animation3D()
@@ -77,4 +78,11 @@ void Components::Animation3D::end()
   {
     running = false;
   }
+}
+
+
+// parse and load data from the FBX file - use Assimp to load the binary data
+void Components::Animation3D::loadFBXData()
+{
+  
 }

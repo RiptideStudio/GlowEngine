@@ -90,6 +90,9 @@
     <Filter Include="Source Files\Engine\Graphics\Lighting">
       <UniqueIdentifier>{b726d471-2581-4b3f-a769-e6afe41b0851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Entity\Components\Visual\Animation">
+      <UniqueIdentifier>{b26f33f7-13f1-423e-8c9f-124d10165410}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -124,12 +127,6 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Entity\Entity.h">
       <Filter>Source Files\Engine\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Parsing\json.hpp">
-      <Filter>Source Files\Engine\Systems\Parsing</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Parsing\json_fwd.hpp">
-      <Filter>Source Files\Engine\Systems\Parsing</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Entity\Components\Component.h">
       <Filter>Source Files\Engine\Entity\Components</Filter>
@@ -212,8 +209,14 @@
     <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h">
       <Filter>Source Files\Engine\Graphics\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation3D.h">
-      <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Bone.h">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.h">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\Parsing\FBXLoader.h">
+      <Filter>Source Files\Engine\Systems\Parsing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,8 +325,14 @@
     <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp">
       <Filter>Source Files\Engine\Graphics\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation3D.cpp">
-      <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Bone.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\Parsing\FBXLoader.cpp">
+      <Filter>Source Files\Engine\Systems\Parsing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
