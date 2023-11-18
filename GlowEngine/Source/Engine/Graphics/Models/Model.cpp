@@ -67,7 +67,7 @@ void Models::Model::load(const std::string fileName)
     Parse::ObjectLoader modelData;
     // parse model data
     modelData.open(fileName);
-    modelData.parse();
+    modelData.parseAssimp();
 
     // store the indices and vertices given the map of object data
     modelVertices = modelData.getModelVertices();

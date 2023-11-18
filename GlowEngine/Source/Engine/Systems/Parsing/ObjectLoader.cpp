@@ -10,6 +10,10 @@
 #include "ObjectLoader.h"
 #include <sstream>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 // default constructor for object loading
 Parse::ObjectLoader::ObjectLoader()
   :
@@ -48,6 +52,9 @@ bool Parse::ObjectLoader::open(const std::string filePath)
 
 // parse a the file's contents
 // this will iterate over the .obj file and save vertices, indices, and other core data
+//
+// NOTE: this is a completely custom OBJ model loader made to work with triangulated meshes
+//  and face-based lighting to simulate a lower-resolution feel
 void Parse::ObjectLoader::parse()
 {
   std::vector<Vector3D> temp_normals;
@@ -143,6 +150,82 @@ void Parse::ObjectLoader::parse()
 
   // close the file
   close();
+}
+
+// parse a model using assimp loader
+void Parse::ObjectLoader::parseAssimp()
+{
+  Assimp::Importer importer;
+
+  // Read the OBJ file, and apply post-processing steps for triangulation and generating normals
+  const aiScene* scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_GenNormals);
+
+  // Check for errors
+  if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
+  {
+    // Error logging - use your own error handling here
+    std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+    return;
+  }
+
+  // Process all the scene's meshes
+  for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
+    const aiMesh* mesh = scene->mMeshes[i];
+    
+    // get the mesh name
+    std::string meshName = mesh->mName.C_Str();
+    modelNames.push_back(meshName);
+    objects++;
+
+    // Process vertices
+    for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
+      
+      // create the vertex so we can set its normals
+      Vertex vertex;
+
+      // position
+      aiVector3D pos = mesh->mVertices[j];
+      vertex.x = pos.x;
+      vertex.y = pos.y;
+      vertex.z = pos.z;
+
+      // Vertex normals
+      if (mesh->HasNormals()) {
+        aiVector3D normal = mesh->mNormals[j];
+        vertex.nx = normal.x;
+        vertex.ny = normal.y;
+        vertex.nz = normal.z;
+      }
+
+      // Texture coordinates
+      if (mesh->mTextureCoords[0]) {
+        aiVector3D uv = mesh->mTextureCoords[0][j];
+        vertex.tx = uv.x;
+        vertex.ty = uv.y;
+      }
+
+      modelVertices[meshName].push_back(vertex);
+    }
+
+    for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
+      aiFace face = mesh->mFaces[j];
+      // Loop over the indices in each face (should be 3 for triangles)
+      for (unsigned int k = 0; k < face.mNumIndices; k++) {
+        // Ensure the cast is safe; aiProcess_Triangulate should guarantee triangles
+        unsigned short index = static_cast<unsigned short>(face.mIndices[k]);
+        // Add the index to your data structure
+        modelIndices[meshName].push_back(index);
+      }
+    }
+
+    // Process material properties if necessary
+    if (mesh->mMaterialIndex >= 0) {
+      // Retrieve material from scene->mMaterials[mesh->mMaterialIndex]
+      // and process it as required for your application
+    }
+  }
+
+  // You can also process nodes, animations, etc., depending on your needs
 }
 
 // parse MTL data - this contains things like texture names

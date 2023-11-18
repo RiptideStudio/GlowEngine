@@ -7,9 +7,6 @@
 */
 
 #include "stdafx.h"
-
-/*
-
 #include "FBXLoader.h"
 
 Parse::FBXLoader::FBXLoader()
@@ -75,4 +72,3 @@ void Parse::FBXLoader::processNodes(aiNode* node, const aiScene* scene)
     processNodes(node->mChildren[i], scene);
   }
 }
-*/

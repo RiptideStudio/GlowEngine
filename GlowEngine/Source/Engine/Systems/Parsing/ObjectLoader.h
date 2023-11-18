@@ -23,6 +23,7 @@ namespace Parse
 
     bool open(const std::string fileName);
     void parse(); // parse data and save to indices/vertices
+    void parseAssimp();
     void parseMTL(); // parse MTL data (texture names)
     void close();
     void destroy();
@@ -50,6 +51,7 @@ namespace Parse
     const std::string getFileName();
 
   private:
+
     std::string fileName;
     std::ifstream file;
 
