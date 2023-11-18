@@ -13,9 +13,9 @@
 void Scene::ForestScene::init()
 {
   createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  Entities::Actor* monkey = createEntity({ 10,-10,-10 }, { 0,0,0}, { 0 }, "Monkey", "Wood");
+  Entities::Actor* monkey = createEntity({ 20,-15,-15 }, { 3,3,3}, { 0 }, "Door", "Moss");
   monkey->setAsPointLight(true);
-  monkey->updatePointLight({ -20,-10,-5 }, 2, { 2.5,1.5,1,1 });
+  monkey->updatePointLight({ -20,-10,-5 }, 4, { 2.5,1.5,1,1 });
 
   for (int i = 0; i < 15; ++i)
   {
@@ -91,11 +91,11 @@ void Scene::ForestScene::update()
     entityList->clear();
   }
   // create particles
-    Particles::Particle* particle = new Particles::Particle();
-    Vector3D pos = { randomRange(-100,100), randomRange(-15,0), randomRange(-100,100) };
-    Components::Transform* transform = getComponentOfType(Transform, particle);
-    transform->setPosition(pos);
-    particleList->add(particle);
+  Particles::Particle* particle = new Particles::Particle();
+  Vector3D pos = { randomRange(-100,100), randomRange(-15,0), randomRange(-100,100) };
+  Components::Transform* transform = getComponentOfType(Transform, particle);
+  transform->setPosition(pos);
+  particleList->add(particle);
 
 }
 

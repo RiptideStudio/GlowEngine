@@ -204,6 +204,11 @@ void Parse::ObjectLoader::parseAssimp()
         vertex.ty = uv.y;
       }
 
+      vertex.r = 1;
+      vertex.g = 1;
+      vertex.b = 1;
+      vertex.a = 1;
+
       modelVertices[meshName].push_back(vertex);
     }
 
@@ -225,7 +230,13 @@ void Parse::ObjectLoader::parseAssimp()
     }
   }
 
-  // You can also process nodes, animations, etc., depending on your needs
+  // parse the mtl parts of the file which contain texture names
+  parseMTL();
+
+  // close the file
+  close();
+
+  // TO-DO: Parse FBX animation files
 }
 
 // parse MTL data - this contains things like texture names
