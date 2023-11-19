@@ -33,7 +33,7 @@ void Models::ModelLibrary::load(std::string directoryPath)
         std::string filePath = entry.path().string();
         std::string fileType = entry.path().extension().string();
         // 4. check that the file is of type ".obj"
-        if (fileType == ".obj")
+        if (fileType == ".obj" || fileType == ".fbx")
         {
           add(fileName, new Models::Model(filePath));
         }

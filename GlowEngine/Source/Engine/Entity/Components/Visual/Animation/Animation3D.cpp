@@ -8,7 +8,6 @@
 
 #include "stdafx.h"
 #include "Animation3D.h"
-#include "Engine/Systems/Parsing/FBXLoader.h"
 
 // initialize the animation's base values
 Components::Animation3D::Animation3D()

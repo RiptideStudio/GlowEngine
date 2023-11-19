@@ -215,9 +215,6 @@
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.h">
       <Filter>Source Files\Engine\Entity\Components\Visual\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Systems\Parsing\FBXLoader.h">
-      <Filter>Source Files\Engine\Systems\Parsing</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -330,9 +327,6 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.cpp">
       <Filter>Source Files\Engine\Entity\Components\Visual\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Parsing\FBXLoader.cpp">
-      <Filter>Source Files\Engine\Systems\Parsing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

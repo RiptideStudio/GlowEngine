@@ -47,7 +47,6 @@
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
     <ClInclude Include="Source\Engine\Systems\Input\Input.h" />
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
-    <ClInclude Include="Source\Engine\Systems\Parsing\FBXLoader.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
     <ClInclude Include="Source\Game\Behaviors\Behavior.h" />
     <ClInclude Include="Source\Game\Behaviors\ParticleBehavior.h" />
@@ -117,7 +116,6 @@
     <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Systems\Parsing\FBXLoader.cpp" />
     <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>

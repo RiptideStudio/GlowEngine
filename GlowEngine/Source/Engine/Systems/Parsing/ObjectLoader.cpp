@@ -10,10 +10,6 @@
 #include "ObjectLoader.h"
 #include <sstream>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 // default constructor for object loading
 Parse::ObjectLoader::ObjectLoader()
   :
@@ -163,8 +159,7 @@ void Parse::ObjectLoader::parseAssimp()
   // Check for errors
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
   {
-    // Error logging - use your own error handling here
-    std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+    Logger::error("Failed to load scene " + fileName);
     return;
   }
 
@@ -180,7 +175,7 @@ void Parse::ObjectLoader::parseAssimp()
     // Process vertices
     for (unsigned int j = 0; j < mesh->mNumVertices; j++) {
       
-      // create the vertex so we can set its normals
+      // create the vertex
       Vertex vertex;
 
       // position
@@ -189,7 +184,7 @@ void Parse::ObjectLoader::parseAssimp()
       vertex.y = pos.y;
       vertex.z = pos.z;
 
-      // Vertex normals
+      // normals
       if (mesh->HasNormals()) {
         aiVector3D normal = mesh->mNormals[j];
         vertex.nx = normal.x;
@@ -204,39 +199,40 @@ void Parse::ObjectLoader::parseAssimp()
         vertex.ty = uv.y;
       }
 
+      // base color
       vertex.r = 1;
       vertex.g = 1;
       vertex.b = 1;
       vertex.a = 1;
 
+      // add the vertex
       modelVertices[meshName].push_back(vertex);
     }
 
     for (unsigned int j = 0; j < mesh->mNumFaces; j++) {
       aiFace face = mesh->mFaces[j];
-      // Loop over the indices in each face (should be 3 for triangles)
+      // loop through the actual indices within each face
       for (unsigned int k = 0; k < face.mNumIndices; k++) {
-        // Ensure the cast is safe; aiProcess_Triangulate should guarantee triangles
-        unsigned short index = static_cast<unsigned short>(face.mIndices[k]);
-        // Add the index to your data structure
+        // add the indices to the model
+        unsigned short index = face.mIndices[k];
         modelIndices[meshName].push_back(index);
       }
     }
 
     // Process material properties if necessary
     if (mesh->mMaterialIndex >= 0) {
-      // Retrieve material from scene->mMaterials[mesh->mMaterialIndex]
-      // and process it as required for your application
+      // currently we have no materials
     }
   }
 
   // parse the mtl parts of the file which contain texture names
   parseMTL();
 
+  // TO-DO: Parse FBX animation data
+  processAnimation(scene);
+
   // close the file
   close();
-
-  // TO-DO: Parse FBX animation files
 }
 
 // parse MTL data - this contains things like texture names
@@ -296,6 +292,49 @@ void Parse::ObjectLoader::parseMTL()
   // match the model's object data order
   // std::reverse(textureNames.begin(), textureNames.end());
 }
+
+// process the animation data from the scene
+void Parse::ObjectLoader::processAnimation(const aiScene* scene)
+{
+  if (scene->HasAnimations()) {
+    for (unsigned int i = 0; i < scene->mNumAnimations; i++) {
+      const aiAnimation* anim = scene->mAnimations[i];
+      for (unsigned int j = 0; j < anim->mNumChannels; j++) {
+        const aiNodeAnim* channel = anim->mChannels[j];
+       
+        for (unsigned int i = 0; i < anim->mNumChannels; i++) {
+          const aiNodeAnim* channel = anim->mChannels[i];
+          std::string nodeName = channel->mNodeName.C_Str();
+
+          // Process position keyframes
+          for (unsigned int j = 0; j < channel->mNumPositionKeys; j++) {
+            aiVectorKey key = channel->mPositionKeys[j];
+            float time = static_cast<float>(key.mTime);
+            aiVector3D position = key.mValue;
+            // Store the position and time in your animation data structure
+          }
+
+          // Process rotation keyframes
+          for (unsigned int j = 0; j < channel->mNumRotationKeys; j++) {
+            aiQuatKey key = channel->mRotationKeys[j];
+            float time = static_cast<float>(key.mTime);
+            aiQuaternion rotation = key.mValue;
+            // Store the rotation and time in your animation data structure
+          }
+
+          // Process scaling keyframes
+          for (unsigned int j = 0; j < channel->mNumScalingKeys; j++) {
+            aiVectorKey key = channel->mScalingKeys[j];
+            float time = static_cast<float>(key.mTime);
+            aiVector3D scale = key.mValue;
+            // Store the scale and time in your animation data structure
+          }
+        }
+      }
+    }
+  }
+}
+
 
 // delete the parser and its data from memory once we're finished
 void Parse::ObjectLoader::close()

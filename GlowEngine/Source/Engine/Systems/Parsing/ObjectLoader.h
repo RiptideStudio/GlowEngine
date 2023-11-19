@@ -10,6 +10,9 @@
 */
 
 #pragma once
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 namespace Parse
 {
@@ -22,9 +25,12 @@ namespace Parse
     ObjectLoader();
 
     bool open(const std::string fileName);
+
     void parse(); // parse data and save to indices/vertices
-    void parseAssimp();
+    void parseAssimp(); // parse model and animation data
     void parseMTL(); // parse MTL data (texture names)
+    void processAnimation(const aiScene* scene);
+
     void close();
     void destroy();
 

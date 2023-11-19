@@ -26,6 +26,7 @@ namespace Models
 
     // add a model to the map
     void add(std::string name, Models::Model* model);
+
     // get a model from the map
     Models::Model* get(std::string name);
 
