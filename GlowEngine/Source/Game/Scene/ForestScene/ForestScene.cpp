@@ -12,10 +12,9 @@
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  Entities::Actor* monkey = createEntity({ 20,-15,-15 }, { 3,3,3}, { 0 }, "Door", "Moss");
-  monkey->setAsPointLight(true);
-  monkey->updatePointLight({ -20,-10,-5 }, 4, { 2.5,1.5,1,1 });
+  Entities::Actor* leaves = createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
+  leaves->setAsPointLight(true);
+  Entities::Actor* monkey = createEntity({ 0,-10,-15 }, { 1,1,1 }, { 0 }, "Mushroom", "");
 
   for (int i = 0; i < 15; ++i)
   {

@@ -80,8 +80,6 @@ void Graphics::Renderer::beginFrame()
   // set the render target and clear depth buffer
   setRenderTarget();
 
- 
-
   // Update the GPU constant buffer
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
