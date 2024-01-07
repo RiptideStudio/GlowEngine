@@ -16,10 +16,9 @@ static float lightSize = 1;
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  Entities::Actor* monkey = createEntity({ 20,-15,-15 }, { 3,3,3}, { 0 }, "Monkey", "Moss");
-  monkey->setName("Monkey");
-  monkey->setAsPointLight(true);
+  Entities::Actor* leaves = createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
+  leaves->setAsPointLight(true);
+  Entities::Actor* monkey = createEntity({ 0,-10,-15 }, { 1,1,1 }, { 0 }, "Mushroom", "");
 
   for (int i = 0; i < 15; ++i)
   {
