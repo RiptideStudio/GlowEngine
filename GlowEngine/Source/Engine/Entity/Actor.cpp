@@ -66,6 +66,7 @@ void Entities::Actor::createPointLight()
 {
   light = new PointLight();
   updatePointLight(getPosition(), 2, { 2.5,1.5,1,1 });
+  renderer->addPointLight(light);
 }
 
 // create a new pointlight data struct and add it to the renderer's list of lights
@@ -74,7 +75,7 @@ void Entities::Actor::updatePointLight(Vector3D pos, float size, DirectX::XMFLOA
   light->pointLight.color = color;
   light->pointLight.position = { pos.x,pos.y,pos.z };
   light->pointLight.size = size;
-  renderer->addPointLight(*light);
+  renderer->updatePointLight(light);
 }
 
 

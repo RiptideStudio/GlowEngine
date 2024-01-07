@@ -70,3 +70,15 @@ void Entities::EntityList::clear()
 {
   activeList.clear();
 }
+
+Entities::Entity* Entities::EntityList::find(std::string name)
+{
+  for (auto entity : activeList)
+  {
+    if (entity->getName() == name)
+    {
+      return entity;
+    }
+  }
+  return nullptr;
+}

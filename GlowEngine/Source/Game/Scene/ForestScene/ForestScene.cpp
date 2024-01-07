@@ -9,13 +9,17 @@
 #include "stdafx.h"
 #include "ForestScene.h"
 
+static Vector3D lightPosition = { -20,-10,-5 };
+static DirectX::XMFLOAT4 lightColor = { 2.5,1.5,1,1 };
+static float lightSize = 1;
+
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
   createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  Entities::Actor* monkey = createEntity({ 20,-15,-15 }, { 3,3,3}, { 0 }, "Door", "Moss");
+  Entities::Actor* monkey = createEntity({ 20,-15,-15 }, { 3,3,3}, { 0 }, "Monkey", "Moss");
+  monkey->setName("Monkey");
   monkey->setAsPointLight(true);
-  monkey->updatePointLight({ -20,-10,-5 }, 4, { 2.5,1.5,1,1 });
 
   for (int i = 0; i < 15; ++i)
   {
@@ -96,6 +100,19 @@ void Scene::ForestScene::update()
   Components::Transform* transform = getComponentOfType(Transform, particle);
   transform->setPosition(pos);
   particleList->add(particle);
+
+  float t = engine->getTotalFrames()*1.f;
+
+  lightSize = 1+sinf(t/50.f)/3.f;
+  lightPosition.x += sinf(t / 500.f)/25.f;
+  lightPosition.z += cosf(t / 500.f)/25.f;
+
+
+  Entities::Actor* monkey = reinterpret_cast<Entities::Actor*>(entityList->find("Monkey"));
+  if (monkey)
+  {
+    monkey->updatePointLight(lightPosition, lightSize, lightColor);
+  }
 
 }
 

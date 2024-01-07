@@ -46,7 +46,8 @@ float4 main(PixelInputType input) : SV_TARGET
     float shininess = .0f; // Shininess factor for specular reflection
     float constantAttenuation = .9f; // Constant attenuation factor
 
-    float3 lowResCoords = round(input.worldpos / 3)*3; // this creates the pixelated effect
+    // float3 lowResCoords = round(input.worldpos / 3)*3; // this creates the pixelated effect
+    float3 lowResCoords = input.worldpos; // this creates the pixelated effect
     
     // Initialize final color
     float3 finalColor = float3(0,0,0.2);

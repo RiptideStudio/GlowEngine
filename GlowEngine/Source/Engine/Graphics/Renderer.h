@@ -81,7 +81,8 @@ namespace Graphics
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // manage point lights
-    void addPointLight(PointLight light);
+    void addPointLight(PointLight* light);
+    void updatePointLight(PointLight* light);
 
     // get the directX devices for draw calls
     ID3D11Device* getDevice();

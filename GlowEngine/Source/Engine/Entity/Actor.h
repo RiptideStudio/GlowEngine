@@ -39,6 +39,9 @@ namespace Entities
     void createPointLight();
     void updatePointLight(Vector3D pos, float size, DirectX::XMFLOAT4 color);
 
+    // ** General ** //
+    void setName(std::string name) { this->name = name; }
+
   private:
 
     // lighting properties

@@ -18,7 +18,7 @@
 
 // define the amount of max lights we can have
 #define MAXLIGHTS 8
-static PointLight pointLightsArray[MAXLIGHTS];
+static PointLight* pointLightsArray[MAXLIGHTS];
 
 // initialize the graphics renderer properties
 Graphics::Renderer::Renderer(HWND handle)
@@ -80,18 +80,15 @@ void Graphics::Renderer::beginFrame()
   // set the render target and clear depth buffer
   setRenderTarget();
 
- 
-
   // Update the GPU constant buffer
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
-  memcpy(mappedResource.pData, pointLightsArray, sizeof(PointLightBuffer)*MAXLIGHTS);
+  memcpy(mappedResource.pData, *pointLightsArray, sizeof(PointLightBuffer)*MAXLIGHTS);
   deviceContext->Unmap(pointLightBuffer, 0);
 
   // bind the constant buffer to the shader
   deviceContext->PSSetConstantBuffers(0, 1, &pointLightBuffer);
-  
 
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
@@ -534,10 +531,22 @@ void Graphics::Renderer::setTopology(D3D_PRIMITIVE_TOPOLOGY topology)
 }
 
 // add a new active point light
-void Graphics::Renderer::addPointLight(PointLight buff)
+void Graphics::Renderer::addPointLight(PointLight* buff)
 {
   pointLightsArray[lights] = buff;
   lights++;
+}
+
+// add a new active point light
+void Graphics::Renderer::updatePointLight(PointLight* buff)
+{
+  for (int i = 0; i < lights; ++i)
+  {
+    if (pointLightsArray[i] == buff)
+    {
+      pointLightsArray[i] = buff;
+    }
+  }
 }
 
 // get the device

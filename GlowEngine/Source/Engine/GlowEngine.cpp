@@ -100,6 +100,7 @@ bool Engine::GlowEngine::run()
     prevTime = currTime;
     fpsTimer += deltaTime;
     frameCount++;
+    totalFrames++;
 
     // update systems
     update();

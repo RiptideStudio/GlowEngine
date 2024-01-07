@@ -41,6 +41,7 @@ namespace Lighting
   public:
 
     PointLightBuffer pointLight;
+    unsigned int id = 0;
 
   };
 

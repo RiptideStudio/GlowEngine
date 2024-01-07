@@ -32,6 +32,8 @@ namespace Entities
     void destroy();
     // return if destroyed
     bool isDestroyed() { return destroyed; }
+    // get the name
+    std::string getName() { return name; }
 
     // get a component
     Components::Component* getComponent(Components::Component::ComponentType type);
