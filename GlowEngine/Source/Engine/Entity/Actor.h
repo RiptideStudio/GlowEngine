@@ -30,14 +30,22 @@ namespace Entities
     void setRotation(Vector3D pos) { transform->setRotation(pos); }
     Vector3D getRotation() { return transform->getRotation(); }
 
-    // ** Sprite ** //
+    // ** Physics ** //
+    void setAcceleraton(Vector3D acc);
+    void setVelocity(Vector3D vel);
+
+    // ** Model ** //
     void setModel(std::string name);
+
+    // ** Texture ** //
     void setTexture(std::string name);
+    void setTextureRepeat(bool val);
 
     // ** Lighting ** //
     void setAsPointLight(bool val);
     void createPointLight();
     void updatePointLight(Vector3D pos, float size, DirectX::XMFLOAT4 color);
+    void setLightSize(float size);
 
     // ** General ** //
     void setName(std::string name) { this->name = name; }
@@ -51,7 +59,11 @@ namespace Entities
     // common pointers actors use
     Engine::GlowEngine* engine;
     Graphics::Renderer* renderer;
+
+    // components
     Components::Transform* transform;
+    Components::Sprite3D* sprite;
+    Components::Physics* physics;
 
   };
 

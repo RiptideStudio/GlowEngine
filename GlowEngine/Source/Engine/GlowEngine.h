@@ -56,6 +56,10 @@ namespace Engine
     bool isRunning() { return running; }
     float getDeltaTime() { return deltaTime; }
 
+    // if we are playing
+    bool isPlaying();
+    void setPlaying(bool val);
+
     // get the window handle from the window class
     HWND getWindowHandle();
 
@@ -78,6 +82,9 @@ namespace Engine
     int frameTime;
     float deltaTime;
     HWND windowHandle;
+
+    // if we are in play mode
+    bool playing;
 
   };
 }

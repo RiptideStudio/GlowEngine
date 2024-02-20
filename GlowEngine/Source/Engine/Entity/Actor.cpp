@@ -27,15 +27,29 @@ Entities::Actor::Actor()
   renderer = engine->getRenderer();
   transform = new Components::Transform();
   addComponent(transform);
-  addComponent(new Components::Sprite3D("Cube"));
+  physics = new Components::Physics();
+  addComponent(physics);
+  sprite = new Components::Sprite3D("Cube");
+  addComponent(sprite);
+  addComponent(new Components::BoxCollider());
   engine->getSceneSystem()->getCurrentScene()->getEntityList()->add(this); // adds actors to active list
+}
+
+// ** Physics ** //
+void Entities::Actor::setAcceleraton(Vector3D acc)
+{
+  physics->setAcceleration(acc);
+}
+
+void Entities::Actor::setVelocity(Vector3D vel)
+{
+  physics->setVelocity(vel);
 }
 
 // ** Models ** //
 // set the model
 void Entities::Actor::setModel(std::string name)
 {
-  Components::Sprite3D* sprite = getComponentOfType(Sprite3D, this);
   sprite->setModel(name);
 }
 
@@ -43,8 +57,12 @@ void Entities::Actor::setModel(std::string name)
 // set the texture
 void Entities::Actor::setTexture(std::string name)
 {
-  Components::Sprite3D* sprite = getComponentOfType(Sprite3D, this);
   sprite->setTextures(name);
+}
+
+void Entities::Actor::setTextureRepeat(bool val)
+{
+  sprite->setTextureRepeat(val);
 }
 
 // ** Lighting ** //
@@ -59,6 +77,12 @@ void Entities::Actor::setAsPointLight(bool val)
   {
     createPointLight();
   }
+}
+
+// update the size of the light
+void Entities::Actor::setLightSize(float size)
+{
+  light->pointLight.size = size;
 }
 
 // create the point light

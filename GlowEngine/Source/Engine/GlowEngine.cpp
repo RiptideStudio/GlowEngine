@@ -191,6 +191,16 @@ void Engine::GlowEngine::cleanUp()
   Logger::write("Cleaning up...");
 }
 
+bool Engine::GlowEngine::isPlaying()
+{
+    return playing;
+}
+
+void Engine::GlowEngine::setPlaying(bool val)
+{
+  playing = val;
+}
+
 // directly get the window handle
 HWND Engine::GlowEngine::getWindowHandle()
 {

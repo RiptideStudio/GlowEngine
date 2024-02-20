@@ -10,6 +10,7 @@
 #include "Window.h"
 #include "Engine/GlowEngine.h"
 
+
 // construct the window
 Graphics::Window::Window()
   : windowWidth(1280),
@@ -82,6 +83,9 @@ void Graphics::Window::updateWindow()
 // windows message callback
 LRESULT Graphics::Window::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+  if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+    return true;
+
   switch (message)
   {
     // when a key is first triggered, set the keystate to active

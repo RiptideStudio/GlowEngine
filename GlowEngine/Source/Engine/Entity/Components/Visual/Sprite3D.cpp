@@ -67,7 +67,7 @@ void Components::Sprite3D::render()
   if (!textures.empty())
   {
     // change the UVs
-    if (model->isDirty())
+    if (model->isDirty() && repeatTexture)
     {
       model->setUV(transform->getScale());
     }
@@ -128,8 +128,17 @@ void Components::Sprite3D::setTextures(std::string singleTextureName)
   {
     for (int i = 0; i < objects; ++i)
     {
+      // BUG: This current implementation implies that the number of textures matches the number of objects
+      // we need to make it so that is not the case
       std::string modelName = model->getModelNames()[i];
-      std::string textureName = model->getTextureModelNames()[i];
+
+      // never over-index the textures
+      int textureIndex = i;
+      if (textureIndex >= model->getTextureModelNames().size())
+      { 
+        textureIndex = model->getTextureModelNames().size()-1;
+      }
+      std::string textureName = model->getTextureModelNames()[textureIndex];
       textures[modelName] = texLib->get(textureName);
     }
   }
@@ -142,6 +151,11 @@ void Components::Sprite3D::setTextures(std::string singleTextureName)
     }
   }
 
+}
+
+void Components::Sprite3D::setTextureRepeat(bool val)
+{
+  repeatTexture = val;
 }
 
 // get the Sprite3D's model

@@ -38,10 +38,9 @@ void Entities::Entity::update()
 void Entities::Entity::render()
 {
   // get the sprite3D to render
-  Components::Sprite3D* sprite = getComponentOfType(Sprite3D, this);
-  if (sprite)
+  for (auto component : components)
   {
-    sprite->render();
+    component->render();
   }
 }
 
@@ -56,6 +55,19 @@ void Entities::Entity::addComponent(Components::Component* component)
 void Entities::Entity::destroy()
 {
   destroyed = true;
+}
+
+// has a component
+bool Entities::Entity::hasComponent(Components::Component::ComponentType type)
+{
+  for (Components::Component* component : components)
+  {
+    if (component->getType() == type)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 // get a component

@@ -32,6 +32,14 @@ void Entities::EntityList::update()
   // update all entities in the active list
   for (auto it = activeList.begin(); it != activeList.end(); )
   {
+    // do collision checks for entities with colliders
+    Entities::Entity* ent = *it;
+
+    if (ent->hasComponent(Components::Component::Collider))
+    {
+
+    }
+
     // check for destroyed entities
     if ((*it)->isDestroyed())
     {

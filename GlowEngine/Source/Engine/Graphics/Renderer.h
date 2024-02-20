@@ -21,6 +21,11 @@ namespace Visual
 
 namespace Graphics
 {
+  class GlowGui;
+}
+
+namespace Graphics
+{
 
   // define a constant buffer to be sent to the vertex shader
   struct cbPerObject
@@ -42,7 +47,6 @@ namespace Graphics
     // frame updates
     void beginFrame();
     void endFrame();
-
     
     void createDeviceAndSwapChain();
     void loadShaders();
@@ -53,6 +57,7 @@ namespace Graphics
     void createDepthStencil();
     void createLightBuffer();
     void createSamplerState();
+    void createRenderTexture();
 
     // shadow mapping
     void createShadowMap();
@@ -88,16 +93,31 @@ namespace Graphics
     ID3D11Device* getDevice();
     ID3D11DeviceContext* getDeviceContext();
 
+    // create the ImGui system
+    void createImGuiSystem();
+
+    // get the back buffer
+    ID3D11Texture2D* getBackBuffer();
+
   private:
 
     // window handle
     HWND windowHandle;
 
+    // ImGui system
+    Graphics::GlowGui* glowGui;
+
     // devices
     ID3D11Device* device;
     ID3D11DeviceContext* deviceContext;
     IDXGISwapChain* swapChain;
+
+    // target view and texture
     ID3D11RenderTargetView* renderTargetView;
+
+    ID3D11Texture2D* renderTexture = nullptr;
+    ID3D11RenderTargetView* rtv = nullptr;
+    ID3D11ShaderResourceView* srv = nullptr;
 
     // shadow mapping
     ID3D11Texture2D* shadowMap;
@@ -106,6 +126,7 @@ namespace Graphics
     // shaders
     ID3D11PixelShader* pixelShader;
     ID3D11VertexShader* vertexShader;
+
     // blobs
     ID3DBlob* pixelShaderBlob;
     ID3DBlob* vertexShaderBlob;
@@ -141,6 +162,7 @@ namespace Graphics
     ID3D11DepthStencilView* depthStencilView;
     ID3D11Texture2D* depthStencilBuffer;
     ID3D11DepthStencilState* depthStencilState;
+    ID3D11ShaderResourceView* shadowMapSRV;
 
     // background color
     float backgroundColor[4];

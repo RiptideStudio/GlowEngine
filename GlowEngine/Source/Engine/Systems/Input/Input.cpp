@@ -33,6 +33,11 @@ void Input::InputSystem::update()
     mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
   }
 
+  if (keystates[WM_LBUTTONDOWN])
+  {
+    Logger::write("BALLS");
+  }
+
   // toggle the focus
   if (keyDown('F'))
   {

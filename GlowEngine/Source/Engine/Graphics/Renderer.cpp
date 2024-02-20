@@ -14,6 +14,7 @@
 #include "Engine/Entity/EntityList/EntityList.h"
 #include "Engine/Graphics/Textures/Texture.h"
 #include "Engine/Graphics/Textures/stb_image.h"
+#include "UI/GlowGui.h"
 #include <filesystem>
 
 // define the amount of max lights we can have
@@ -29,6 +30,7 @@ Graphics::Renderer::Renderer(HWND handle)
   camera(nullptr),
   constantBuffer(nullptr),
   sampler(nullptr),
+  glowGui(nullptr),
   lights(0)
 {
   // engine
@@ -57,6 +59,7 @@ void Graphics::Renderer::initGraphics()
   createConstantBuffer();
   createSamplerState();
   createLightBuffer();
+  createImGuiSystem();
 
   // set the rasterizer to wireframe for testing
   // setRasterizerFillMode(D3D11_FILL_WIREFRAME);
@@ -80,6 +83,9 @@ void Graphics::Renderer::beginFrame()
   // set the render target and clear depth buffer
   setRenderTarget();
 
+  // start imGui frame
+  glowGui->beginUpdate();
+
   // Update the GPU constant buffer
   D3D11_MAPPED_SUBRESOURCE mappedResource;
   deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
@@ -98,8 +104,11 @@ void Graphics::Renderer::beginFrame()
 // present the swapchain and draw the objects
 void Graphics::Renderer::endFrame()
 {
+  // end ImGui draw
+  glowGui->endUpdate();
+
   // present the back buffer to the screen
-  swapChain->Present(0, 0);
+  swapChain->Present(1, 0);
 }
 
 // initialize the d3d device, context and swap chain
@@ -379,6 +388,11 @@ void Graphics::Renderer::createSamplerState()
   device->CreateSamplerState(&sampDesc, &sampler);
 }
 
+void Graphics::Renderer::createRenderTexture()
+{
+
+}
+
 // create a shadow map
 void Graphics::Renderer::createShadowMap()
 {
@@ -559,4 +573,14 @@ ID3D11Device* Graphics::Renderer::getDevice()
 ID3D11DeviceContext* Graphics::Renderer::getDeviceContext()
 {
   return deviceContext;
+}
+
+void Graphics::Renderer::createImGuiSystem()
+{
+  glowGui = new Graphics::GlowGui(windowHandle,device,deviceContext,this);
+}
+
+ID3D11Texture2D* Graphics::Renderer::getBackBuffer()
+{
+  return backBuffer;
 }

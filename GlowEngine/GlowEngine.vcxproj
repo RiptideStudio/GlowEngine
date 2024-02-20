@@ -21,7 +21,10 @@
   <ItemGroup>
     <ClInclude Include="Source\Engine\EngineInstance.h" />
     <ClInclude Include="Source\Engine\Entity\Actor.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Collision\BoxCollider.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Collision\Collider.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Component.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Physical\Physics.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Bone.h" />
@@ -41,6 +44,15 @@
     <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\GlowGui.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imconfig.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_internal.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_rectpack.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_textedit.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_truetype.h" />
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
     <ClInclude Include="Source\Engine\Math\Random.h" />
@@ -65,9 +77,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Entity\Actor.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Collision\BoxCollider.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Collision\Collider.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Physical\Physics.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -100,6 +115,28 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\GlowGui.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp" />
     <ClCompile Include="Source\Engine\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>

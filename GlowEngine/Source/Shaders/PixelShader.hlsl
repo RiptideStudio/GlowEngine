@@ -43,14 +43,14 @@ float4 main(PixelInputType input) : SV_TARGET
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     
     // Test constants for lighting calculations
-    float shininess = .0f; // Shininess factor for specular reflection
-    float constantAttenuation = .9f; // Constant attenuation factor
+    float shininess = 0.25f; // Shininess factor for specular reflection
+    float constantAttenuation = 1.f; // Constant attenuation factor
 
     // float3 lowResCoords = round(input.worldpos / 3)*3; // this creates the pixelated effect
     float3 lowResCoords = input.worldpos; // this creates the pixelated effect
     
     // Initialize final color
-    float3 finalColor = float3(0,0,0.2);
+    float3 finalColor = float3(0,0,0.22);
 
     // Calculate lighting for each point light
     for (int i = 0; i < MAXLIGHTS; ++i)
@@ -73,7 +73,7 @@ float4 main(PixelInputType input) : SV_TARGET
         float3 halfwayVector = normalize(pixelToLight + viewVector);
 
         // Calculate the specular factor
-        float specularIntensity = pow(max(dot(input.normal, halfwayVector), 0.0), shininess);
+        float specularIntensity = pow(max(dot(input.normal, halfwayVector), shininess), shininess);
         float3 specularLight = specularIntensity * pointLights[i].color.rgb; // Specular color
 
         // Combine the diffuse and specular components

@@ -34,7 +34,8 @@ namespace Entities
     bool isDestroyed() { return destroyed; }
     // get the name
     std::string getName() { return name; }
-
+    // has a component
+    bool hasComponent(Components::Component::ComponentType type);
     // get a component
     Components::Component* getComponent(Components::Component::ComponentType type);
 

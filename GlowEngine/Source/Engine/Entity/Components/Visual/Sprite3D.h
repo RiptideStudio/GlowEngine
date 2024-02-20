@@ -41,6 +41,8 @@ namespace Components
     void setColor(const float(&color)[4]);
     // set a sprite's texture map to the model's texture names
     void setTextures(std::string singleTextureName);
+    // set a texuture to repeat
+    void setTextureRepeat(bool val);
 
     // get the model
     Models::Model* getModel();
@@ -53,6 +55,8 @@ namespace Components
   private:
 
     float alpha;
+
+    bool repeatTexture = false;
 
     Models::Model* model;
     std::map<std::string, Textures::Texture*> textures; // map of textures to objects

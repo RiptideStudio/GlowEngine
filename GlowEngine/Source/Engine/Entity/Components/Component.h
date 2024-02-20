@@ -28,6 +28,9 @@ namespace Components
       Sprite2D,
       Sprite3D,
       Animation3D,
+      BoxCollider,
+      Physics,
+      Collider,
       None
     };
 
@@ -50,6 +53,8 @@ namespace Components
       Entities::Entity* parent;
       std::string name;
       ComponentType type;
+
+      bool active = false;
       
     private:
 
