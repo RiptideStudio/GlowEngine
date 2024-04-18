@@ -35,35 +35,6 @@ void Graphics::GlowGui::beginUpdate()
   ImGui_ImplDX11_NewFrame();
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
- 
-  // Fullscreen dockspace
-  ImGuiViewport* viewport = ImGui::GetMainViewport();
-  ImGui::SetNextWindowPos(viewport->Pos);
-  ImGui::SetNextWindowSize(viewport->Size);
-  ImGui::SetNextWindowViewport(viewport->ID);
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-  ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-  window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
-  ImGui::PopStyleVar(2);
-
-  ImGui::Begin("DockSpace", nullptr, window_flags);
-  ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-  ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
-  ImGui::End();
-
-  ImGui::Begin("Tools");
-  ImGui::End();
-
-  ImGui::Begin("Settings");
-  ImGui::End();
-
-  ImGui::Begin("Game View", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-  // Assuming you have a texture ID for your game's render target
-  ImGui::Image((void*)(intptr_t)renderer->shadowMapSRV, ImGui::GetContentRegionAvail());
-  ImGui::End();
-
 }
 
 void Graphics::GlowGui::update()
