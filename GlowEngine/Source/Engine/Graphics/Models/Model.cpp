@@ -202,4 +202,7 @@ void Models::Model::render()
 
   // draw the triangle
   deviceContext->DrawIndexed(modelIndices[getModelNames()[objectIndex]].size(), 0, 0);
+
+  // unbind the texture
+  renderer->unBindTexture();
 }

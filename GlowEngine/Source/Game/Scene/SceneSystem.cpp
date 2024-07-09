@@ -21,6 +21,14 @@ Scene::SceneSystem::SceneSystem(std::string systemName)
 void Scene::SceneSystem::update()
 {
   currentScene->update();
+  currentScene->updateEntities();
+
+  // restart the current scene
+  if (input->keyDown('R'))
+  {
+      currentScene->getEntityList()->clear();
+      init();
+  }
 }
 
 // render all the entities within a scene

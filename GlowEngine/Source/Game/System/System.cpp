@@ -15,6 +15,7 @@
 Systems::System::System(std::string systemName)
 {
   engine = EngineInstance::getEngine();
+  input = engine->getInputSystem();
   name = systemName;
   SystemInstance::addSystem(this);
 }

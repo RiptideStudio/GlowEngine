@@ -22,8 +22,9 @@ void Scene::ForestScene::init()
   leaves->setAsPointLight(true);
   leaves->setLightSize(lightSize);
   Entities::Actor* monkey = createEntity({ 10,17.5f,-15 }, { 2,2,2 }, { 0 }, "Chest", "Chest");
-  Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 3,3,3 }, { 0 }, "Mushroom", "Schilling");
+  Entities::Actor* d = createEntity({ -10,17.5f,-15 }, { 2,2,2 }, { 0 }, "Door", "Cobblestone");
   Entities::Actor* soup = createEntity({ 0,-6,15 }, { 2,2,2 }, { 0 }, "soup", "");
+  Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 3,3,3 }, { 0 }, "Mushroom", "Mushroom");
 
   for (int i = 0; i < 15; ++i)
   {
@@ -36,7 +37,7 @@ void Scene::ForestScene::init()
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      Entities::Entity* e = createEntity(randomPos, scale, { 0 }, "Tree2", "");
+      Entities::Entity* e = createEntity(randomPos, scale, { 0 }, "Tree2","");
       randomX = randomRange(-100, 100);
       randomZ = randomRange(-100, 100);
 
@@ -52,7 +53,6 @@ void Scene::ForestScene::init()
 
 void Scene::ForestScene::update()
 {
-  updateEntities();
   // hotkeys for stress testing
   if (input->keyDown('G'))
   {
@@ -63,7 +63,7 @@ void Scene::ForestScene::update()
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Chest", "Schilling");
+    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Chest", "Chest");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
   if (input->keyDown('H'))
@@ -94,10 +94,7 @@ void Scene::ForestScene::update()
       }
     }
   }
-  if (input->keyDown('R'))
-  {
-    entityList->clear();
-  }
+
   // create particles
   Particles::Particle* particle = new Particles::Particle();
   Vector3D pos = { randomRange(-100.f,100.f), randomRange(-15.f,0.f), randomRange(-100.f,100.f) };
@@ -107,9 +104,9 @@ void Scene::ForestScene::update()
 
   float t = engine->getTotalFrames()*1.f;
 
-  lightSize = 3+sinf(t/50.f)/3.f;
-  lightPosition.x += sinf(t / 500.f)/25.f;
-  lightPosition.z += cosf(t / 500.f)/25.f;
+  lightSize = 6+sinf(t/50.f)/3.f;
+  //lightPosition.x += sinf(t / 500.f)/25.f;
+  //lightPosition.z += cosf(t / 500.f)/25.f;
 
   Entities::Actor* monkey = reinterpret_cast<Entities::Actor*>(entityList->find("Leaves"));
   if (monkey)

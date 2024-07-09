@@ -8,6 +8,8 @@
 
 #pragma once
 
+namespace Input { class InputSystem; }
+
 namespace Systems
 {
 
@@ -30,6 +32,7 @@ namespace Systems
 
     // all systems have access to core engine and other important systems
     Engine::GlowEngine* engine;
+    Input::InputSystem* input;
 
     std::string name;
   };
