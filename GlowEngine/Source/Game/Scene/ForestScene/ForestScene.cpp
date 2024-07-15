@@ -10,7 +10,7 @@
 #include "ForestScene.h"
 
 static Vector3D lightPosition = { -20,-10,-5 };
-static DirectX::XMFLOAT4 lightColor = { 2.5,1.5,1,1 };
+static DirectX::XMFLOAT4 lightColor = { 1,1,2.5,1 };
 static float lightSize = 1;
 
 // initialize the forest scene
@@ -19,6 +19,7 @@ void Scene::ForestScene::init()
   Entities::Actor* leaves = createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
   leaves->setTextureRepeat(true);
   leaves->setAsPointLight(true);
+  leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
   instanceCreateExt("Monkey", {10,10,-15},{5,5,5}, {45,0,0});
   Entities::Actor* d = createEntity({ -10,17.5f,-15 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
   Entities::Actor* soup = createEntity({ 0,-6,15 }, { 1,1,1 }, { 0 }, "soup", "");

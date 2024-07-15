@@ -65,9 +65,9 @@ Entities::Entity* Entities::EntityFactory::loadEntity(std::string filePath)
     file.close();
 
     // set its properties if they exist
-    entity->setName(data["name"]);
-    entity->sprite->setModel(data["model"]);
-    entity->sprite->setTextures(data["texture"]);
+    if (data.contains("name")) entity->setName(data["name"]);
+    if (data.contains("model")) entity->sprite->setModel(data["model"]);
+    if (data.contains("texture")) entity->sprite->setTextures(data["texture"]);
   }
   catch (const std::exception& e)
   {

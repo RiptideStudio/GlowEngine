@@ -288,9 +288,6 @@ void Parse::ObjectLoader::parseMTL()
     // failed to open
     return;
   }
-
-  // match the model's object data order
-  // std::reverse(textureNames.begin(), textureNames.end());
 }
 
 // process the animation data from the scene
