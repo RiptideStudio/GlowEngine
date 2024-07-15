@@ -30,8 +30,8 @@ namespace Components
     Sprite3D(const std::string modelName, const std::string textureName = "");
     Sprite3D();
 
-    // clone
     Sprite3D* clone();
+    virtual void load(const nlohmann::json&);
 
     // initialize
     void init();
@@ -55,11 +55,16 @@ namespace Components
     // get alpha
     float getAlpha();
 
+    // single texture mode
+    void setSingleTextureMode(bool val) { singleTexture = val; }
+    bool isSingleTextureMode() { return singleTexture; }
+
   private:
 
     float alpha;
 
     bool repeatTexture = false;
+    bool singleTexture = true;
 
     Models::Model* model;
     std::map<std::string, Textures::Texture*> textures; // map of textures to objects

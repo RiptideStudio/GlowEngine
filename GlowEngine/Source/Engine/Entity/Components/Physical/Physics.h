@@ -27,15 +27,20 @@ namespace Components
 
     void render();
 
+    void setAnchored(bool val);
+
   private:
 
     Vector3D velocity;
     Vector3D targetVelocity;
     Vector3D acceleration;
 
+    // anchored means we can't move no matter what
+    bool anchored = false;
+
     // this is the gravity constant
-    const float gravity = -15.f;
-    const float maxVelocity = 50.f;
+    const float gravity = -25.f;
+    const float maxVelocity = 100.f;
 
   };
 

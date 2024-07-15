@@ -26,6 +26,9 @@ namespace Entities
     void update();
     void render();
     void clear();
+
+    void checkCollisions();
+
     Entities::Entity* find(std::string name);
 
     int getSize() { return size; }

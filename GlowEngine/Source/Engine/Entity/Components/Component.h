@@ -40,6 +40,7 @@ namespace Components
       virtual void update() {};
       virtual void render() {};
       virtual void exit() {};
+      virtual void load(const nlohmann::json&) {};
 
       virtual Components::Component* clone();
 
@@ -50,9 +51,10 @@ namespace Components
       // set the parent entity
       void setParent(Entities::Entity* newParent);
 
+      Entities::Entity* parent;
+
     protected:
       
-      Entities::Entity* parent;
       std::string name;
       ComponentType type;
 

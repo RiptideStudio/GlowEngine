@@ -49,6 +49,8 @@ namespace Textures
 
     // get the name
     std::string getName() { return name; }
+    // set the name
+    void setName(std::string newName) { name = newName; }
 
     // get base texture properties
     int getHeight() { return height; }

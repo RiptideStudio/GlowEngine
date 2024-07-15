@@ -18,7 +18,15 @@ namespace Components
 
   public:
 
-    BoxCollider();
+    BoxCollider(Vector3D newScale);
+
+    virtual bool isColliding(const Components::Collider*) override;
+
+    virtual void onFirstCollide();
+    virtual void onCollide();
+    virtual void onLeaveCollide();
+
+    virtual void update();
 
   private:
 

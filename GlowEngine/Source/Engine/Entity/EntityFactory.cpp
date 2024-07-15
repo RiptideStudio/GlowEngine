@@ -47,6 +47,7 @@ void Entities::EntityFactory::addArchetype(std::string name, std::string filePat
   if (fs::exists(filePath))
   {
     archetypes[name] = loadEntity(filePath);
+    Logger::write("Added entity archetype from " + filePath);
   }
 }
 
@@ -64,10 +65,8 @@ Entities::Entity* Entities::EntityFactory::loadEntity(std::string filePath)
     file >> data;
     file.close();
 
-    // set its properties if they exist
-    if (data.contains("name")) entity->setName(data["name"]);
-    if (data.contains("model")) entity->sprite->setModel(data["model"]);
-    if (data.contains("texture")) entity->sprite->setTextures(data["texture"]);
+    // call entity load
+    entity->load(data);
   }
   catch (const std::exception& e)
   {
@@ -78,15 +77,19 @@ Entities::Entity* Entities::EntityFactory::loadEntity(std::string filePath)
 }
 
 // creates an actor and adds it to the scene given a name
-Entities::Actor* Entities::EntityFactory::createEntity(std::string name, Vector3D position)
+Entities::Entity* Entities::EntityFactory::createEntity(std::string name, Vector3D position)
 {
-  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(new Entities::Entity(*archetypes[name]));
+  // if archetype was invalid, return an empty entity
+  if (!archetypes[name])
+    return new Entities::Entity();
 
-  if (actor)
+  // if valid, clone the entity as an actor
+  Entities::Entity* entity = new Entities::Entity(*archetypes[name]);
+
+  if (entity)
   {
-    actor->transform->setPosition(position);
-    sceneSystem->getCurrentScene()->getEntityList()->add(actor);
+    entity->transform->setPosition(position);
   }
 
-  return actor;
+  return entity;
 }

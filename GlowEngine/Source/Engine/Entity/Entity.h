@@ -23,6 +23,7 @@ namespace Entities
     Entity(const Entity& other);
 
     virtual ~Entity();
+    virtual void load(const nlohmann::json&);
 
     // update all of an entity's components
     void update();
@@ -42,6 +43,8 @@ namespace Entities
     bool hasComponent(Components::Component::ComponentType type);
     // get a component
     Components::Component* getComponent(Components::Component::ComponentType type);
+    // get the components vector
+    std::vector<Components::Component*> getComponents() { return components; }
 
     // core components are public for easy modification and access
     Components::Transform* transform;

@@ -33,6 +33,7 @@ namespace Entities
     // ** Physics ** //
     void setAcceleraton(Vector3D acc);
     void setVelocity(Vector3D vel);
+    void setAnchored(bool val);
 
     // ** Model ** //
     void setModel(std::string name);

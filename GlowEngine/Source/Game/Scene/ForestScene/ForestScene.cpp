@@ -10,19 +10,28 @@
 #include "ForestScene.h"
 
 static Vector3D lightPosition = { -20,-10,-5 };
-static DirectX::XMFLOAT4 lightColor = { 1,1,2.5,1 };
+static DirectX::XMFLOAT4 lightColor = { 1.25,1,1,1 };
 static float lightSize = 1;
 
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
-  Entities::Actor* leaves = createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
+  Entities::Actor* leaves = createEntity({ 0,-10,0 }, { 1000,0,1000 }, { 0 }, "", "");
+  Entities::Entity* plane = new Entities::Entity();
+  getComponentOfType(Sprite3D, plane)->setModel("Plane");
+  getComponentOfType(Sprite3D, plane)->setTextures("Leaves");
+  getComponentOfType(Sprite3D, plane)->setTextureRepeat(true);
+  getComponentOfType(Transform, plane)->setScale({ 1000,1000,1000 });
+  getComponentOfType(Transform, plane)->setPosition({0,-10,0});
+  entityList->add(plane);
+  leaves->setAnchored(true);
   leaves->setTextureRepeat(true);
   leaves->setAsPointLight(true);
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
-  instanceCreateExt("Monkey", {10,10,-15},{5,5,5}, {45,0,0});
-  Entities::Actor* d = createEntity({ -10,17.5f,-15 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
-  Entities::Actor* soup = createEntity({ 0,-6,15 }, { 1,1,1 }, { 0 }, "soup", "");
+  instanceCreateExt("Monkey", { 10,10,-15 }, { 5,5,5 }, { 45,0,0 });
+  instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
+  Entities::Actor* d = createEntity({ -10,17.56f,-5 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
+  Entities::Actor* s = createEntity({ 10,17.5f,-5 }, { 1,1,1 }, { 0 }, "Torus", "Cobblestone");
   Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 1, 1, 1 }, { 0 }, "Mushroom", "Mushroom");
 
   for (int i = 0; i < 15; ++i)
@@ -36,7 +45,7 @@ void Scene::ForestScene::init()
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      instanceCreateExt("Tree", randomPos, scale);
+      instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
     }
   }
 }
@@ -53,7 +62,7 @@ void Scene::ForestScene::update()
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Chest", "Chest");
+    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Monkey", "Sun");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
   if (input->keyDown('H'))

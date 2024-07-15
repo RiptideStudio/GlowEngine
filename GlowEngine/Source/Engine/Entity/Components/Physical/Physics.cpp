@@ -35,6 +35,9 @@ void Components::Physics::setAcceleration(Vector3D acc)
 // update velocity and transform
 void Components::Physics::update()
 {
+  if (anchored)
+    return;
+
   float dt = EngineInstance::getEngine()->getDeltaTime();
   Components::Transform* transform = getComponentOfType(Transform, parent);
 
@@ -42,13 +45,6 @@ void Components::Physics::update()
   {
     // do a ground check (test)
     Vector3D position = transform->getPosition();
-
-    if (position.y <= -8)
-    {
-      position.y = -8;
-      acceleration = 0;
-      return;
-    }
 
     // set the velocity
     velocity += acceleration * dt;
@@ -62,5 +58,10 @@ void Components::Physics::update()
 
 void Components::Physics::render()
 {
+}
+
+void Components::Physics::setAnchored(bool val)
+{
+  anchored = val;
 }
 

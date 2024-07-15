@@ -27,7 +27,7 @@ void Scene::SceneSystem::update()
   if (input->keyDown('R'))
   {
       currentScene->getEntityList()->clear();
-      init();
+      currentScene->init();
   }
 }
 

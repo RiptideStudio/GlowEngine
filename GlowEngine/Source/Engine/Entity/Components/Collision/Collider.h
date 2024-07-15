@@ -17,12 +17,26 @@ namespace Components
 
   public:
 
+    // the logic to check if we are colliding
+    virtual bool isColliding(const Components::Collider* other) = 0;
+    // while we are colliding
+    virtual void onCollide() {};
+    // when we touch for the first time
+    virtual void onFirstCollide() {};
+    // when we leave the collision
+    virtual void onLeaveCollide() {};
+
     // define collider types
     enum class ColliderType
     {
       Box,
       Sphere
     };
+
+  protected:
+
+    bool collided = false;
+    bool autoSize = true;
 
   };
 

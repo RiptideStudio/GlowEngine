@@ -1,5 +1,5 @@
 {
     "name": "Tree",
-    "texture": "",
+    "singleTexture": false,
     "model": "Tree2"
 }

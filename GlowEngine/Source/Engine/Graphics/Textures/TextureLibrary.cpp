@@ -49,6 +49,7 @@ void Textures::TextureLibrary::load(std::string directoryPath)
 void Textures::TextureLibrary::add(std::string name, Textures::Texture* texture)
 {
   // add the texture to the library
+  texture->setName(name);
   if (texture)
   {
     textures[name] = texture;

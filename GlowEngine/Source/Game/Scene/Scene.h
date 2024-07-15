@@ -45,7 +45,8 @@ namespace Scene
 
     // create an entity and add it to the scene
     Entities::Actor* instanceCreate(std::string name, Vector3D position);
-    Entities::Actor* instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation = {0});
+    Entities::Actor* instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation = { 0 });
+    Entities::Actor* instanceCreateGeneral(std::string name, std::string model, std::string texture, Vector3D position, Vector3D scale, Vector3D rotation = {0});
 
   protected:
 

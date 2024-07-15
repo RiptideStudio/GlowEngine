@@ -41,8 +41,8 @@ void Models::Model::init()
   device = renderer->getDevice();
   deviceContext = renderer->getDeviceContext();
   dirty = true;
-  objects = 1;
   shadowBuffer = nullptr;
+  objects = 0;
 }
 
 // parse a .obj file and load its vertex data into the model

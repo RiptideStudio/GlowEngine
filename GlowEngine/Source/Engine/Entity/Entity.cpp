@@ -49,6 +49,17 @@ Entities::Entity::~Entity()
   }
 }
 
+// when loading an entity from json, iterate over its components and call their load method
+void Entities::Entity::load(const nlohmann::json& data)
+{
+  if (data.contains("name")) setName(data["name"]);
+
+  for (const auto& component : components)
+  {
+    component->load(data);
+  }
+}
+
 // update all the components of an entity
 void Entities::Entity::update()
 {

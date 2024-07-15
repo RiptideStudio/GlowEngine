@@ -88,6 +88,7 @@ namespace Models
 
     // set the object index to render
     void setObjectIndex(int index) { objectIndex = index; }
+    // if we are single texture
 
     // uv coordinates
     void setUV(Vector3D coords);

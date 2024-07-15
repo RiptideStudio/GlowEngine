@@ -13,7 +13,7 @@
 #include "Engine/Entity/Entity.h"
 #include "Engine/Graphics/Textures/Texture.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
-
+#include "Engine/EngineInstance.h"
 
 // overloaded constructor to take in a model and a texture
 Components::Sprite3D::Sprite3D(const std::string modelName, const std::string textureName)
@@ -21,7 +21,6 @@ Components::Sprite3D::Sprite3D(const std::string modelName, const std::string te
   renderer(nullptr)
 {
   init();
-  setModel(modelName);
   setTextures(textureName);
 }
 
@@ -38,10 +37,17 @@ Components::Sprite3D* Components::Sprite3D::clone()
   return new Sprite3D(*this);
 }
 
+void Components::Sprite3D::load(const nlohmann::json& data) 
+{
+  if (data.contains("singleTexture")) setSingleTextureMode(data["singleTexture"]);
+  if (data.contains("model")) setModel(data["model"]);
+  if (data.contains("texture")) setTextures(data["texture"]); else setTextures("None");
+}
+
 // initialize the Sprite3D component
 void Components::Sprite3D::init()
 {
-  model = nullptr;
+  model = new Models::Model();
   texture = nullptr;
   type = ComponentType::Sprite3D;
   name = "Sprite-3D";
@@ -110,7 +116,7 @@ void Components::Sprite3D::render()
 // set this model given a name
 void Components::Sprite3D::setModel(const std::string modelName)
 {
-  this->model = new Models::Model(modelName);
+  model->load(modelName);
 }
 
 // set the model's vertex color
@@ -128,7 +134,16 @@ void Components::Sprite3D::setTextures(std::string singleTextureName)
   int objects = model->getObjects();
   int textureNum = model->getTextureModelNames().size(); // how many individual textures we have
 
-  if (textureNum > 1)
+  // single texture mode is auto-set if objects are only one
+  if (singleTexture)
+  {
+    // any objects that have less than one model should just set all textures to the given one
+    for (int i = 0; i < objects; ++i)
+    {
+      textures[model->getModelNames()[i]] = new Textures::Texture(singleTextureName);
+    }
+  }
+  else
   {
     for (int i = 0; i < objects; ++i)
     {
@@ -139,19 +154,11 @@ void Components::Sprite3D::setTextures(std::string singleTextureName)
       // never over-index the textures
       int textureIndex = i;
       if (textureIndex >= model->getTextureModelNames().size())
-      { 
-        textureIndex = model->getTextureModelNames().size()-1;
+      {
+        textureIndex = model->getTextureModelNames().size() - 1;
       }
       std::string textureName = model->getTextureModelNames()[textureIndex];
       textures[modelName] = texLib->get(textureName);
-    }
-  }
-  else
-  {
-    // any objects that have less than one model should just set all textures to the given one
-    for (int i = 0; i < objects; ++i)
-    {
-      textures[model->getModelNames()[i]] = new Textures::Texture(singleTextureName);
     }
   }
 

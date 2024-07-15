@@ -19,15 +19,15 @@
 #include "Engine/Graphics/Renderer.h"
 
 // construct actors with premade components
-Entities::Actor::Actor()
-  : isLight(false),
-  light(nullptr)
+Entities::Actor::Actor() : Entity(),
+    isLight(false),
+    light(nullptr)
 {
   engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
-  addComponent(new Components::BoxCollider());
+  addComponent(new Components::BoxCollider({1,1,1}));
   addComponent(physics = new Components::Physics());
-  engine->getSceneSystem()->getCurrentScene()->getEntityList()->add(this); // adds actors to active list
+  engine->getSceneSystem()->getCurrentScene()->getEntityList()->add(this);
 }
 
 // ** Physics ** //
@@ -39,6 +39,11 @@ void Entities::Actor::setAcceleraton(Vector3D acc)
 void Entities::Actor::setVelocity(Vector3D vel)
 {
   physics->setVelocity(vel);
+}
+
+void Entities::Actor::setAnchored(bool val)
+{
+  physics->setAnchored(val);
 }
 
 // ** Models ** //

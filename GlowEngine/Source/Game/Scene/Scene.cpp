@@ -66,17 +66,31 @@ Entities::Actor* Scene::Scene::createEntity(
 }
 
 // boilerplate for adding an entity directly to the scene
+// lets you fully customize your entity with different complexity levels
 Entities::Actor* Scene::Scene::instanceCreate(std::string name, Vector3D position)
 {
-  return factory->createEntity(name, position);
+  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
+  entityList->add(actor);
+  return actor;
 }
 
 Entities::Actor* Scene::Scene::instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation)
 {
-  Entities::Actor* actor = factory->createEntity(name, position);
+  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
   actor->setScale(scale);
   actor->setRotation(rotation);
+  entityList->add(actor);
   return actor;
 }
 
+Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::string model, std::string texture, Vector3D position, Vector3D scale, Vector3D rotation)
+{
+  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
+  actor->setScale(scale);
+  actor->setRotation(rotation);
+  actor->setModel(model);
+  actor->setTexture(texture);
+  entityList->add(actor);
+  return actor;
+}
 
