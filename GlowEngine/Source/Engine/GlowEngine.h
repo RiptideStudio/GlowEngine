@@ -14,6 +14,7 @@ namespace Models { class ModelLibrary; }
 namespace Textures { class TextureLibrary; }
 namespace Scene { class SceneSystem; }
 namespace Meshes { class MeshLibrary; }
+namespace Entities { class EntityFactory; }
 
 namespace Engine
 {
@@ -37,6 +38,8 @@ namespace Engine
     void createCoreSystems();
     // create systems dependent on core systems
     void createLaterSystems();
+    // create later core pointers
+    void initializeSystemCorePointers();
 
     // cleanup on engine exit
     void cleanUp();
@@ -49,6 +52,7 @@ namespace Engine
     Scene::SceneSystem* getSceneSystem() { return sceneSystem; }
     Graphics::Window* getWindow() { return window; }
     Meshes::MeshLibrary* getMeshLibrary() { return meshLibrary; }
+    Entities::EntityFactory* getEntityFactory() { return factory; }
 
     // get engine properties
     int getFps() { return fps; }
@@ -74,6 +78,7 @@ namespace Engine
     Textures::TextureLibrary* textureLibrary;
     Meshes::MeshLibrary* meshLibrary;
     Scene::SceneSystem* sceneSystem;
+    Entities::EntityFactory* factory;
 
     // core engine properties (fps, delta time)
     bool running;
@@ -85,6 +90,5 @@ namespace Engine
 
     // if we are in play mode
     bool playing;
-
   };
 }

@@ -36,6 +36,9 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
   type = ComponentType::Transform;
 }
 
+// clone it baby
+
+
 // reclaculate the world matrix
 void Components::Transform::recalculateMatrix()
 {
@@ -72,4 +75,10 @@ bool Components::Transform::isDirty()
 const Matrix& Components::Transform::getTransformMatrix()
 {
   return transformMatrix;
+}
+
+Components::Transform* Components::Transform::clone()
+{
+  Transform* transform = new Transform(*this);
+  return transform;
 }

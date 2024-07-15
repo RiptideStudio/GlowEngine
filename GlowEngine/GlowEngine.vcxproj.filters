@@ -260,6 +260,9 @@
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.h">
       <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\EntityFactory.h">
+      <Filter>Source Files\Engine\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -405,6 +408,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.cpp">
       <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\EntityFactory.cpp">
+      <Filter>Source Files\Engine\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

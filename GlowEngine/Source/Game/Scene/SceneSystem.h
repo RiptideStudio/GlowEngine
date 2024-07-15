@@ -29,6 +29,8 @@ namespace Scene
 
     // set the current scene
     void setCurrentScene(Scene* scene);
+    // set the current scene given a name
+    void setCurrentScene(std::string name);
 
     // exit a scene
     void exitCurrentScene();

@@ -16,13 +16,37 @@ Entities::Entity::Entity()
   name("Entity"),
   destroyed(false)
 {
-  
+  addComponent(transform = new Components::Transform());
+  addComponent(sprite = new Components::Sprite3D("Cube"));
+}
+
+// copy constructor for entity
+Entities::Entity::Entity(const Entity& other)
+  :
+  id(0),
+  name("Entity"),
+  destroyed(false)
+{
+  // copy components
+  for (const auto& component : other.components)
+  {
+    Components::Component* comp = component->clone();
+    addComponent(comp);
+  }
+
+  // update quick pointers
+  transform = getComponentOfType(Transform, this);
+  sprite = getComponentOfType(Sprite3D, this);
+  physics = getComponentOfType(Physics, this);
 }
 
 // virtual destructor for entities
 Entities::Entity::~Entity()
 {
-  // no-op
+  for (auto component : components)
+  {
+    delete component;
+  }
 }
 
 // update all the components of an entity
@@ -55,6 +79,11 @@ void Entities::Entity::addComponent(Components::Component* component)
 void Entities::Entity::destroy()
 {
   destroyed = true;
+}
+
+void Entities::Entity::setName(std::string newName)
+{
+  name = newName;
 }
 
 // has a component

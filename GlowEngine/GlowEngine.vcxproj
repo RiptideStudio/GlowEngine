@@ -30,6 +30,7 @@
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Bone.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Sprite3D.h" />
     <ClInclude Include="Source\Engine\Entity\Entity.h" />
+    <ClInclude Include="Source\Engine\Entity\EntityFactory.h" />
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h" />
     <ClInclude Include="Source\Engine\GlowEngine.h" />
     <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="Source\Engine\Entity\Entity.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\EntityFactory.cpp" />
     <ClCompile Include="Source\Engine\Entity\EntityList\EntityList.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>

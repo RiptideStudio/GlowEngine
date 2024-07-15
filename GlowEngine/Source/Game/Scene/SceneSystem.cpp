@@ -40,7 +40,7 @@ void Scene::SceneSystem::render()
 // initialize the scene system
 void Scene::SceneSystem::init()
 {
-  setCurrentScene(scenes["ForestScene"]);
+  
 }
 
 // set the current scene
@@ -62,6 +62,11 @@ void Scene::SceneSystem::setCurrentScene(Scene* scene)
   currentScene = scene;
   // initialize the new scene
   currentScene->init();
+}
+
+void Scene::SceneSystem::setCurrentScene(std::string name)
+{
+  setCurrentScene(scenes[name]);
 }
 
 // exit the current scene

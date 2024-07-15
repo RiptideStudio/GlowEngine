@@ -41,6 +41,8 @@ namespace Components
       virtual void render() {};
       virtual void exit() {};
 
+      virtual Components::Component* clone();
+
       const ComponentType getType();
 
       // get the parent

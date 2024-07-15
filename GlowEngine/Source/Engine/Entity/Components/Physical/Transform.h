@@ -26,6 +26,8 @@ namespace Components
     // get the transform matrix
     const Matrix& getTransformMatrix();
 
+    Components::Transform* clone();
+
     // anchored transforms do not move, and so they calculate their world matrix once and only once
     bool isAnchored() { return anchored; }
     // set a transform to be anchored

@@ -74,7 +74,7 @@ void Graphics::Renderer::cleanup()
 // the beginning of each frame of the render engine
 void Graphics::Renderer::beginFrame()
 {
-  // update the camera
+  // update the camera matrix
   camera->update();
 
   // clear the target view for drawing
@@ -87,11 +87,14 @@ void Graphics::Renderer::beginFrame()
   glowGui->beginUpdate();
 
   // Update the GPU constant buffer
-  D3D11_MAPPED_SUBRESOURCE mappedResource;
-  deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+  if (*pointLightsArray)
+  {
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
-  memcpy(mappedResource.pData, *pointLightsArray, sizeof(PointLightBuffer)*MAXLIGHTS);
-  deviceContext->Unmap(pointLightBuffer, 0);
+    memcpy(mappedResource.pData, *pointLightsArray, sizeof(PointLightBuffer) * MAXLIGHTS);
+    deviceContext->Unmap(pointLightBuffer, 0);
+  }
 
   // bind the constant buffer to the shader
   deviceContext->PSSetConstantBuffers(0, 1, &pointLightBuffer);
@@ -547,6 +550,9 @@ void Graphics::Renderer::setTopology(D3D_PRIMITIVE_TOPOLOGY topology)
 // add a new active point light
 void Graphics::Renderer::addPointLight(PointLight* buff)
 {
+  if (lights > 7)
+    return;
+
   pointLightsArray[lights] = buff;
   lights++;
 }

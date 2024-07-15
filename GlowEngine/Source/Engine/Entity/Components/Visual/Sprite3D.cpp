@@ -18,8 +18,7 @@
 // overloaded constructor to take in a model and a texture
 Components::Sprite3D::Sprite3D(const std::string modelName, const std::string textureName)
   : Component(),
-  renderer(nullptr),
-  model(nullptr)
+  renderer(nullptr)
 {
   init();
   setModel(modelName);
@@ -29,16 +28,21 @@ Components::Sprite3D::Sprite3D(const std::string modelName, const std::string te
 // base Sprite3D constructor to give pointers to renderer
 Components::Sprite3D::Sprite3D()
   : Component(),
-  renderer(nullptr),
-  model(nullptr),
-  texture(nullptr)
+  renderer(nullptr)
 {
   init();
+}
+
+Components::Sprite3D* Components::Sprite3D::clone()
+{
+  return new Sprite3D(*this);
 }
 
 // initialize the Sprite3D component
 void Components::Sprite3D::init()
 {
+  model = nullptr;
+  texture = nullptr;
   type = ComponentType::Sprite3D;
   name = "Sprite-3D";
   Engine::GlowEngine* engine = EngineInstance::getEngine();

@@ -60,11 +60,6 @@ namespace Entities
     Engine::GlowEngine* engine;
     Graphics::Renderer* renderer;
 
-    // components
-    Components::Transform* transform;
-    Components::Sprite3D* sprite;
-    Components::Physics* physics;
-
   };
 
 }

@@ -25,13 +25,8 @@ Entities::Actor::Actor()
 {
   engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
-  transform = new Components::Transform();
-  addComponent(transform);
-  physics = new Components::Physics();
-  addComponent(physics);
-  sprite = new Components::Sprite3D("Cube");
-  addComponent(sprite);
   addComponent(new Components::BoxCollider());
+  addComponent(physics = new Components::Physics());
   engine->getSceneSystem()->getCurrentScene()->getEntityList()->add(this); // adds actors to active list
 }
 
@@ -89,7 +84,7 @@ void Entities::Actor::setLightSize(float size)
 void Entities::Actor::createPointLight()
 {
   light = new PointLight();
-  updatePointLight(getPosition(), 2, { 2.5,1.5,1,1 });
+  updatePointLight((getPosition() + Vector3D{0,20,0}), 50, { 2.5,1.5,1,1 });
   renderer->addPointLight(light);
 }
 

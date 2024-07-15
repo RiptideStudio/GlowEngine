@@ -49,7 +49,6 @@ void Models::Model::init()
 // adds the model to the model library if it doesn't already exist
 void Models::Model::load(const std::string fileName)
 {
-
   // query the model library to see if we can get the model's data
   Models::ModelLibrary* library = engine->getModelLibrary();
   Models::Model* model = library->get(fileName);

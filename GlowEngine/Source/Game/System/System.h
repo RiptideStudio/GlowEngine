@@ -9,6 +9,7 @@
 #pragma once
 
 namespace Input { class InputSystem; }
+namespace Scene { class Scene; class SceneSystem; }
 
 namespace Systems
 {
@@ -28,11 +29,13 @@ namespace Systems
     // get the system's name
     const std::string getName() { return name; }
 
-  protected:
 
     // all systems have access to core engine and other important systems
     Engine::GlowEngine* engine;
     Input::InputSystem* input;
+    Scene::SceneSystem* sceneSystem;
+
+  protected:
 
     std::string name;
   };

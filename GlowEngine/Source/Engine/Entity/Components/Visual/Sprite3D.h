@@ -30,6 +30,9 @@ namespace Components
     Sprite3D(const std::string modelName, const std::string textureName = "");
     Sprite3D();
 
+    // clone
+    Sprite3D* clone();
+
     // initialize
     void init();
     // render - this calls model->render() as well

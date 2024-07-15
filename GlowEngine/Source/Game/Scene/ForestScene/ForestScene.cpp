@@ -17,14 +17,12 @@ static float lightSize = 1;
 void Scene::ForestScene::init()
 {
   Entities::Actor* leaves = createEntity({ -10,-10,-5 }, { 1000,1000,1000 }, { 0 }, "Plane", "Leaves");
-  leaves->setName("Leaves");
   leaves->setTextureRepeat(true);
   leaves->setAsPointLight(true);
-  leaves->setLightSize(lightSize);
-  Entities::Actor* monkey = createEntity({ 10,17.5f,-15 }, { 2,2,2 }, { 0 }, "Chest", "Chest");
-  Entities::Actor* d = createEntity({ -10,17.5f,-15 }, { 2,2,2 }, { 0 }, "Door", "Cobblestone");
-  Entities::Actor* soup = createEntity({ 0,-6,15 }, { 2,2,2 }, { 0 }, "soup", "");
-  Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 3,3,3 }, { 0 }, "Mushroom", "Mushroom");
+  instanceCreateExt("Monkey", {10,10,-15},{5,5,5}, {45,0,0});
+  Entities::Actor* d = createEntity({ -10,17.5f,-15 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
+  Entities::Actor* soup = createEntity({ 0,-6,15 }, { 1,1,1 }, { 0 }, "soup", "");
+  Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 1, 1, 1 }, { 0 }, "Mushroom", "Mushroom");
 
   for (int i = 0; i < 15; ++i)
   {
@@ -37,16 +35,7 @@ void Scene::ForestScene::init()
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      Entities::Entity* e = createEntity(randomPos, scale, { 0 }, "Tree2","");
-      randomX = randomRange(-100, 100);
-      randomZ = randomRange(-100, 100);
-
-      y = -9.5;
-      randomScale = randomRange(.4f, 1.f);
-
-      randomPos = { randomX,y,randomZ };
-      scale = { randomScale ,randomScale ,randomScale };
-      // Entities::Entity* e2 = createEntity(randomPos, scale, { randomRange(-30.f,30.f),-10,randomRange(-30.f,30.f)}, "Rock", "Cobblestone");
+      instanceCreateExt("Tree", randomPos, scale);
     }
   }
 }
@@ -94,26 +83,6 @@ void Scene::ForestScene::update()
       }
     }
   }
-
-  // create particles
-  Particles::Particle* particle = new Particles::Particle();
-  Vector3D pos = { randomRange(-100.f,100.f), randomRange(-15.f,0.f), randomRange(-100.f,100.f) };
-  Components::Transform* transform = getComponentOfType(Transform, particle);
-  transform->setPosition(pos);
-  particleList->add(particle);
-
-  float t = engine->getTotalFrames()*1.f;
-
-  lightSize = 6+sinf(t/50.f)/3.f;
-  //lightPosition.x += sinf(t / 500.f)/25.f;
-  //lightPosition.z += cosf(t / 500.f)/25.f;
-
-  Entities::Actor* monkey = reinterpret_cast<Entities::Actor*>(entityList->find("Leaves"));
-  if (monkey)
-  {
-    monkey->updatePointLight(lightPosition, lightSize, lightColor);
-  }
-
 }
 
 void Scene::ForestScene::exit()

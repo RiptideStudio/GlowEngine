@@ -14,6 +14,7 @@ Scene::Scene::Scene()
 {
   engine = EngineInstance::getEngine();
   input = engine->getInputSystem();
+  factory = engine->getEntityFactory();
   entityList = new Entities::EntityList();
   particleList = new Entities::EntityList();
   name = "Scene";
@@ -58,10 +59,23 @@ Entities::Actor* Scene::Scene::createEntity(
   actor->setPosition(pos);
   actor->setScale(scale);
   actor->setRotation(rotation);
-
   actor->setModel(modelName);
   actor->setTexture(textureName);
 
+  return actor;
+}
+
+// boilerplate for adding an entity directly to the scene
+Entities::Actor* Scene::Scene::instanceCreate(std::string name, Vector3D position)
+{
+  return factory->createEntity(name, position);
+}
+
+Entities::Actor* Scene::Scene::instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation)
+{
+  Entities::Actor* actor = factory->createEntity(name, position);
+  actor->setScale(scale);
+  actor->setRotation(rotation);
   return actor;
 }
 

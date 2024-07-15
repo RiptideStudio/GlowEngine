@@ -18,6 +18,12 @@ Components::Component::Component()
   type = ComponentType::None;
 }
 
+// clone is more flexible than copy constructor
+Components::Component* Components::Component::clone()
+{
+  return new Components::Component(*this);
+}
+
 // get the type
 const Components::Component::ComponentType Components::Component::getType()
 {

@@ -180,9 +180,24 @@ void Engine::GlowEngine::createLaterSystems()
   // texture library
   textureLibrary = new Textures::TextureLibrary();
   textureLibrary->load();
+  // entity factory
+  factory = new Entities::EntityFactory();
   // scene system
   sceneSystem = new Scene::SceneSystem("SceneSystem");
   sceneSystem->init();
+  // initialize later system core pointers
+  initializeSystemCorePointers();
+  // set the first scene
+  sceneSystem->setCurrentScene("ForestScene");
+}
+
+// used to give core system pointers their 
+void Engine::GlowEngine::initializeSystemCorePointers()
+{
+  for (const auto& system : SystemInstance::getSystems())
+  {
+    system->sceneSystem = sceneSystem;
+  }
 }
 
 // called on engine exit

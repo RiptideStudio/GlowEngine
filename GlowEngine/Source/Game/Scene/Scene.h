@@ -11,6 +11,7 @@
 #include "Engine/Graphics/Particles/Particle.h"
 #include "Engine/Graphics/Particles/ParticleEmitter.h"
 #include "Engine/Entity/Entity.h"
+#include "Engine/Entity/EntityFactory.h"
 #include "Engine/GlowEngine.h"
 
 namespace Scene
@@ -42,6 +43,10 @@ namespace Scene
     // create an entity directly to this scene with already made components
     Entities::Actor* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
 
+    // create an entity and add it to the scene
+    Entities::Actor* instanceCreate(std::string name, Vector3D position);
+    Entities::Actor* instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation = {0});
+
   protected:
 
     // system pointers
@@ -54,6 +59,8 @@ namespace Scene
     Entities::EntityList* entityList;
     // particle list
     Entities::EntityList* particleList;
+    // entity factory
+    Entities::EntityFactory* factory;
 
   };
 
