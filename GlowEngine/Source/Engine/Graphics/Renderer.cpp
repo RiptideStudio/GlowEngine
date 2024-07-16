@@ -490,8 +490,8 @@ void Graphics::Renderer::updateConstantBufferCameraMatrices()
 
 void Graphics::Renderer::toggleFullscreen(bool val)
 {
-  swapChain->SetFullscreenState(val, nullptr);
   fullscreen = !fullscreen;
+  swapChain->SetFullscreenState(val, nullptr);
 }
 
 // set the texture resource to nullptr which means no texture

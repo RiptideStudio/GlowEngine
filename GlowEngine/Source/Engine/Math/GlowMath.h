@@ -27,8 +27,12 @@ namespace GlowMath
     Vector3D operator+(const Vector3D& other);
     Vector3D operator-(const Vector3D& other);
 
+    // interpolation
+    void lerpTowards(const Vector3D& targetVector, float t = .15f);
+
     // normalize
     void normalize();
+    float dot(const Vector3D other);
 
     // multiply operator
     Vector3D operator*(const Vector3D& other);

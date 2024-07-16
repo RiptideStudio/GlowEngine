@@ -23,7 +23,11 @@ namespace Components
     void setTargetVelocity(Vector3D vel);
     void setAcceleration(Vector3D acc);
 
-    void setAccelerationY(float val) { acceleration.x = val; }
+    void setAccelerationY(float val) { acceleration.y = val; }
+    void setTargetVelocityY(float val) { targetVelocity.y = val; }
+    void setTargetVelocityX(float val) { targetVelocity.x = val; }
+    void setTargetVelocityZ(float val) { targetVelocity.z = val; }
+    void addTargetVelocity(Vector3D vec);
 
     void setVelocityX(float val);
     void setVelocityY(float val);
@@ -37,6 +41,7 @@ namespace Components
     void render();
 
     void setAnchored(bool val);
+    bool isAnchored() { return anchored; }
     void setGrounded(bool val) { grounded = val; }
     bool isGrounded() { return grounded; }
 
@@ -51,8 +56,8 @@ namespace Components
     bool grounded = false; // we are on the ground
 
     // this is the gravity constant
-    const float gravity = -25.f;
-    const float maxVelocity = 100.f;
+    float gravity;
+    float maxVelocity = 100.f;
 
   };
 

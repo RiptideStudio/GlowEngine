@@ -24,9 +24,9 @@ namespace Components
 
     virtual bool isColliding(const Components::Collider*) override;
 
-    virtual void onFirstCollide();
-    virtual void onCollide();
-    virtual void onLeaveCollide();
+    virtual void onFirstCollide(const Components::Collider* other);
+    virtual void onCollide(const Components::Collider* other);
+    virtual void onLeaveCollide(const Components::Collider* other);
 
     virtual void update();
 

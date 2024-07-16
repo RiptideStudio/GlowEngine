@@ -35,7 +35,7 @@ void Input::InputSystem::update()
   }
 
   // toggle fullscreen
-  if (keyTriggered(VK_TAB))
+  if (keyReleased(VK_TAB))
   {
     engine->getRenderer()->toggleFullscreen(!engine->getRenderer()->isFullscreen());
   }
@@ -98,4 +98,9 @@ bool Input::InputSystem::keyDown(int key)
 bool Input::InputSystem::keyTriggered(int key)
 {
   return keystates[key] && !previousKeystates[key];
+}
+
+bool Input::InputSystem::keyReleased(int key)
+{
+  return previousKeystates[key] && !keystates[key];
 }

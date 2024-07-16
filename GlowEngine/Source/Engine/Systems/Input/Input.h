@@ -40,6 +40,9 @@ namespace Input
     // if a key was triggered
     bool keyTriggered(int key);
 
+    // if a key was released
+    bool keyReleased(int key);
+
     // if we are focused on this window
     bool isFocused() { return focused; }
 

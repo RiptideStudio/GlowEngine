@@ -266,6 +266,9 @@
     <ClInclude Include="Source\Game\Behaviors\PlayerBehavior.h">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Math\Lerp.h">
+      <Filter>Source Files\Engine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -417,6 +420,9 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Behaviors\PlayerBehavior.cpp">
       <Filter>Source Files\Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Math\Lerp.cpp">
+      <Filter>Source Files\Engine\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

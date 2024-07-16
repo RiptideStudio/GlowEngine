@@ -18,7 +18,7 @@ Game::PlayerBehavior::PlayerBehavior()
 {
   type = Components::Component::ComponentType::Behavior;
   moveSpeed = 20.f;
-  jumpSpeed = 20.f;
+  jumpSpeed = 25.f;
   god = false;
 }
 
@@ -42,25 +42,33 @@ void Game::PlayerBehavior::update()
 
   camera->setTarget(parent);
 
+  Vector3D forwardVelocity = forward * moveSpeed;
+  Vector3D rightVelocity = right * moveSpeed;
+
+  Vector3D targetVelocity = { 0,0,0 };
+
   if (input->keyDown('W'))
   {
-    physics->setVelocity(forward * moveSpeed);
+    targetVelocity.x += forwardVelocity.x;
+    targetVelocity.z += forwardVelocity.z;
   }
   if (input->keyDown('A'))
   {
-    physics->setVelocity(right * moveSpeed);
+    targetVelocity.x += rightVelocity.x;
+    targetVelocity.z += rightVelocity.z;
   }
   if (input->keyDown('S'))
   {
-    physics->setVelocity(forward * -moveSpeed);
+    targetVelocity.x -= forwardVelocity.x;
+    targetVelocity.z -= forwardVelocity.z;
   }
   if (input->keyDown('D'))
   {
-    physics->setVelocity(right * -moveSpeed);
+    targetVelocity.x -= rightVelocity.x;
+    targetVelocity.z -= rightVelocity.z;
   }
 
-  // jump
-  if (input->keyTriggered(VK_SPACE) && !god)
+  if (input->keyDown(VK_SPACE) && physics->isGrounded())
   {
     physics->setVelocityY(jumpSpeed);
   }
@@ -77,5 +85,19 @@ void Game::PlayerBehavior::update()
       physics->setVelocityY(-moveSpeed);
     }
   }
+
+  // for diagonal movement
+  if (targetVelocity.x != 0 || targetVelocity.z != 0)
+  {
+    float length = std::sqrt(targetVelocity.x * targetVelocity.x + targetVelocity.z * targetVelocity.z);
+    targetVelocity.x /= length;
+    targetVelocity.z /= length;
+
+    targetVelocity.x *= moveSpeed;
+    targetVelocity.z *= moveSpeed;
+  }
+
+  physics->setVelocityX(targetVelocity.x);
+  physics->setVelocityZ(targetVelocity.z);
 }
 

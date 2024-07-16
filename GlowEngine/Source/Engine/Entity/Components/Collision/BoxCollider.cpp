@@ -83,35 +83,119 @@ bool Components::BoxCollider::isAABBColliding(const BoxCollider& other)
   return overlapX && overlapY && overlapZ;
 }
 
-void Components::BoxCollider::onFirstCollide()
+void Components::BoxCollider::onFirstCollide(const Components::Collider* other)
 {
-  Logger::write("Collided First");
+  collided = true;
+  collidingObjects.insert(other);
+  Logger::write("Collision Entered");
 }
 
-void Components::BoxCollider::onCollide()
+void Components::BoxCollider::onCollide(const Components::Collider* other)
 {
   // when we hit something, this is triggered once
   if (!collided)
   {
-    onFirstCollide();
-    collided = true;
+    onFirstCollide(other);
   }
+  Logger::write("Colliding");
 
-  // while we are colliding
+  // Get the physics and transform components
   Components::Physics* physics = getComponentOfType(Physics, parent);
   Components::Transform* transform = getComponentOfType(Transform, parent);
+  const BoxCollider* otherBox = dynamic_cast<const BoxCollider*>(other);
 
-  // if we are falling and fell on something (grounded)
-  if (physics->getVelocity().y < 0)
+  // Get the current position and velocity
+  Vector3D currentPosition = transform->getPosition();
+  Vector3D oldPosition = transform->getOldPosition();
+  Vector3D velocity = physics->getVelocity();
+
+  // Get the positions of both colliding objects
+  Vector3D otherPosition = other->parent->transform->getPosition();
+
+  // Calculate the half-sizes
+  Vector3D halfSizeA = scale * 0.5f;
+  Vector3D otherScale = otherBox->scale;
+  Vector3D halfSizeB = otherScale * 0.5f;
+
+  // Calculate the penetration depths along each axis
+  float penetrationX = halfSizeA.x + halfSizeB.x - std::abs(currentPosition.x - otherPosition.x);
+  float penetrationY = halfSizeA.y + halfSizeB.y - std::abs(currentPosition.y - otherPosition.y);
+  float penetrationZ = halfSizeA.z + halfSizeB.z - std::abs(currentPosition.z - otherPosition.z);
+
+  // Determine the primary collision axis by finding the smallest penetration depth
+  float minPenetration = penetrationX;
+  Vector3D collisionNormal = Vector3D(1, 0, 0); // Default to X-axis
+
+  if (penetrationY < minPenetration)
   {
-    physics->setVelocity(0);
-    transform->setPosition(transform->getOldPosition());
+    collisionNormal = Vector3D(0, 1, 0); // Y-axis
+    minPenetration = penetrationY;
+  }
+
+  if (penetrationZ < minPenetration)
+  {
+    collisionNormal = Vector3D(0, 0, 1); // Z-axis
+    minPenetration = penetrationZ;
+  }
+
+  if (minPenetration <= 0) 
+    return;
+
+  // Adjust the velocity based on the collision normal
+  velocity = velocity - collisionNormal * (velocity.dot(collisionNormal));
+
+  // If the smallest penetration is in the Y-axis, handle grounding and position adjustment
+  if (collisionNormal.y == 1 && currentPosition.y > otherPosition.y)
+  {
+    physics->setGrounded(true);
+    if (minPenetration > 0)
+    {
+      currentPosition.y += minPenetration * 0.5f; // Adjust slightly to avoid jitter
+      transform->setPosition(currentPosition);
+    }
+  }
+
+  // Set the adjusted velocity
+  physics->setVelocity(velocity);
+
+  if (!physics->isAnchored())
+  {
+    // Adjust the position based on the collision normal and penetration depth
+    if (minPenetration == penetrationY && penetrationY > 0)
+    {
+      currentPosition = oldPosition + collisionNormal * minPenetration * 2.f; // Minimal adjustment to avoid jitter
+      transform->setPosition(currentPosition);
+    }
+    else
+    {
+      transform->setPosition(oldPosition);
+    }
   }
 }
 
-void Components::BoxCollider::onLeaveCollide()
+void Components::BoxCollider::onLeaveCollide(const Components::Collider* other)
 {
-  Components::Physics* physics = parent->physics;
+  // Remove the object from the set of currently colliding objects
+  Logger::write("Left collision");
+  collidingObjects.erase(other);
+  collided = false;
+
+  Components::Physics* physics = getComponentOfType(Physics, parent);
+  if (physics)
+  {
+    bool grounded = false;
+    for (auto* collider : collidingObjects)
+    {
+      Vector3D collisionNormal = parent->transform->getPosition() - collider->parent->transform->getPosition();
+      collisionNormal.normalize();
+      if (collisionNormal.y > 0)
+      {
+        grounded = true;
+        break;
+      }
+    }
+    physics->setGrounded(grounded);
+  }
 }
 
 // recalculate the real scale of the mesh when our transform changes

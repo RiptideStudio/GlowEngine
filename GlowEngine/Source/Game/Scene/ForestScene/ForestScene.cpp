@@ -37,7 +37,7 @@ void Scene::ForestScene::init()
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
   instanceCreateExt("Monkey", { 10,10,-15 }, { 5,5,5 }, { 45,0,0 });
   instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
-  //Entities::Actor* d = createEntity({ -10,17.56f,-5 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
+  Entities::Actor* d = createEntity({ -10,17.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
   //Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 1, 1, 1 }, { 0 }, "Mushroom", "Mushroom");
 
   for (int i = 0; i < 15; ++i)
@@ -75,7 +75,7 @@ void Scene::ForestScene::update()
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Tree", "Leaves");
+    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,randomRotz }, "Tree", "Chest");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
 }

@@ -97,8 +97,16 @@ void Entities::EntityList::checkCollisions()
       // resolve collisions
       if (collider1->isColliding(collider2)) 
       {
-        collider2->onCollide();
-        collider1->onCollide();
+        collider2->onCollide(collider1);
+        collider1->onCollide(collider2);
+      }
+      else
+      {
+        if (collider1->collidingObjects.find(collider2) != collider1->collidingObjects.end())
+        {
+          collider2->onLeaveCollide(collider1);
+          collider1->onLeaveCollide(collider2);
+        }
       }
     }
   }

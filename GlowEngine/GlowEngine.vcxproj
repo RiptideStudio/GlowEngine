@@ -56,6 +56,7 @@
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_truetype.h" />
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
+    <ClInclude Include="Source\Engine\Math\Lerp.h" />
     <ClInclude Include="Source\Engine\Math\Random.h" />
     <ClInclude Include="Source\Engine\Math\Vertex.h" />
     <ClInclude Include="Source\Engine\Systems\Input\Input.h" />
@@ -147,6 +148,7 @@
     <ClCompile Include="Source\Engine\Math\GlowMath.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Math\Lerp.cpp" />
     <ClCompile Include="Source\Engine\Math\Vertex.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -366,6 +368,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Include;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

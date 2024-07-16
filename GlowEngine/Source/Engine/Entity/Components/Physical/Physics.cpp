@@ -9,11 +9,14 @@
 #include "stdafx.h"
 #include "Physics.h"
 #include "Engine/GlowEngine.h"
+#include "Engine/Math/Lerp.h"
 
 Components::Physics::Physics()
 {
-  acceleration = { 0,gravity,0 };
+  maxVelocity = 25.f;
+  acceleration = { 0,0,0 };
   velocity = { 0,0,0 };
+  gravity = 35.f;
   targetVelocity = { 0,0,0 };
   type = ComponentType::Physics;
 }
@@ -31,6 +34,11 @@ void Components::Physics::setTargetVelocity(Vector3D vel)
 void Components::Physics::setAcceleration(Vector3D acc)
 {
   acceleration = acc;
+}
+
+void Components::Physics::addTargetVelocity(Vector3D vec)
+{
+  targetVelocity += vec;
 }
 
 void Components::Physics::setVelocityX(float val)
@@ -59,14 +67,23 @@ void Components::Physics::update()
 
   if (transform)
   {
-    // do a ground check (test)
     Vector3D position = transform->getPosition();
 
-    // set the velocity
-    velocity += acceleration * dt;
-    velocity.y = std::clamp(velocity.y, -maxVelocity, maxVelocity);
 
-    Vector3D finalPosition = position + (velocity * dt);
+    if (!grounded)
+    {
+      // Apply gravity to the acceleration
+      acceleration.y -= gravity * dt;
+    }
+    else
+    {
+      // Reset vertical acceleration and velocity when grounded
+      acceleration.y = 0;
+      velocity.y = 0;
+    }
+
+    // calculate the final position and update old position
+    Vector3D finalPosition = position + ((velocity+acceleration) * dt);
 
     transform->setOldPosition(position);
     transform->setPosition(finalPosition);
