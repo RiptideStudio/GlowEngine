@@ -35,8 +35,8 @@ void Scene::Scene::render()
 // update a scene's given entities
 void Scene::Scene::updateEntities()
 {
+
   entityList->update();
-  particleList->update();
 }
 
 // render a scene's entities

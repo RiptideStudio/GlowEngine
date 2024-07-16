@@ -15,6 +15,7 @@
 Components::BoxCollider::BoxCollider(Vector3D newScale)
 {
   scale = newScale;
+  hitboxScale = { 1,1,1 };
   type = ComponentType::Collider;
 }
 
@@ -28,41 +29,6 @@ bool Components::BoxCollider::isColliding(const Components::Collider* other)
   return isAABBColliding(*otherBox);
 }
 
-// Cast a ray towards a direction 
-bool Components::BoxCollider::rayIntersects(const Vector3D& rayOrigin, const Vector3D& rayDirection, float& tmin, float& tmax) 
-{
-  Vector3D position = parent->transform->getPosition();
-  Vector3D min = position - scale * 0.5f;
-  Vector3D max = position + scale * 0.5f;
-
-  tmin = (min.x - rayOrigin.x) / rayDirection.x;
-  tmax = (max.x - rayOrigin.x) / rayDirection.x;
-
-  if (tmin > tmax) std::swap(tmin, tmax);
-
-  float tymin = (min.y - rayOrigin.y) / rayDirection.y;
-  float tymax = (max.y - rayOrigin.y) / rayDirection.y;
-
-  if (tymin > tymax) std::swap(tymin, tymax);
-
-  if ((tmin > tymax) || (tymin > tmax)) return false;
-
-  if (tymin > tmin) tmin = tymin;
-  if (tymax < tmax) tmax = tymax;
-
-  float tzmin = (min.z - rayOrigin.z) / rayDirection.z;
-  float tzmax = (max.z - rayOrigin.z) / rayDirection.z;
-
-  if (tzmin > tzmax) std::swap(tzmin, tzmax);
-
-  if ((tmin > tzmax) || (tzmin > tmax)) return false;
-
-  if (tzmin > tmin) tmin = tzmin;
-  if (tzmax < tmax) tmax = tzmax;
-
-  return true;
-}
-
 // AABB collision detection
 bool Components::BoxCollider::isAABBColliding(const BoxCollider& other) 
 {
@@ -74,10 +40,10 @@ bool Components::BoxCollider::isAABBColliding(const BoxCollider& other)
 
   Vector3D otherScale = other.scale;
   Vector3D minB = otherPosition - otherScale * 0.5f;
-  Vector3D maxB = otherPosition + otherScale * 0.5f;
+  Vector3D maxB = (otherPosition + otherScale * 0.5f);
 
   bool overlapX = (minA.x < maxB.x) && (maxA.x > minB.x);
-  bool overlapY = (minA.y < maxB.y) && (maxA.y > minB.y);
+  bool overlapY = (minA.y <= maxB.y) && (maxA.y > minB.y);
   bool overlapZ = (minA.z < maxB.z) && (maxA.z > minB.z);
 
   return overlapX && overlapY && overlapZ;
@@ -87,7 +53,6 @@ void Components::BoxCollider::onFirstCollide(const Components::Collider* other)
 {
   collided = true;
   collidingObjects.insert(other);
-  Logger::write("Collision Entered");
 }
 
 void Components::BoxCollider::onCollide(const Components::Collider* other)
@@ -97,7 +62,6 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
   {
     onFirstCollide(other);
   }
-  Logger::write("Colliding");
 
   // Get the physics and transform components
   Components::Physics* physics = getComponentOfType(Physics, parent);
@@ -124,7 +88,7 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
 
   // Determine the primary collision axis by finding the smallest penetration depth
   float minPenetration = penetrationX;
-  Vector3D collisionNormal = Vector3D(1, 0, 0); // Default to X-axis
+  Vector3D collisionNormal = Vector3D(1, 0, 0);
 
   if (penetrationY < minPenetration)
   {
@@ -148,29 +112,25 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
   if (collisionNormal.y == 1 && currentPosition.y > otherPosition.y)
   {
     physics->setGrounded(true);
+    velocity.y = 0;
+
     if (minPenetration > 0)
     {
       currentPosition.y += minPenetration * 0.5f; // Adjust slightly to avoid jitter
       transform->setPosition(currentPosition);
     }
   }
+  else if (!physics->isAnchored())
+  {
+    if (minPenetration > 0)
+    {
+      currentPosition += collisionNormal * minPenetration * 0.00001f;
+      transform->setPosition({oldPosition.x,currentPosition.y,oldPosition.z});
+    }
+  }
 
   // Set the adjusted velocity
   physics->setVelocity(velocity);
-
-  if (!physics->isAnchored())
-  {
-    // Adjust the position based on the collision normal and penetration depth
-    if (minPenetration == penetrationY && penetrationY > 0)
-    {
-      currentPosition = oldPosition + collisionNormal * minPenetration * 2.f; // Minimal adjustment to avoid jitter
-      transform->setPosition(currentPosition);
-    }
-    else
-    {
-      transform->setPosition(oldPosition);
-    }
-  }
 }
 
 void Components::BoxCollider::onLeaveCollide(const Components::Collider* other)
@@ -198,14 +158,20 @@ void Components::BoxCollider::onLeaveCollide(const Components::Collider* other)
   }
 }
 
+void Components::BoxCollider::setHitboxSize(Vector3D hitboxSize)
+{
+  scale = hitboxSize;
+  isDirty = false;
+}
+
 // recalculate the real scale of the mesh when our transform changes
 // this can be modified to only be done if the scale changes in the future
 void Components::BoxCollider::update()
 {
   if (isDirty)
   {
-    isDirty = false;
     calculateScale(parent->sprite->getModel()->getModelVertices(), *parent->transform);
+    isDirty = false;
   }
 }
 
@@ -249,4 +215,5 @@ void Components::BoxCollider::calculateScale(const std::map<std::string, std::ve
     originalScale.z * transform.getScale().z);
 
   isDirty = parent->transform->isDirty();
+
 }

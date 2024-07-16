@@ -85,6 +85,16 @@ void Entities::Actor::setLightSize(float size)
   light->pointLight.size = size;
 }
 
+void Entities::Actor::setHitboxSize(Vector3D size)
+{
+  Components::BoxCollider* collider = reinterpret_cast<Components::BoxCollider*>(getComponentOfType(Collider, this));
+
+  if (collider)
+  {
+    collider->setHitboxSize(size);
+  }
+}
+
 // create the point light
 void Entities::Actor::createPointLight()
 {

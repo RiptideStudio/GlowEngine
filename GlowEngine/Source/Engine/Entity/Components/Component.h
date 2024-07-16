@@ -44,6 +44,8 @@ namespace Components
 
       virtual Components::Component* clone();
 
+      int getPriority() { return priority; }
+
       const ComponentType getType();
 
       // get the parent
@@ -59,6 +61,7 @@ namespace Components
       ComponentType type;
 
       bool active = false;
+      int priority = 0;
       
     private:
 

@@ -50,7 +50,7 @@ float4 main(PixelInputType input) : SV_TARGET
     float3 lowResCoords = input.worldpos; // this creates the pixelated effect
     
     // Initialize final color
-    float3 finalColor = float3(0,0,0.22);
+    float3 finalColor = float3(0.3,0.2,0.25);
 
     // Calculate lighting for each point light
     for (int i = 0; i < MAXLIGHTS; ++i)

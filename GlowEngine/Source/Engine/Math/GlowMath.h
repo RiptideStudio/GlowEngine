@@ -22,6 +22,7 @@ namespace GlowMath
 
     // plus equals operator
     void operator+=(const Vector3D& other);
+    void operator-=(const Vector3D& other);
 
     // plus operator
     Vector3D operator+(const Vector3D& other);

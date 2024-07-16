@@ -39,7 +39,7 @@ Graphics::Renderer::Renderer(HWND handle)
   // window
   window = engine->getWindow();
   // graphics
-  float bgCol[4] = { 0,0,0.025,1 };
+  float bgCol[4] = { 0.5,0.3,0.4,1 };
   setBackgroundColor(bgCol);
   initGraphics();
   // camera

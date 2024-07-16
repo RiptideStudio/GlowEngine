@@ -17,6 +17,7 @@ Components::Physics::Physics()
   acceleration = { 0,0,0 };
   velocity = { 0,0,0 };
   gravity = 35.f;
+  priority = 1;
   targetVelocity = { 0,0,0 };
   type = ComponentType::Physics;
 }
@@ -68,7 +69,6 @@ void Components::Physics::update()
   if (transform)
   {
     Vector3D position = transform->getPosition();
-
 
     if (!grounded)
     {

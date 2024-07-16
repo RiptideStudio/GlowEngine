@@ -58,6 +58,7 @@ namespace Entities
     int id;
     bool destroyed;
     bool visible = true;
+    bool needsComponentSort = true; // flag for sorting components
     std::string name;
 
     std::vector<Components::Component*> components; // entity component list

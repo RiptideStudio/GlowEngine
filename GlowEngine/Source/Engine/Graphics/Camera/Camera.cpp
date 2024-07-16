@@ -31,7 +31,7 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   right = { 0,0,0 };
   forward = { 0,0,1 };
   viewDistance = 250;
-  height = 4;
+  height = 3; // how high we feel 
   engine = EngineInstance::getEngine();
   renderer = renderEngine;
   windowHandle = engine->getWindowHandle();

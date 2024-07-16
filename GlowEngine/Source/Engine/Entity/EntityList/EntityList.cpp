@@ -29,6 +29,7 @@ void Entities::EntityList::add(Entities::Entity* entity)
 // update a list of entities
 void Entities::EntityList::update()
 {
+
   for (auto it = activeList.begin(); it != activeList.end(); )
   {
     // check for destroyed entities

@@ -65,7 +65,7 @@ void Entities::Entity::load(const nlohmann::json& data)
 // update all the components of an entity
 void Entities::Entity::update()
 {
-  for (auto component : components)
+  for (auto& component : components)
   {
     component->update();
   }
@@ -84,8 +84,14 @@ void Entities::Entity::render()
 // attach a new component to an entity
 void Entities::Entity::addComponent(Components::Component* component)
 {
+  // add the components
   component->setParent(this);
   this->components.push_back(component);
+
+  // sort them in order of priority, higher priority goes first
+  std::sort(components.begin(), components.end(), [](Components::Component* a, Components::Component* b) {
+    return a->getPriority() > b->getPriority();
+  });
 }
 
 // flag an entity for destroy

@@ -22,23 +22,24 @@ void Scene::ForestScene::init()
   player->addComponent(new Components::BoxCollider());
   player->addComponent(new Components::Physics());
   player->addComponent(new Game::PlayerBehavior());
+  player->setHitboxSize(Vector3D(1.5,5,1.5));
 
-  Entities::Actor* leaves = createEntity({ 0,-10,0 }, { 1000,0,1000 }, { 0 }, "", "");
   Entities::Entity* plane = new Entities::Entity();
   getComponentOfType(Sprite3D, plane)->setModel("Plane");
   getComponentOfType(Sprite3D, plane)->setTextures("Leaves");
   getComponentOfType(Sprite3D, plane)->setTextureRepeat(true);
   getComponentOfType(Transform, plane)->setScale({ 1000,1000,1000 });
-  getComponentOfType(Transform, plane)->setPosition({0,-10,0});
+  getComponentOfType(Transform, plane)->setPosition({ 0,-10,0 });
   entityList->add(plane);
+  Entities::Actor* leaves = createEntity({ 0,-10,0 }, { 1000,0,1000 }, { 0 }, "", "");
   leaves->setAnchored(true);
   leaves->setTextureRepeat(true);
   leaves->setAsPointLight(true);
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
   instanceCreateExt("Monkey", { 10,10,-15 }, { 5,5,5 }, { 45,0,0 });
   instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
-  Entities::Actor* d = createEntity({ -10,17.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
-  //Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 1, 1, 1 }, { 0 }, "Mushroom", "Mushroom");
+  Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
+  Entities::Entity* shroom = instanceCreate("Mushroom",Vector3D(0,-10,0));
 
   for (int i = 0; i < 15; ++i)
   {
@@ -53,10 +54,18 @@ void Scene::ForestScene::init()
       randomX = randomRange(-100, 100);
       randomZ = randomRange(-100, 100);
       Vector3D randomPos2 = { randomX,y,randomZ };
+      randomX = randomRange(-100, 100);
+      randomZ = randomRange(-100, 100);
+      Vector3D randomPos3 = { randomX,0,randomZ };
+      randomScale = randomRange(1.f, 2.5f);
+
       Vector3D scale = { randomScale ,randomScale ,randomScale };
       instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
+
       if (j % 5 == 0)
       {
+        Entities::Actor* tree = createEntity(randomPos3, scale*2, { 0,0,randomRange(0.f, 360.f) }, "Tree", "Leaves");
+        tree->setHitboxSize(Vector3D(3,tree->getScale().y*6, 3));
         instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
       }
     }
@@ -75,7 +84,7 @@ void Scene::ForestScene::update()
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,randomRotz }, "Tree", "Chest");
+    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,randomRotz }, "Cube", "Crystal");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
 }

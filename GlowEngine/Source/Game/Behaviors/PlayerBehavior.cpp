@@ -71,6 +71,7 @@ void Game::PlayerBehavior::update()
   if (input->keyDown(VK_SPACE) && physics->isGrounded())
   {
     physics->setVelocityY(jumpSpeed);
+    transform->setPosition(transform->getPosition() + Vector3D(0, 0.1, 0));
   }
 
   // godmode lets us fly unbound by physics and collision!

@@ -20,7 +20,7 @@ namespace Components
 
   public:
 
-    BoxCollider(Vector3D newScale = {1,1,1});
+    BoxCollider(Vector3D newScale = { 1,1,1 });
 
     virtual bool isColliding(const Components::Collider*) override;
 
@@ -28,16 +28,17 @@ namespace Components
     virtual void onCollide(const Components::Collider* other);
     virtual void onLeaveCollide(const Components::Collider* other);
 
+    void setHitboxSize(Vector3D hitboxSize);
+
     virtual void update();
 
     bool isAABBColliding(const BoxCollider& other);
-    bool rayIntersects(const Vector3D& rayOrigin, const Vector3D& rayDirection, float& tmin, float& tmax);
     void calculateScale(const std::map<std::string, std::vector<Vertex>>& modelVertices, const Components::Transform& transform);
 
   private:
 
     Vector3D scale;
-    Vector3D scaledSize;
+    Vector3D hitboxScale;
 
   };
 

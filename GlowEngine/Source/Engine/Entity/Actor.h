@@ -51,6 +51,9 @@ namespace Entities
     // ** General ** //
     void setName(std::string name) { this->name = name; }
 
+    // ** Collision ** //
+    void setHitboxSize(Vector3D size);
+
   private:
 
     // lighting properties
