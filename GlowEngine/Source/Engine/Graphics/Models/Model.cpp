@@ -89,6 +89,11 @@ const std::vector<GlowMath::Vertex>& Models::Model::getVerticies()
   return vertices;
 }
 
+const std::vector<GlowMath::Vertex>& Models::Model::getVerticies() const
+{
+  return vertices;
+}
+
 // get indices container
 const std::vector<unsigned short>& Models::Model::getIndices()
 {

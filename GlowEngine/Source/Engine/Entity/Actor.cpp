@@ -25,7 +25,7 @@ Entities::Actor::Actor() : Entity(),
 {
   engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
-  addComponent(new Components::BoxCollider({1,1,1}));
+  addComponent(new Components::BoxCollider());
   addComponent(physics = new Components::Physics());
   engine->getSceneSystem()->getCurrentScene()->getEntityList()->add(this);
 }

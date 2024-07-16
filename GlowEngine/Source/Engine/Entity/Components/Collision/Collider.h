@@ -33,10 +33,13 @@ namespace Components
       Sphere
     };
 
+    bool colliding = false; // if we are currently colliding
+    bool collided = false;
+
   protected:
 
-    bool collided = false;
     bool autoSize = true;
+    bool isDirty = true; // recalculate mesh bounding box
 
   };
 

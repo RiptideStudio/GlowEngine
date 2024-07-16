@@ -20,8 +20,10 @@ namespace Input
 
     InputSystem(std::string systemName);
 
-    // update the keystates and mouse state
+    // general game loop update
     void update();
+    // update key states
+    void updateKeyStates();
 
     // get the mouse delta
     Vector3D getMouseDelta() { return { (float)mouseDelta.x, (float)mouseDelta.y,0 }; }
@@ -55,7 +57,7 @@ namespace Input
 
     // keystates
     std::unordered_map<int, bool> keystates;
-    std::unordered_map<int, bool> keystatesTriggered;
+    std::unordered_map<int, bool> previousKeystates;
 
   };
 

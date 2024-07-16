@@ -35,6 +35,17 @@ Vector3D GlowMath::Vector3D::operator-(const Vector3D& other)
   return Vector3D(x - other.x, y - other.y, z - other.z);
 }
 
+void GlowMath::Vector3D::normalize()
+{
+  float length = std::sqrt(x * x + y * y + z * z);
+  if (length > 0.0f) 
+  {  
+    x /= length;
+    y /= length;
+    z /= length;
+  }
+}
+
 Vector3D GlowMath::Vector3D::operator*(const Vector3D& other)
 {
   return Vector3D(x * other.x, y * other.y, z * other.z);

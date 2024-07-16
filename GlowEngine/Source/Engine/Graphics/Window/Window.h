@@ -32,8 +32,8 @@ namespace Graphics
     bool updateMessages();
 
     HWND getHandle() { return windowHandle; }
-    int getWidth() { return windowWidth; }
-    int getHeight() { return windowHeight; }
+    int getWidth();
+    int getHeight();
 
     const std::wstring getName() { return windowName; }
     void setName(std::wstring name) { windowName = name; }

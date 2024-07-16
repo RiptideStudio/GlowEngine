@@ -44,6 +44,7 @@ namespace Components
 
     // get scale
     Vector3D getScale() { return scale; }
+    const Vector3D getScale() const { return scale; }
     void setScale(Vector3D newScale) { scale = newScale; dirty = true; }
 
     // rotation

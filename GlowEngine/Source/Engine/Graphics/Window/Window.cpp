@@ -13,8 +13,8 @@
 
 // construct the window
 Graphics::Window::Window()
-  : windowWidth(1280),
-  windowHeight(720)
+  : windowWidth(GetSystemMetrics(SM_CXSCREEN)/1.25f),
+  windowHeight(GetSystemMetrics(SM_CYSCREEN)/1.25f)
 {
   windowClassName = L"Otherglow Window";
   windowName = L"Otherglow";
@@ -52,18 +52,15 @@ bool Graphics::Window::setup()
     this // Set the GWLP_USERDATA to the GlowEngine instance
   );
 
-  // position the window to be in the centre of the screen
-  if (windowHandle != nullptr)
-  {
-    // Adjust the window size
-    RECT rect = { 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
-    AdjustWindowRect(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE);
-    SetWindowPos(windowHandle, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
-  }
-  else
+  if (windowHandle == nullptr)
   {
     return false;
   }
+
+  // position the window to be in the centre of the screen
+  RECT rect = { 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
+  AdjustWindowRect(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE);
+  SetWindowPos(windowHandle, nullptr, 0, 0, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
   return true;
 }
@@ -85,6 +82,10 @@ LRESULT Graphics::Window::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 {
   if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
     return true;
+
+  // handle input system key states
+  if (input)
+    input->updateKeyStates();
 
   switch (message)
   {
@@ -127,6 +128,16 @@ bool Graphics::Window::updateMessages()
     }
   }
   return true;
+}
+
+int Graphics::Window::getWidth()
+{
+  return windowWidth;
+}
+
+int Graphics::Window::getHeight()
+{
+  return windowHeight;
 }
 
 // return the current message parameter (quit, create, etc)

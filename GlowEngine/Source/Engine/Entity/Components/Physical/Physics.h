@@ -23,11 +23,22 @@ namespace Components
     void setTargetVelocity(Vector3D vel);
     void setAcceleration(Vector3D acc);
 
+    void setAccelerationY(float val) { acceleration.x = val; }
+
+    void setVelocityX(float val);
+    void setVelocityY(float val);
+    void setVelocityZ(float val);
+
+    const Vector3D getVelocity() { return velocity; }
+    const Vector3D getAcceleration() { return acceleration; }
+
     void update();
 
     void render();
 
     void setAnchored(bool val);
+    void setGrounded(bool val) { grounded = val; }
+    bool isGrounded() { return grounded; }
 
   private:
 
@@ -37,6 +48,7 @@ namespace Components
 
     // anchored means we can't move no matter what
     bool anchored = false;
+    bool grounded = false; // we are on the ground
 
     // this is the gravity constant
     const float gravity = -25.f;

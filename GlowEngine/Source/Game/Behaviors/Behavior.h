@@ -21,6 +21,11 @@ namespace Game
 
     virtual void update() {};
 
+  protected:
+
+    Input::InputSystem* input;
+    Engine::GlowEngine* engine;
+
   };
 
 }

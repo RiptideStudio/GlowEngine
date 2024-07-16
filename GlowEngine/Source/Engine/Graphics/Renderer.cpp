@@ -13,6 +13,7 @@
 #include "Engine/Entity/Entity.h"
 #include "Engine/Entity/EntityList/EntityList.h"
 #include "Engine/Graphics/Textures/Texture.h"
+#include "Engine/Graphics/Window/Window.h"
 #include "Engine/Graphics/Textures/stb_image.h"
 #include "UI/GlowGui.h"
 #include <filesystem>
@@ -35,6 +36,8 @@ Graphics::Renderer::Renderer(HWND handle)
 {
   // engine
   engine = EngineInstance::getEngine();
+  // window
+  window = engine->getWindow();
   // graphics
   float bgCol[4] = { 0,0,0.025,1 };
   setBackgroundColor(bgCol);
@@ -237,8 +240,8 @@ void Graphics::Renderer::createViewport()
 {
   // Create and set the viewport
   D3D11_VIEWPORT viewport;
-  viewport.Width = static_cast<float>(1280);
-  viewport.Height = static_cast<float>(720);
+  viewport.Width = static_cast<float>(window->getWidth());
+  viewport.Height = static_cast<float>(window->getHeight());
   viewport.MinDepth = 0.0f;
   viewport.MaxDepth = 1.0f;
   viewport.TopLeftX = 0.0f;
@@ -279,8 +282,8 @@ void Graphics::Renderer::createDepthStencil()
 {
   D3D11_TEXTURE2D_DESC depthStencilDesc;
 
-  depthStencilDesc.Width = 1280; // Your render target width
-  depthStencilDesc.Height = 720; // Your render target height
+  depthStencilDesc.Width = window->getWidth(); // Your render target width
+  depthStencilDesc.Height = window->getHeight(); // Your render target height
   depthStencilDesc.MipLevels = 1;
   depthStencilDesc.ArraySize = 1;
   depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -401,8 +404,8 @@ void Graphics::Renderer::createShadowMap()
 {
   D3D11_TEXTURE2D_DESC depthTexDesc;
   ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));
-  depthTexDesc.Width = 1280;
-  depthTexDesc.Height = 720;
+  depthTexDesc.Width = window->getWidth();
+  depthTexDesc.Height = window->getHeight();
   depthTexDesc.MipLevels = 1;
   depthTexDesc.ArraySize = 1;
   depthTexDesc.Format = DXGI_FORMAT_R32_TYPELESS; // Use a typeless format for more flexibility
@@ -434,8 +437,8 @@ void Graphics::Renderer::createShadowMap()
   device->CreateShaderResourceView(shadowMap, &srvDesc, &shadowMapSRV);
 
   D3D11_VIEWPORT shadowViewport;
-  shadowViewport.Width = static_cast<float>(1280);
-  shadowViewport.Height = static_cast<float>(720);
+  shadowViewport.Width = static_cast<float>(window->getWidth());
+  shadowViewport.Height = static_cast<float>(window->getHeight());
   shadowViewport.MinDepth = 0.0f;
   shadowViewport.MaxDepth = 1.0f;
   shadowViewport.TopLeftX = 0;
@@ -483,6 +486,12 @@ void Graphics::Renderer::updateConstantBufferCameraMatrices()
 {
   cbData.view = DirectX::XMMatrixTranspose(camera->getViewMatrix());
   cbData.projection = DirectX::XMMatrixTranspose(camera->getPerspecitveMatrix());
+}
+
+void Graphics::Renderer::toggleFullscreen(bool val)
+{
+  swapChain->SetFullscreenState(val, nullptr);
+  fullscreen = !fullscreen;
 }
 
 // set the texture resource to nullptr which means no texture

@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "ForestScene.h"
+#include "Game/Behaviors/PlayerBehavior.h"
 
 static Vector3D lightPosition = { -20,-10,-5 };
 static DirectX::XMFLOAT4 lightColor = { 1.25,1,1,1 };
@@ -16,6 +17,12 @@ static float lightSize = 1;
 // initialize the forest scene
 void Scene::ForestScene::init()
 {
+  // player entity
+  Entities::Actor* player = instanceCreateExt("Player", {0,5,0}, {1,2,1}, 0);
+  player->addComponent(new Components::BoxCollider());
+  player->addComponent(new Components::Physics());
+  player->addComponent(new Game::PlayerBehavior());
+
   Entities::Actor* leaves = createEntity({ 0,-10,0 }, { 1000,0,1000 }, { 0 }, "", "");
   Entities::Entity* plane = new Entities::Entity();
   getComponentOfType(Sprite3D, plane)->setModel("Plane");
@@ -30,9 +37,8 @@ void Scene::ForestScene::init()
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
   instanceCreateExt("Monkey", { 10,10,-15 }, { 5,5,5 }, { 45,0,0 });
   instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
-  Entities::Actor* d = createEntity({ -10,17.56f,-5 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
-  Entities::Actor* s = createEntity({ 10,17.5f,-5 }, { 1,1,1 }, { 0 }, "Torus", "Cobblestone");
-  Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 1, 1, 1 }, { 0 }, "Mushroom", "Mushroom");
+  //Entities::Actor* d = createEntity({ -10,17.56f,-5 }, { 1,1,1 }, { 0 }, "Door", "Cobblestone");
+  //Entities::Actor* shroom = createEntity({ -30,-10,-15 }, { 1, 1, 1 }, { 0 }, "Mushroom", "Mushroom");
 
   for (int i = 0; i < 15; ++i)
   {
@@ -44,8 +50,15 @@ void Scene::ForestScene::init()
 
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };
+      randomX = randomRange(-100, 100);
+      randomZ = randomRange(-100, 100);
+      Vector3D randomPos2 = { randomX,y,randomZ };
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
+      instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
+      if (j % 5 == 0)
+      {
+        instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
+      }
     }
   }
 }
@@ -62,36 +75,8 @@ void Scene::ForestScene::update()
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Monkey", "Sun");
+    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { randomRotx,randomRoty,randomRotz }, "Tree", "Leaves");
     std::cout << "Entities: " << entityList->getSize() << std::endl;
-  }
-  if (input->keyDown('H'))
-  {
-    for (float i = 0; i < 50; i += 2)
-    {
-      for (float j = 0; j < 50; j += 2)
-      {
-        Entities::Entity* entity = new Entities::Entity();
-        Components::Sprite3D* sprite = new Components::Sprite3D("Tree", "Cobblestone");
-
-        if ((int)i % 5 == 0)
-        {
-          sprite->setModel("Cube");
-        }
-        else if ((int)j % 5 == 0)
-        {
-          sprite->setModel("IcoSphere");
-        }
-        else
-        {
-          sprite->setModel("Cylinder");
-        }
-
-        entity->addComponent(sprite);
-        entity->addComponent(new Components::Transform({ 5 - i,j - 5,10 + sinf(i) * j }, { 1,1,1 }, { i,j,1 }));
-        entityList->add(entity);
-      }
-    }
   }
 }
 

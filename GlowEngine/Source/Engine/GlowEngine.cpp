@@ -166,6 +166,8 @@ void Engine::GlowEngine::createCoreSystems()
   input = new Input::InputSystem("InputSystem");
   // setup renderer
   renderer = new Graphics::Renderer(windowHandle);
+  // camera, though it belongs to the renderer we have a quick pointer
+  camera = renderer->getCamera();
 }
 
 // create systems dependent on core systems

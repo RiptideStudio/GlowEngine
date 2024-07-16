@@ -10,6 +10,7 @@
 
 // forward declare systems
 namespace Graphics { class Renderer; class Window; }
+namespace Visual { class Camera; }
 namespace Models { class ModelLibrary; }
 namespace Textures { class TextureLibrary; }
 namespace Scene { class SceneSystem; }
@@ -47,6 +48,7 @@ namespace Engine
     // get system pointers
     Input::InputSystem* getInputSystem() { return input; }
     Graphics::Renderer* getRenderer() { return renderer; }
+    Visual::Camera* getCamera() { return camera; }
     Models::ModelLibrary* getModelLibrary() { return modelLibrary; }
     Textures::TextureLibrary* getTextureLibrary() { return textureLibrary; }
     Scene::SceneSystem* getSceneSystem() { return sceneSystem; }
@@ -73,6 +75,7 @@ namespace Engine
     // system pointers
     Graphics::Renderer* renderer;
     Graphics::Window* window;
+    Visual::Camera* camera;
     Input::InputSystem* input;
     Models::ModelLibrary* modelLibrary;
     Textures::TextureLibrary* textureLibrary;

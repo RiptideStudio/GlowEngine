@@ -61,10 +61,12 @@ namespace Models
     void load(const std::string fileName);
     // get vertices and indices container
     const std::vector<GlowMath::Vertex>& getVerticies();
+    const std::vector<GlowMath::Vertex>& getVerticies() const;
     const std::vector<unsigned short>& getIndices();
 
     // get the model vertex map
     const std::map<std::string, std::vector<Vertex>>& getModelVertices() { return modelVertices; }
+    const std::map<std::string, std::vector<Vertex>>& getModelVertices() const { return modelVertices; }
     // model indices
     const std::map<std::string, std::vector<unsigned short>>& getModelIndices() { return modelIndices; }
     // get the model names - this is so we can iterate over each name and get them from the map
@@ -73,6 +75,9 @@ namespace Models
     std::vector<std::string> getTextureModelNames() { return textureNames; }
     // get the number of objects
     const int& getObjects() { return objects; }
+    // set the name and get the name
+    const void setName(std::string newName) { name = newName; }
+    const std::string getName() { return name; }
 
     // get the model's buffer index
     ID3D11Buffer* getVertexBuffer(int index);
@@ -138,6 +143,8 @@ namespace Models
     // will be deprecated soon
     std::vector<Vertex> vertices;
     std::vector<unsigned short> indices;
+
+    std::string name;
 
   };
 

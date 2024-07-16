@@ -64,6 +64,9 @@ void Entities::EntityList::render()
   // render all entities in the list
   for (auto entity : activeList)
   {
+    if (!entity->isVisible())
+      continue;
+
     entity->render();
   }
 }
@@ -95,6 +98,7 @@ void Entities::EntityList::checkCollisions()
       if (collider1->isColliding(collider2)) 
       {
         collider2->onCollide();
+        collider1->onCollide();
       }
     }
   }

@@ -11,6 +11,12 @@
 namespace Graphics
 {
   class Renderer;
+  class Window;
+}
+
+namespace Entities
+{
+  class Entity;
 }
 
 namespace Visual
@@ -32,6 +38,12 @@ namespace Visual
     // get the perspective matrix
     const Matrix& getPerspecitveMatrix();
 
+    // get the forward vector or 'look' direction
+    const Vector3D getForwardVector();
+    const Vector3D getRightVector();
+    // set the target
+    void setTarget(Entities::Entity* newTarget);
+
     // get the position
     XMVector getPosition() { return position; }
 
@@ -39,12 +51,13 @@ namespace Visual
 
     // renderer
     Graphics::Renderer* renderer;
+    Graphics::Window* window;
     Engine::GlowEngine* engine;
     Input::InputSystem* input;
 
     // camera properties
     XMVector position;
-    XMVector target;
+    XMVector targetPosition;
     XMVector upDirection;
     XMVector forward;
     XMVector right;
@@ -57,6 +70,7 @@ namespace Visual
     float pitch;
     float cameraSpeed;
     float mouseSensitivity;
+    float height; // how tall we are
 
     // window properties
     float windowWidth;
@@ -67,6 +81,9 @@ namespace Visual
     // camera contains both the view and perspective matrix
     Matrix viewMatrix;
     Matrix perspectiveMatrix;
+
+    // camera follows an entity
+    Entities::Entity* target;
 
   };
 

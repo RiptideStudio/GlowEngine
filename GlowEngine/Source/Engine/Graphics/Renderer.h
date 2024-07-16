@@ -22,6 +22,7 @@ namespace Visual
 namespace Graphics
 {
   class GlowGui;
+  class Window;
 }
 
 namespace Graphics
@@ -71,6 +72,10 @@ namespace Graphics
     // update the perspective and camera view matrix
     void updateConstantBufferCameraMatrices();
 
+    // toggle fullscreen
+    void toggleFullscreen(bool val);
+    bool isFullscreen() { return fullscreen; }
+
     // unbind a texture 
     void unBindTexture();
 
@@ -98,6 +103,9 @@ namespace Graphics
 
     // get the back buffer
     ID3D11Texture2D* getBackBuffer();
+
+    // get the camera
+    Visual::Camera* getCamera() { return camera; }
 
   private:
 
@@ -171,9 +179,13 @@ namespace Graphics
     Engine::GlowEngine* engine;
     // camera
     Visual::Camera* camera;
+    // window
+    Graphics::Window* window;
 
     // point lights - the renderer can have a variable amount of point lights
     int lights;
+
+    bool fullscreen = false;
 
   };
 

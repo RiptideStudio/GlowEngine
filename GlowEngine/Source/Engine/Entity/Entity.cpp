@@ -25,7 +25,8 @@ Entities::Entity::Entity(const Entity& other)
   :
   id(0),
   name("Entity"),
-  destroyed(false)
+  destroyed(false),
+  visible(other.visible)
 {
   // copy components
   for (const auto& component : other.components)
@@ -53,6 +54,7 @@ Entities::Entity::~Entity()
 void Entities::Entity::load(const nlohmann::json& data)
 {
   if (data.contains("name")) setName(data["name"]);
+  if (data.contains("visible")) visible = data["visible"];
 
   for (const auto& component : components)
   {

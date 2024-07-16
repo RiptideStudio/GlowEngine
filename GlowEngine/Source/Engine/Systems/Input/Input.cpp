@@ -10,6 +10,7 @@
 #include "Input.h"
 #include "Engine/GlowEngine.h"
 #include "Engine/EngineInstance.h"
+#include "Engine/Graphics/Renderer.h"
 
 Input::InputSystem::InputSystem(std::string systemName) 
   : System(systemName)
@@ -33,9 +34,10 @@ void Input::InputSystem::update()
     mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
   }
 
-  if (keystates[WM_LBUTTONDOWN])
+  // toggle fullscreen
+  if (keyTriggered(VK_TAB))
   {
-    Logger::write("BALLS");
+    engine->getRenderer()->toggleFullscreen(!engine->getRenderer()->isFullscreen());
   }
 
   // toggle the focus
@@ -68,6 +70,11 @@ void Input::InputSystem::update()
   }
 }
 
+void Input::InputSystem::updateKeyStates()
+{
+  previousKeystates = keystates;
+}
+
 // set a key state to active
 void Input::InputSystem::onKeyTriggered(int keycode)
 {
@@ -90,6 +97,5 @@ bool Input::InputSystem::keyDown(int key)
 // check if a key was triggered
 bool Input::InputSystem::keyTriggered(int key)
 {
-  // TO BE IMPLEMENTED
-  return false;
+  return keystates[key] && !previousKeystates[key];
 }

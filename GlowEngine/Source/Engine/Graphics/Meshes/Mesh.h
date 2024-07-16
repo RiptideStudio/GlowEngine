@@ -30,6 +30,7 @@ namespace Meshes
 
     // get the mesh's data for read only
     const std::vector<Vertex>& getVertices() { return vertices; }
+    const std::vector<Vertex>& getVertices() const { return vertices; }
     const std::vector<unsigned short>& getIndices() { return indices; }
 
     // get the name

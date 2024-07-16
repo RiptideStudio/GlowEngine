@@ -15,6 +15,7 @@ Components::Physics::Physics()
   acceleration = { 0,gravity,0 };
   velocity = { 0,0,0 };
   targetVelocity = { 0,0,0 };
+  type = ComponentType::Physics;
 }
 
 void Components::Physics::setVelocity(Vector3D vel)
@@ -30,6 +31,21 @@ void Components::Physics::setTargetVelocity(Vector3D vel)
 void Components::Physics::setAcceleration(Vector3D acc)
 {
   acceleration = acc;
+}
+
+void Components::Physics::setVelocityX(float val)
+{
+  velocity.x = val;
+}
+
+void Components::Physics::setVelocityY(float val)
+{
+  velocity.y = val;
+}
+
+void Components::Physics::setVelocityZ(float val)
+{
+  velocity.z = val;
 }
 
 // update velocity and transform
@@ -52,6 +68,7 @@ void Components::Physics::update()
 
     Vector3D finalPosition = position + (velocity * dt);
 
+    transform->setOldPosition(position);
     transform->setPosition(finalPosition);
   }
 }

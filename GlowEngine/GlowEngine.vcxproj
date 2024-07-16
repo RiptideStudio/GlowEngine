@@ -63,6 +63,7 @@
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
     <ClInclude Include="Source\Game\Behaviors\Behavior.h" />
     <ClInclude Include="Source\Game\Behaviors\ParticleBehavior.h" />
+    <ClInclude Include="Source\Game\Behaviors\PlayerBehavior.h" />
     <ClInclude Include="Source\Game\Scene\ForestScene\ForestScene.h" />
     <ClInclude Include="Source\Game\Scene\Scene.h" />
     <ClInclude Include="Source\Game\Scene\SceneSystem.h" />
@@ -160,6 +161,7 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Behaviors\Behavior.cpp" />
     <ClCompile Include="Source\Game\Behaviors\ParticleBehavior.cpp" />
+    <ClCompile Include="Source\Game\Behaviors\PlayerBehavior.cpp" />
     <ClCompile Include="Source\Game\Scene\ForestScene\ForestScene.cpp" />
     <ClCompile Include="Source\Game\Scene\Scene.cpp" />
     <ClCompile Include="Source\Game\Scene\SceneSystem.cpp" />

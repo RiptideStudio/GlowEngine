@@ -35,6 +35,8 @@ namespace Entities
     void destroy();
     // return if destroyed
     bool isDestroyed() { return destroyed; }
+    // if visible
+    bool isVisible() { return visible; }
     // get the name
     std::string getName() { return name; }
     // set name
@@ -55,6 +57,7 @@ namespace Entities
 
     int id;
     bool destroyed;
+    bool visible = true;
     std::string name;
 
     std::vector<Components::Component*> components; // entity component list

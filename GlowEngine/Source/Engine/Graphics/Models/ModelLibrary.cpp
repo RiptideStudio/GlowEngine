@@ -47,6 +47,7 @@ void Models::ModelLibrary::add(std::string name, Models::Model* model)
 {
   if (model)
   {
+    model->setName(name);
     models[name] = model;
   }
   Logger::write("Added new model " + name + " to library");
