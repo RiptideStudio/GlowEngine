@@ -57,14 +57,14 @@ namespace Components
 
     protected:
       
+      // component identifiers
       std::string name;
       ComponentType type;
-
+      // if this component should be updated
       bool active = false;
+      // priority determines order of update
       int priority = 0;
       
-    private:
-
   };
 
 }

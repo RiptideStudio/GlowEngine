@@ -26,6 +26,9 @@ namespace Meshes
     // load all of our preset meshes (quad, etc
     void load();
 
+    // render common meshes
+    void drawBox(Components::BoxCollider* box);
+
   private:
 
     std::map<std::string, Meshes::Mesh*> meshes;

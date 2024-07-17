@@ -9,8 +9,8 @@
 #include "stdafx.h"
 #include "BoxCollider.h"
 #include "Engine/GlowEngine.h"
-#include "Engine/Graphics/Meshes/Mesh.h"
-#include "Engine/Graphics/Models/Model.h"
+#include "Engine/Graphics/Renderer.h"
+#include "Engine/Graphics/Meshes/MeshLibrary.h"
 
 Components::BoxCollider::BoxCollider(Vector3D newScale)
 {
@@ -160,6 +160,8 @@ void Components::BoxCollider::onLeaveCollide(const Components::Collider* other)
 
 void Components::BoxCollider::setHitboxSize(Vector3D hitboxSize)
 {
+  calculateScale(parent->sprite->getModel()->getModelVertices(), *parent->transform);
+  meshScale = hitboxSize / parent->transform->getScale();
   scale = hitboxSize;
   isDirty = false;
 }
@@ -173,6 +175,17 @@ void Components::BoxCollider::update()
     calculateScale(parent->sprite->getModel()->getModelVertices(), *parent->transform);
     isDirty = false;
   }
+}
+
+// draw a wireframe of the box based on vertices
+void Components::BoxCollider::renderDebug()
+{
+  Graphics::Renderer* renderer = EngineInstance::getEngine()->getRenderer();
+  Meshes::MeshLibrary* lib = EngineInstance::getEngine()->getMeshLibrary();
+
+  renderer->drawSetColor(Graphics::Color::Red);
+  lib->drawBox(this);
+  renderer->drawSetColor(Graphics::Color::Clear);
 }
 
 // our scalar value works for collisions at small values, but as we have larger and larger objects,
@@ -214,6 +227,38 @@ void Components::BoxCollider::calculateScale(const std::map<std::string, std::ve
     originalScale.y * transform.getScale().y,
     originalScale.z * transform.getScale().z);
 
-  isDirty = parent->transform->isDirty();
+  meshScale = originalScale;
 
+  // Calculate the center of the bounding box
+  Vector3D center = (min + max) * 0.5f;
+
+  // Clear the previous vertices
+  this->vertices.clear();
+
+  // Define the vertices of the box collider
+  Vector3D sc = parent->transform->getScale();
+  Vector3D halfScale = sc * 0.5f;
+  Vector3D corners[8] = {
+      center + Vector3D(-halfScale.x, -halfScale.y, -halfScale.z),
+      center + Vector3D(halfScale.x, -halfScale.y, -halfScale.z),
+      center + Vector3D(halfScale.x, halfScale.y, -halfScale.z),
+      center + Vector3D(-halfScale.x, halfScale.y, -halfScale.z),
+      center + Vector3D(-halfScale.x, -halfScale.y, halfScale.z),
+      center + Vector3D(halfScale.x, -halfScale.y, halfScale.z),
+      center + Vector3D(halfScale.x, halfScale.y, halfScale.z),
+      center + Vector3D(-halfScale.x, halfScale.y, halfScale.z)
+  };
+
+  // Add the corners to the vertices vector
+  for (const auto& corner : corners)
+  {
+    Vertex v;
+    v.x = corner.x;
+    v.y = corner.y;
+    v.z = corner.z;
+
+    this->vertices.push_back(v);
+  }
+
+  isDirty = parent->transform->isDirty();
 }

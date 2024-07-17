@@ -29,11 +29,15 @@ namespace Components
     virtual void onLeaveCollide(const Components::Collider* other);
 
     void setHitboxSize(Vector3D hitboxSize);
+    Vector3D getHitboxSize() { return scale; }
 
     virtual void update();
+    virtual void renderDebug();
 
     bool isAABBColliding(const BoxCollider& other);
     void calculateScale(const std::map<std::string, std::vector<Vertex>>& modelVertices, const Components::Transform& transform);
+
+    Vector3D meshScale;
 
   private:
 

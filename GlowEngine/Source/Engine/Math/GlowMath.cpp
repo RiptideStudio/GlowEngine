@@ -75,3 +75,8 @@ Vector3D GlowMath::Vector3D::operator*(const float& other)
   return Vector3D(x * other, y * other, z * other);
 }
 
+Vector3D GlowMath::Vector3D::operator/(const Vector3D& other)
+{
+  return Vector3D(x / other.x, y / other.y, z / other.z);
+}
+

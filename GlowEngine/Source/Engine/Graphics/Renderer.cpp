@@ -39,11 +39,16 @@ Graphics::Renderer::Renderer(HWND handle)
   // window
   window = engine->getWindow();
   // graphics
-  float bgCol[4] = { 0.5,0.3,0.4,1 };
-  setBackgroundColor(bgCol);
   initGraphics();
   // camera
   camera = new Visual::Camera(this);
+  
+  // setup and bind buffers
+  colorBuffer = new ConstantBuffer<ColorBuffer>(device);
+
+  //background
+  float bgCol[4] = { 0.5,0.3,0.4,1 };
+  setBackgroundColor(bgCol);
 }
 
 // initialize each part of the graphics pipeline
@@ -486,6 +491,13 @@ void Graphics::Renderer::updateConstantBufferCameraMatrices()
 {
   cbData.view = DirectX::XMMatrixTranspose(camera->getViewMatrix());
   cbData.projection = DirectX::XMMatrixTranspose(camera->getPerspecitveMatrix());
+}
+
+void Graphics::Renderer::drawSetColor(const Color& color)
+{
+  ColorBuffer colorData = { color.r, color.g, color.b, color.a };
+  colorBuffer->update(deviceContext, colorData);
+  colorBuffer->bind(deviceContext, 2, ShaderType::Pixel);
 }
 
 void Graphics::Renderer::toggleFullscreen(bool val)

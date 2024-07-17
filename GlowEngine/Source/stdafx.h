@@ -58,3 +58,6 @@ using namespace GlowMath;
 #include "Engine/Graphics/UI/ImGuiFiles/imgui.h"
 #include "Engine/Graphics/UI/ImGuiFiles/imgui_impl_win32.h"
 #include "Engine/Graphics/UI/ImGuiFiles/imgui_impl_dx11.h"
+
+// graphics
+#include "Engine/Graphics/Color/Color.h"

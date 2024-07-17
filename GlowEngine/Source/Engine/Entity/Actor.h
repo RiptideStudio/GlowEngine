@@ -27,7 +27,7 @@ namespace Entities
     void setScale(Vector3D newScale) { transform->setScale(newScale); }
     Vector3D getScale() { return transform->getScale(); }
 
-    void setRotation(Vector3D pos) { transform->setRotation(pos); }
+    void setRotation(Vector3D rot) { transform->setRotation(rot); }
     Vector3D getRotation() { return transform->getRotation(); }
 
     // ** Physics ** //
@@ -53,6 +53,7 @@ namespace Entities
 
     // ** Collision ** //
     void setHitboxSize(Vector3D size);
+    Vector3D getHitboxSize();
 
   private:
 

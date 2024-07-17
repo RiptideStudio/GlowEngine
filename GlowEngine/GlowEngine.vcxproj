@@ -34,6 +34,8 @@
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h" />
     <ClInclude Include="Source\Engine\GlowEngine.h" />
     <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h" />
+    <ClInclude Include="Source\Engine\Graphics\Color\Color.h" />
+    <ClInclude Include="Source\Engine\Graphics\ConstantBuffer.h" />
     <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\Mesh.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\MeshLibrary.h" />
@@ -105,6 +107,8 @@
     <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Color\Color.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\ConstantBuffer.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\Mesh.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\MeshLibrary.cpp" />

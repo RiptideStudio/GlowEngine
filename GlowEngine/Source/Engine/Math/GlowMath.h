@@ -39,6 +39,9 @@ namespace GlowMath
     Vector3D operator*(const Vector3D& other);
     Vector3D operator*(const float& other);
 
+    // division
+    Vector3D operator/(const Vector3D& other);
+
   public:
 
     // client can change vector properties

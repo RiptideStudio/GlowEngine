@@ -17,6 +17,16 @@ struct PointLightBuffer
     float4 color;
 };
 
+struct ColorBuffer
+{
+    float4 objectColor;
+};
+
+cbuffer ColorRegister : register(b2)
+{
+    ColorBuffer colorBuffer;
+};
+
 // GPU fog buffer
 cbuffer LightBufferType : register(b1)
 {
@@ -39,6 +49,12 @@ SamplerState SampleType;
 // main entry point
 float4 main(PixelInputType input) : SV_TARGET
 {
+    // draw the object an entire color if so
+    if (colorBuffer.objectColor.x != 0)
+    {
+        return colorBuffer.objectColor;
+    }
+    
     // Get the texture color
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     

@@ -9,6 +9,9 @@
 #include "stdafx.h"
 #include "MeshLibrary.h"
 #include "Engine/Graphics/Meshes/Mesh.h"
+#include "Engine/Graphics/Renderer.h"
+#include "Engine/Graphics/Models/ModelLibrary.h"
+#include "Engine/GlowEngine.h"
 
 // add a mesh to the library
 void Meshes::MeshLibrary::add(Meshes::Mesh* mesh)
@@ -72,4 +75,86 @@ void Meshes::MeshLibrary::load()
     0,2,3
   };
   quadMesh->setIndices(indices);
+}
+
+// draw a cube mesh
+void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
+{
+  std::vector<Vertex> vertices = box->vertices;
+
+  if (vertices.empty())
+    return;
+
+  Graphics::Renderer* renderer = EngineInstance::getEngine()->getRenderer();
+  ID3D11DeviceContext* deviceContext = renderer->getDeviceContext();
+  ID3D11Device* device = renderer->getDevice();
+  
+  ID3D11Buffer* vertexBuffer;
+  ID3D11Buffer* indexBuffer;
+
+  // Define vertices
+  D3D11_BUFFER_DESC vertexBufferDesc;
+  ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+  vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+  vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertices.size();
+  vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+  vertexBufferDesc.CPUAccessFlags = 0;
+  vertexBufferDesc.MiscFlags = 0;
+
+  D3D11_SUBRESOURCE_DATA vertexData;
+  ZeroMemory(&vertexData, sizeof(vertexData));
+  vertexData.pSysMem = vertices.data();
+
+  HRESULT result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+
+  std::vector<unsigned> indices = {
+        0, 1, 2, 2, 3, 0, // Front face
+        4, 5, 6, 6, 7, 4, // Back face
+        0, 1, 5, 5, 4, 0, // Bottom face
+        2, 3, 7, 7, 6, 2, // Top face
+        0, 3, 7, 7, 4, 0, // Left face
+        1, 2, 6, 6, 5, 1  // Right face
+  };
+
+  D3D11_BUFFER_DESC indexBufferDesc;
+  ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
+  indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+  indexBufferDesc.ByteWidth = sizeof(unsigned) * indices.size();
+  indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+  indexBufferDesc.CPUAccessFlags = 0;
+  indexBufferDesc.MiscFlags = 0;
+
+  D3D11_SUBRESOURCE_DATA indexData;
+  ZeroMemory(&indexData, sizeof(indexData));
+  indexData.pSysMem = indices.data();
+
+  result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
+
+  Vector3D scale = box->meshScale;
+  Vector3D pos = box->parent->transform->getPosition();
+  DirectX::XMFLOAT4 rotation = { 0,0,0,0 };
+
+  DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
+  DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&rotation)); // Assuming rotation is an XMFLOAT4 representing a quaternion
+  DirectX::XMMATRIX translationMatrix = DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+
+  // Combine the transformations
+  DirectX::XMMATRIX final = scaleMatrix * rotationMatrix * translationMatrix;
+
+  // update the constant buffer's world matrix
+  renderer->updateConstantBufferWorldMatrix(final);
+
+  // bind the constant buffer and update subresource
+  renderer->updateConstantBuffer();
+
+  UINT stride = sizeof(Vertex);
+  UINT offset = 0;
+  deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+  deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+  // draw the triangle
+  deviceContext->DrawIndexed(36, 0, 0);
+
+  indexBuffer->Release();
+  vertexBuffer->Release();
 }

@@ -27,21 +27,24 @@ namespace Components
     // when we leave the collision
     virtual void onLeaveCollide(const Components::Collider* other) {};
 
-    // define collider types
-    enum class ColliderType
-    {
-      Box,
-      Sphere
-    };
+    // render calls respective draw function
+    void render();
+    virtual void renderDebug() {};
 
     bool colliding = false; // if we are currently colliding
     bool collided = false;
     bool autoSize = true;
     bool isDirty = true; // recalculate mesh bounding box
 
+    // objects we are currently colliding with
     std::set<const Components::Collider*> collidingObjects;
+    std::vector<Vertex> vertices;
 
   protected:
+
+    // debug drawing 
+    bool debugDraw = true;
+    std::vector<unsigned> indices;
 
   };
 

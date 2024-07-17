@@ -64,8 +64,6 @@ void Scene::ForestScene::init()
 
       if (j % 5 == 0)
       {
-        Entities::Actor* tree = createEntity(randomPos3, scale*2, { 0,0,randomRange(0.f, 360.f) }, "Tree", "Leaves");
-        tree->setHitboxSize(Vector3D(3,tree->getScale().y*6, 3));
         instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
       }
     }

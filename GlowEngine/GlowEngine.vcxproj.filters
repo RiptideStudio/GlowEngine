@@ -102,6 +102,9 @@
     <Filter Include="Source Files\Engine\Graphics\UI\ImGuiFiles">
       <UniqueIdentifier>{616939ed-f3de-444b-a3e3-f0dbfe530f82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Color">
+      <UniqueIdentifier>{ed55f887-ad08-46c9-8d57-fbef40dd67ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -269,6 +272,12 @@
     <ClInclude Include="Source\Engine\Math\Lerp.h">
       <Filter>Source Files\Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Color\Color.h">
+      <Filter>Source Files\Engine\Graphics\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\ConstantBuffer.h">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -423,6 +432,12 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Math\Lerp.cpp">
       <Filter>Source Files\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Color\Color.cpp">
+      <Filter>Source Files\Engine\Graphics\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\ConstantBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

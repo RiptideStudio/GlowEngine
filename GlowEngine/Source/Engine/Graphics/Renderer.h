@@ -13,6 +13,7 @@
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
 #include "Engine/Graphics/Lighting/LightBuffer.h"
+#include "ConstantBuffer.h"
 
 namespace Visual
 {
@@ -71,6 +72,9 @@ namespace Graphics
     void updateConstantBufferWorldMatrix(Matrix world);
     // update the perspective and camera view matrix
     void updateConstantBufferCameraMatrices();
+
+    // set the target color
+    void drawSetColor(const Color& color);
 
     // toggle fullscreen
     void toggleFullscreen(bool val);
@@ -172,6 +176,11 @@ namespace Graphics
     ID3D11DepthStencilState* depthStencilState;
     ID3D11ShaderResourceView* shadowMapSRV;
 
+    // buffers
+    ConstantBuffer<ColorBuffer>* colorBuffer;
+
+    // we hold a vector of constant buffers that stay unitialized 
+
     // background color
     float backgroundColor[4];
 
@@ -184,7 +193,6 @@ namespace Graphics
 
     // point lights - the renderer can have a variable amount of point lights
     int lights;
-
     bool fullscreen = false;
 
   };
