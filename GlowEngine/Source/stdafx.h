@@ -43,6 +43,7 @@ using namespace GlowMath;
 #include "Engine/Systems/Input/Input.h"
 #include "Game/System/System.h"
 #include "Game/System/SystemInstance.h"
+#include "Engine/Audio/SoundSystem.h"
 
 // components
 #include "Engine/Graphics/Models/Model.h"

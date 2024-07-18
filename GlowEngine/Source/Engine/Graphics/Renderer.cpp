@@ -129,12 +129,15 @@ void Graphics::Renderer::createDeviceAndSwapChain()
   DXGI_SWAP_CHAIN_DESC swapChainDesc;
   ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-  swapChainDesc.BufferCount = 1;
+  swapChainDesc.BufferCount = 2;
+  swapChainDesc.SampleDesc.Count = 1;
   swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   swapChainDesc.OutputWindow = windowHandle;
-  swapChainDesc.SampleDesc.Count = 1;
   swapChainDesc.Windowed = TRUE;
+  swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+  swapChainDesc.BufferDesc.RefreshRate.Numerator = 144;
+  swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
   // Create a device, device context, and swap chain using the information in the swapChainDesc structure
   D3D_FEATURE_LEVEL featureLevel;
@@ -500,10 +503,10 @@ void Graphics::Renderer::drawSetColor(const Color& color)
   colorBuffer->bind(deviceContext, 2, ShaderType::Pixel);
 }
 
-void Graphics::Renderer::toggleFullscreen(bool val)
+void Graphics::Renderer::toggleFullscreen()
 {
   fullscreen = !fullscreen;
-  swapChain->SetFullscreenState(val, nullptr);
+  window->setFullscreen(fullscreen);
 }
 
 // set the texture resource to nullptr which means no texture
@@ -560,6 +563,16 @@ void Graphics::Renderer::setBackgroundColor(float color[4])
   backgroundColor[1] = color[1];
   backgroundColor[2] = color[2];
   backgroundColor[3] = color[3];
+}
+
+void Graphics::Renderer::toggleDebugMode()
+{
+  debug = !debug;
+}
+
+bool Graphics::Renderer::isDebugMode()
+{
+  return debug;
 }
 
 // set the renderer's topology

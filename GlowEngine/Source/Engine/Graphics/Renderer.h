@@ -77,7 +77,7 @@ namespace Graphics
     void drawSetColor(const Color& color);
 
     // toggle fullscreen
-    void toggleFullscreen(bool val);
+    void toggleFullscreen();
     bool isFullscreen() { return fullscreen; }
 
     // unbind a texture 
@@ -90,6 +90,8 @@ namespace Graphics
     // clear the target view with a background colour
     void clearTargetView();
     void setBackgroundColor(float color[4]);
+    void toggleDebugMode();
+    bool isDebugMode();
 
     // set the topology with a default of trianglelist
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -194,6 +196,7 @@ namespace Graphics
     // point lights - the renderer can have a variable amount of point lights
     int lights;
     bool fullscreen = false;
+    bool debug = true;
 
   };
 

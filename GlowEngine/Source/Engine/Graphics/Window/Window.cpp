@@ -115,6 +115,22 @@ LRESULT Graphics::Window::windowProcStatic(HWND hWnd, UINT message, WPARAM wPara
   return EngineInstance::getEngine()->getWindow()->windowProc(hWnd, message, wParam, lParam);
 }
 
+void Graphics::Window::setFullscreen(bool val)
+{
+  if (val)
+  {
+    SetWindowLongPtr(windowHandle, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+    SetWindowPos(windowHandle, HWND_TOP, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED);
+    ShowWindow(windowHandle, SW_MAXIMIZE);
+  }
+  else
+  {
+    SetWindowLongPtr(windowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+    SetWindowPos(windowHandle, nullptr, 0, 0, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    ShowWindow(windowHandle, SW_NORMAL);
+  }
+}
+
 // update messages, return false if we quit the window
 bool Graphics::Window::updateMessages()
 {

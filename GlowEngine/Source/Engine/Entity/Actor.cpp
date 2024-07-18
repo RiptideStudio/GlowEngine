@@ -95,6 +95,16 @@ void Entities::Actor::setHitboxSize(Vector3D size)
   }
 }
 
+void Entities::Actor::setStatic(bool val)
+{
+  Components::Collider* collider = getComponentOfType(Collider, this);
+
+  if (collider)
+  {
+    collider->setStatic(val);
+  }
+}
+
 Vector3D Entities::Actor::getHitboxSize()
 {
   Components::BoxCollider* collider = reinterpret_cast<Components::BoxCollider*>(getComponentOfType(Collider, this));

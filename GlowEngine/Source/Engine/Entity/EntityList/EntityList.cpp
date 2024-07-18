@@ -29,7 +29,6 @@ void Entities::EntityList::add(Entities::Entity* entity)
 // update a list of entities
 void Entities::EntityList::update()
 {
-
   for (auto it = activeList.begin(); it != activeList.end(); )
   {
     // check for destroyed entities
@@ -41,6 +40,18 @@ void Entities::EntityList::update()
     }
     else
     {
+      // if we have a collider, at this entity to the collider list as well
+      if ((*it)->hasComponent(Components::Component::Collider))
+      {
+        Components::Collider* col = getComponentOfType(Collider, (*it));
+
+        if (!col->isStatic())
+        {
+          nonStaticList.push_back((*it));
+        }
+        colliderList.push_back((*it));
+      }
+
       // update the entity and increment the iterator
       (*it)->update();
       ++it;
@@ -79,38 +90,47 @@ void Entities::EntityList::clear()
 
 void Entities::EntityList::checkCollisions()
 {
-  for (auto it1 = activeList.begin(); it1 != activeList.end(); ++it1) 
+  for (auto it1 = nonStaticList.begin(); it1 != nonStaticList.end(); ++it1)
   {
     Entity* ent1 = *it1;
     Components::Collider* collider1 = getComponentOfType(Collider, ent1);
 
-    if (!collider1) 
-      continue;
-
-    for (auto it2 = std::next(it1); it2 != activeList.end(); ++it2) 
+    for (auto it2 = colliderList.begin(); it2 != colliderList.end(); ++it2)
     {
       Entity* ent2 = *it2;
-      Components::Collider* collider2 = getComponentOfType(Collider, ent2);
 
-      if (!collider2) 
+      // don't collide with ourselves; this seems strange, but this allows us to have absurd amounts
+      // of static colliders with almost zero drawback
+      if (ent2 == ent1)
         continue;
 
-      // resolve collisions
+      Components::Collider* collider2 = getComponentOfType(Collider, ent2);
+
+      // if both colliders are static, then we don't want to do any collision logic
+      // this reduces our collision to O(N) complexity  
+      if (collider2->isStatic() && collider1->isStatic()) 
+        break;
+
+      // detect collisions
       if (collider1->isColliding(collider2)) 
       {
-        collider2->onCollide(collider1);
-        collider1->onCollide(collider2);
+        collider2->updateCollision(collider1);
+        collider1->updateCollision(collider2);
       }
       else
       {
-        if (collider1->collidingObjects.find(collider2) != collider1->collidingObjects.end())
+        if (collider1->getCollidingObjects().find(collider2) != collider1->getCollidingObjects().end() 
+          && collider1->hasCollided() 
+          && collider2->hasCollided())
         {
-          collider2->onLeaveCollide(collider1);
-          collider1->onLeaveCollide(collider2);
+          collider2->leaveCollision(collider1);
+          collider1->leaveCollision(collider2);
         }
       }
     }
   }
+  colliderList.clear();
+  nonStaticList.clear();
 }
 
 Entities::Entity* Entities::EntityList::find(std::string name)

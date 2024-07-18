@@ -16,6 +16,7 @@ namespace Textures { class TextureLibrary; }
 namespace Scene { class SceneSystem; }
 namespace Meshes { class MeshLibrary; }
 namespace Entities { class EntityFactory; }
+namespace Audio { class SoundSystem; class SoundLibrary; }
 
 namespace Engine
 {
@@ -55,6 +56,8 @@ namespace Engine
     Graphics::Window* getWindow() { return window; }
     Meshes::MeshLibrary* getMeshLibrary() { return meshLibrary; }
     Entities::EntityFactory* getEntityFactory() { return factory; }
+    Audio::SoundLibrary* getSoundLibrary() { return soundLibrary; }
+    Audio::SoundSystem* getSoundSystem() { return soundSystem; }
 
     // get engine properties
     int getFps() { return fps; }
@@ -82,6 +85,8 @@ namespace Engine
     Meshes::MeshLibrary* meshLibrary;
     Scene::SceneSystem* sceneSystem;
     Entities::EntityFactory* factory;
+    Audio::SoundLibrary* soundLibrary;
+    Audio::SoundSystem* soundSystem;
 
     // core engine properties (fps, delta time)
     bool running;

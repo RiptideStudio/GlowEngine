@@ -53,6 +53,7 @@ namespace Entities
 
     // ** Collision ** //
     void setHitboxSize(Vector3D size);
+    void setStatic(bool val);
     Vector3D getHitboxSize();
 
   private:

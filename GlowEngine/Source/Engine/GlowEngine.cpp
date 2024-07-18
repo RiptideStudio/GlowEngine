@@ -15,6 +15,8 @@
 #include "Game/Scene/SceneSystem.h"
 #include "Engine/Graphics/Window/Window.h"
 #include "Engine/Graphics/Meshes/MeshLibrary.h"
+#include "Engine/Audio/SoundLibrary.h"
+#include "Engine/Audio/SoundSystem.h"
 
 // initialize engine values
 Engine::GlowEngine::GlowEngine()
@@ -131,6 +133,10 @@ void Engine::GlowEngine::stop()
 // loop through and update each system
 void Engine::GlowEngine::update()
 {
+  // if we're paused, don't update but keep rendering
+  if (!input->isFocused())
+    return;
+
   // update all systems
   for (auto system : SystemInstance::getSystems())
   {
@@ -168,6 +174,9 @@ void Engine::GlowEngine::createCoreSystems()
   renderer = new Graphics::Renderer(windowHandle);
   // camera, though it belongs to the renderer we have a quick pointer
   camera = renderer->getCamera();
+  // audio
+  soundLibrary = new Audio::SoundLibrary();
+  soundSystem = new Audio::SoundSystem();
 }
 
 // create systems dependent on core systems

@@ -26,26 +26,60 @@ namespace Components
     virtual void onFirstCollide(const Components::Collider* other) {};
     // when we leave the collision
     virtual void onLeaveCollide(const Components::Collider* other) {};
+    // our general update function
+    virtual void update();
+
+    // calls the function callback after some checks
+    void leaveCollision(const Collider* other);
+    // calls the on first collide callback after some checks
+    void updateCollision(const Collider* other);
 
     // render calls respective draw function
     void render();
     virtual void renderDebug() {};
 
-    bool colliding = false; // if we are currently colliding
-    bool collided = false;
-    bool autoSize = true;
-    bool isDirty = true; // recalculate mesh bounding box
+    // calculate the scale, original scale, and vertices of the parent mesh if it exists
+    // this must be called at least once for accurate debug drawing and collisions
+    void calculateScale();
 
-    // objects we are currently colliding with
-    std::set<const Components::Collider*> collidingObjects;
-    std::vector<Vertex> vertices;
+    // general getters
+    bool isColliding();
+    bool hasCollided();
+    bool isDirty();
+    bool autoSizeEnabled();
+    bool isStatic();
+    Vector3D getHitboxSize();
+    Vector3D getMeshScale();
+    
+    const std::vector<Vertex>& getVertices();
+    const std::set<const Components::Collider*>& getCollidingObjects();
+
+    // general setters
+    void setColliding(bool val);
+    void setCollided(bool val);
+    void setAutoSize(bool val);
+    void setDirty(bool val);
+    void setStatic(bool val);
 
   protected:
 
-    // debug drawing 
-    bool debugDraw = true;
-    std::vector<unsigned> indices;
+    // flags for collision
+    bool colliding = false;
+    bool collided = false;
+    bool autoSize = true;
+    bool dirty = true;
 
+    // static colliders are not checked against any other static colliders
+    bool colliderIsStatic = true;
+
+    // debug drawing 
+    std::vector<unsigned> indices;
+    std::vector<Vertex> vertices;
+    std::set<const Components::Collider*> collidingObjects;
+
+    // scale of the collider and original mesh scale
+    Vector3D scale;
+    Vector3D meshScale;
   };
 
 }

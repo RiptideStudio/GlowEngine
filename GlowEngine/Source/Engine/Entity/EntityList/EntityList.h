@@ -35,8 +35,10 @@ namespace Entities
 
   private:
     std::vector<Entities::Entity*> activeList;
-    std::vector<Entities::Entity*> deferredList;
     std::vector<Entities::Entity*> destroyList;
+
+    std::vector<Entities::Entity*> colliderList;
+    std::vector<Entities::Entity*> nonStaticList;
 
     int size;
 

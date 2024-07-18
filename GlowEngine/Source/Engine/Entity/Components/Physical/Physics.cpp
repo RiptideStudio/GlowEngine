@@ -60,6 +60,7 @@ void Components::Physics::setVelocityZ(float val)
 // update velocity and transform
 void Components::Physics::update()
 {
+  // anchored objects don't move
   if (anchored)
     return;
 

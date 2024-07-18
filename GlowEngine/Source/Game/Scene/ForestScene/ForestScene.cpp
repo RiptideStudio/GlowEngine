@@ -22,7 +22,7 @@ void Scene::ForestScene::init()
   player->addComponent(new Components::BoxCollider());
   player->addComponent(new Components::Physics());
   player->addComponent(new Game::PlayerBehavior());
-  player->setHitboxSize(Vector3D(1.5,5,1.5));
+  player->setHitboxSize(Vector3D(1.5,6,1.5));
 
   Entities::Entity* plane = new Entities::Entity();
   getComponentOfType(Sprite3D, plane)->setModel("Plane");
@@ -39,7 +39,8 @@ void Scene::ForestScene::init()
   instanceCreateExt("Monkey", { 10,10,-15 }, { 5,5,5 }, { 45,0,0 });
   instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
-  Entities::Entity* shroom = instanceCreate("Mushroom",Vector3D(0,-10,0));
+
+  Audio::playSound("Forest");
 
   for (int i = 0; i < 15; ++i)
   {
@@ -82,7 +83,8 @@ void Scene::ForestScene::update()
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    createEntity({ randomX,randomY,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,randomRotz }, "Cube", "Crystal");
+    Entities::Actor* cube = createEntity({ randomX,-10,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,randomRotz }, "Cube", "Crystal");
+    cube->setAnchored(true);
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
 }

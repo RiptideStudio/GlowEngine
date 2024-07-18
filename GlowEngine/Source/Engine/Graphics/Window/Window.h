@@ -28,6 +28,9 @@ namespace Graphics
     LRESULT CALLBACK windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     static LRESULT CALLBACK windowProcStatic(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+    // set fullscreen
+    void setFullscreen(bool val);
+
     // message updates
     bool updateMessages();
 

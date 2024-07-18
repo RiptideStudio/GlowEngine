@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\Audio\Sound.h" />
+    <ClInclude Include="Source\Engine\Audio\SoundLibrary.h" />
+    <ClInclude Include="Source\Engine\Audio\SoundSystem.h" />
     <ClInclude Include="Source\Engine\EngineInstance.h" />
     <ClInclude Include="Source\Engine\Entity\Actor.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Collision\BoxCollider.h" />
@@ -78,6 +81,9 @@
     <ClInclude Include="Source\Windows\targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\Audio\Sound.cpp" />
+    <ClCompile Include="Source\Engine\Audio\SoundLibrary.cpp" />
+    <ClCompile Include="Source\Engine\Audio\SoundSystem.cpp" />
     <ClCompile Include="Source\Engine\EngineInstance.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -344,8 +350,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -379,8 +385,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mt.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>

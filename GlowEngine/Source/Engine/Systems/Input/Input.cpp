@@ -33,23 +33,6 @@ void Input::InputSystem::update()
     mouseDelta.x = currentMousePosition.x - previousMousePosition.x;
     mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
   }
-
-  // toggle fullscreen
-  if (keyReleased(VK_TAB))
-  {
-    engine->getRenderer()->toggleFullscreen(!engine->getRenderer()->isFullscreen());
-  }
-
-  // toggle the focus
-  if (keyDown('F'))
-  {
-    focused = true;
-  }
-  // toggle the focus
-  if (keyDown('P'))
-  {
-    focused = false;
-  }
   if (focused)
   {
     ShowCursor(false);
@@ -72,7 +55,29 @@ void Input::InputSystem::update()
 
 void Input::InputSystem::updateKeyStates()
 {
+  updateHotkeys();
   previousKeystates = keystates;
+}
+
+void Input::InputSystem::updateHotkeys()
+{
+  // toggle fullscreen
+  if (keyReleased(VK_TAB))
+  {
+    engine->getRenderer()->toggleFullscreen();
+  }
+
+  // toggle renderer debug mode
+  if (keyTriggered('Q'))
+  {
+    engine->getRenderer()->toggleDebugMode();
+  }
+
+  // toggle the focus
+  if (keyTriggered('P'))
+  {
+    focused = !focused;
+  }
 }
 
 // set a key state to active
@@ -103,4 +108,9 @@ bool Input::InputSystem::keyTriggered(int key)
 bool Input::InputSystem::keyReleased(int key)
 {
   return previousKeystates[key] && !keystates[key];
+}
+
+void Input::InputSystem::setFocus(bool focus)
+{
+  focused = focus;
 }

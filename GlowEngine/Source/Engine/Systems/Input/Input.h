@@ -24,6 +24,8 @@ namespace Input
     void update();
     // update key states
     void updateKeyStates();
+    // update hotkeys
+    void updateHotkeys();
 
     // get the mouse delta
     Vector3D getMouseDelta() { return { (float)mouseDelta.x, (float)mouseDelta.y,0 }; }
@@ -45,6 +47,8 @@ namespace Input
 
     // if we are focused on this window
     bool isFocused() { return focused; }
+    // set focused
+    void setFocus(bool focus);
 
   private:
 

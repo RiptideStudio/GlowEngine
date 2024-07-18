@@ -80,7 +80,7 @@ void Meshes::MeshLibrary::load()
 // draw a cube mesh
 void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
 {
-  std::vector<Vertex> vertices = box->vertices;
+  std::vector<Vertex> vertices = box->getVertices();
 
   if (vertices.empty())
     return;
@@ -130,7 +130,7 @@ void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
 
   result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
 
-  Vector3D scale = box->meshScale;
+  Vector3D scale = box->getMeshScale();
   Vector3D pos = box->parent->transform->getPosition();
   DirectX::XMFLOAT4 rotation = { 0,0,0,0 };
 
@@ -144,7 +144,6 @@ void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
   // update the constant buffer's world matrix
   renderer->updateConstantBufferWorldMatrix(final);
 
-  // bind the constant buffer and update subresource
   renderer->updateConstantBuffer();
 
   UINT stride = sizeof(Vertex);
@@ -152,7 +151,6 @@ void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
   deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
   deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-  // draw the triangle
   deviceContext->DrawIndexed(36, 0, 0);
 
   indexBuffer->Release();
