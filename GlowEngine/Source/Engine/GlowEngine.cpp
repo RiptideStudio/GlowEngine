@@ -85,11 +85,6 @@ bool Engine::GlowEngine::run()
 
   while (running)
   {
-    // terminate engine on escape
-    if (input->keyDown(VK_ESCAPE))
-    {
-      stop();
-    }
     // windows messages
     if (!window->updateMessages())
     {

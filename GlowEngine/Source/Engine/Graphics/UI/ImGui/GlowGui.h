@@ -8,6 +8,11 @@
 
 #pragma once
 
+namespace UI
+{
+  class Widget;
+}
+
 namespace Graphics
 {
 
@@ -30,6 +35,8 @@ namespace Graphics
     ID3D11Device* device;
     ID3D11DeviceContext* context;
     Graphics::Renderer* renderer;
+
+    std::vector<UI::Widget*> widgets;
 
   };
 

@@ -52,7 +52,6 @@
     <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\GlowGui.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imconfig.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.h" />
@@ -61,6 +60,9 @@
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_rectpack.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_textedit.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_truetype.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\GlowGui.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Widget.h" />
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
     <ClInclude Include="Source\Engine\Math\Lerp.h" />
@@ -131,7 +133,6 @@
     <ClCompile Include="Source\Engine\Graphics\Shaders\ShaderManager.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\UI\GlowGui.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -153,6 +154,9 @@
     <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_widgets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\GlowGui.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Widget.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp" />
     <ClCompile Include="Source\Engine\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>

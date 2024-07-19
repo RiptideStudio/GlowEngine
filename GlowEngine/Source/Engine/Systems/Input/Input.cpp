@@ -64,7 +64,18 @@ void Input::InputSystem::updateHotkeys()
   {
     engine->getRenderer()->toggleFullscreen();
   }
-
+  // terminate engine on escape
+  if (keyTriggered(VK_ESCAPE))
+  {
+    if (!focused)
+    {
+      engine->stop();
+    }
+    else
+    {
+      focused = false;
+    }
+  }
   // toggle renderer debug mode
   if (keyTriggered('Q'))
   {

@@ -8,8 +8,13 @@
 
 #include "stdafx.h"
 #include "GlowGui.h"
+#include "Engine/EngineInstance.h"
+#include "Engine/GlowEngine.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Graphics/Window/Window.h"
+#include "Engine/Graphics/UI/ImGui/Widget.h"
+#include "Engine/Graphics/UI/ImGui/Inspector/Inspector.h"
 
 Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11DeviceContext* context, Graphics::Renderer* renderer)
   :
@@ -23,11 +28,14 @@ Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11Device
   ImGui::CreateContext();
   ImGui_ImplWin32_Init(windowHandle);
   ImGui_ImplDX11_Init(device, context);
+
   ImGui::StyleColorsDark();
   ImGuiIO& io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+  widgets.push_back(new UI::Inspector("Inspector","Men"));
 }
 
 void Graphics::GlowGui::beginUpdate()
@@ -43,13 +51,14 @@ void Graphics::GlowGui::beginUpdate()
 
   if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
   {
-
+    // define the main viewport of ImGui
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(viewport->Pos);
     ImGui::SetNextWindowSize(size);
     ImGui::SetNextWindowViewport(viewport->ID);
     ImGui::SetNextWindowBgAlpha(0.0f);
 
+    // define the flags for docking space
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
       ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
       ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
@@ -66,12 +75,13 @@ void Graphics::GlowGui::beginUpdate()
 // here, we will invoke any draw calls
 void Graphics::GlowGui::update()
 {
+  // define flags for game window
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground |
     ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar |
     ImGuiWindowFlags_NoScrollWithMouse;
 
   // Begin the ImGui window with the specified flags
-  ImGui::Begin("Game View", nullptr, window_flags);
+  ImGui::Begin("Otherglow", nullptr, window_flags);
   ImVec2 size = ImGui::GetContentRegionAvail();
 
   // Adjust the viewport to match the ImGui window
@@ -85,10 +95,11 @@ void Graphics::GlowGui::update()
   renderer->getDeviceContext()->RSSetViewports(1, &viewport);
   ImGui::End();
 
-  // Additional UI windows
-  ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoCollapse);
-  ImGui::Text("This is the Inspector window.");
-  ImGui::End();
+  // update our widgets
+  for (auto& widget : widgets)
+  {
+    widget->renderFrame();
+  }
 
   // Create another additional dockable window
   ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoCollapse);
@@ -96,8 +107,20 @@ void Graphics::GlowGui::update()
   ImGui::End();
 
   // Create another additional dockable window
-  ImGui::Begin("Settings", nullptr, ImGuiWindowFlags_NoCollapse);
-  ImGui::Text("This is the Hierarchy window.");
+  ImGui::Begin("Game Settings", nullptr, ImGuiWindowFlags_NoCollapse);
+  ID3D11ShaderResourceView** r = EngineInstance::getEngine()->getTextureLibrary()->get("PlayButton")->getTextureView();
+
+  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0)); // Transparent button background
+  ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0, 0, 0, 0)); // Transparent hovered button background
+  ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0, 0, 0, 0)); // Transparent active button background
+  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0)); // No padding
+
+  if (ImGui::ImageButton((void*)(*r), {64,64}))
+  {
+    EngineInstance::getEngine()->getInputSystem()->setFocus(!EngineInstance::getEngine()->getInputSystem()->isFocused());
+  }
+  ImGui::PopStyleVar();
+  ImGui::PopStyleColor(3);
   ImGui::End();
 
   // Create another additional dockable window
