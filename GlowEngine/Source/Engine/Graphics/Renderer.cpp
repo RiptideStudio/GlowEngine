@@ -49,13 +49,6 @@ Graphics::Renderer::Renderer(HWND handle)
   buffers.push_back(globalLightBuffer = new ConstantBuffer<GlobalLightBuffer>(device, deviceContext, 1, true, ShaderType::Pixel));
   buffers.push_back(colorBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 2, false, ShaderType::Pixel));
 
-  // for fun <3
-  GlobalLightBuffer lightData;
-  lightData.cameraPosition = { 0,-10,0 };
-  lightData.lightColor = {1.5,1.1,1.75};
-  lightData.lightDirection = { 0, 1,0 };
-  globalLightBuffer->set(lightData);
-
   //background
   float bgCol[4] = { 0.5,0.3,0.4,1 };
   setBackgroundColor(bgCol);
@@ -102,6 +95,13 @@ void Graphics::Renderer::beginFrame()
 
   // start imGui frame
   glowGui->beginUpdate();
+
+  // temporary global light data for testing
+  GlobalLightBuffer lightData;
+  lightData.cameraPosition = { DirectX::XMVectorGetX(camera->getPosition()),DirectX::XMVectorGetY(camera->getPosition()),DirectX::XMVectorGetZ(camera->getPosition()) };
+  lightData.lightColor = { 1.5,1.1,1.75 };
+  lightData.lightDirection = { 0, 1,0 };
+  globalLightBuffer->set(lightData);
 
   // for now, we just have one light
   // we will update this once we have a proper lighting solution
