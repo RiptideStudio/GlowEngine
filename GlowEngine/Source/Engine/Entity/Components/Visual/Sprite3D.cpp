@@ -89,10 +89,10 @@ void Components::Sprite3D::render()
   }
 
   // update the constant buffer's world matrix
-  renderer->updateConstantBufferWorldMatrix(transform->getTransformMatrix());
+  renderer->updateObjectBufferWorldMatrix(transform->getTransformMatrix());
 
   // bind the constant buffer and update subresource
-  renderer->updateConstantBuffer();
+  renderer->updateObjectBuffer();
 
   // each models contain several objects, we need to loop through them 
   for (int i = 0; i < model->getObjects(); ++i)

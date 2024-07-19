@@ -15,8 +15,8 @@
 namespace Lighting
 {
 
-  // define a GPU fog buffer
-  struct LightBuffer
+  // define world light
+  struct GlobalLightBuffer
   {
     DirectX::XMFLOAT3 lightDirection;
     float padding;

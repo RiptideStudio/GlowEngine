@@ -30,6 +30,7 @@
 
 // engine
 #include "Engine/EngineInstance.h"
+#include "Engine/Global.h"
 
 // math
 #include "Engine/Math/GlowMath.h"

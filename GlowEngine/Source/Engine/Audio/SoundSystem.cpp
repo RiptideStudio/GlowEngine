@@ -51,6 +51,9 @@ void Audio::SoundSystem::playSound(std::string name)
   // get the sound archetype
   Sound* sound = lib->get(name);
 
+  if (!sound)
+    return;
+
   // play the sound
   FMOD::Channel* targetChannel = soundChannel;
 

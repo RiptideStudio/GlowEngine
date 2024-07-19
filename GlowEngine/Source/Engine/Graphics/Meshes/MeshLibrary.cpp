@@ -142,9 +142,9 @@ void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
   DirectX::XMMATRIX final = scaleMatrix * rotationMatrix * translationMatrix;
 
   // update the constant buffer's world matrix
-  renderer->updateConstantBufferWorldMatrix(final);
+  renderer->updateObjectBufferWorldMatrix(final);
 
-  renderer->updateConstantBuffer();
+  renderer->updateObjectBuffer();
 
   UINT stride = sizeof(Vertex);
   UINT offset = 0;

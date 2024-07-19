@@ -28,7 +28,7 @@ cbuffer ColorRegister : register(b2)
 };
 
 // GPU fog buffer
-cbuffer LightBufferType : register(b1)
+cbuffer GlobalLightBuffer : register(b1)
 {
     float3 lightDirection;
     float3 lightColor;
@@ -44,6 +44,10 @@ cbuffer PointLight : register(b0)
 // texture sampler
 Texture2D shaderTexture;
 SamplerState SampleType;
+
+// texture sampler
+Texture2D shadowTexture;
+SamplerState shadowSampler;
 
 // main entrypoint
 // main entry point
@@ -69,7 +73,7 @@ float4 main(PixelInputType input) : SV_TARGET
     float3 finalColor = float3(0.3,0.2,0.25);
 
     // Calculate lighting for each point light
-    for (int i = 0; i < MAXLIGHTS; ++i)
+    for (int i = 0; i < 1; ++i)
     {
         // calculate size
         float linearAttenuation = 0.0045f / pointLights[i].size; // Linear attenuation factor
@@ -83,7 +87,7 @@ float4 main(PixelInputType input) : SV_TARGET
         float3 diffuseLight = diffuseIntensity * pointLights[i].color.rgb;
 
         // Calculate the view vector
-        float3 viewVector = normalize(cameraPosition - input.worldpos.xyz);
+        float3 viewVector = normalize(input.worldpos.xyz);
         
         // Calculate the halfway vector for Blinn-Phong specular highlights
         float3 halfwayVector = normalize(pixelToLight + viewVector);
@@ -93,7 +97,7 @@ float4 main(PixelInputType input) : SV_TARGET
         float3 specularLight = specularIntensity * pointLights[i].color.rgb; // Specular color
 
         // Combine the diffuse and specular components
-        float3 lightColor = diffuseLight + specularLight;
+        float3 shineColor = diffuseLight + specularLight;
 
         // Calculate distance to the light source
         float distance = length(pointLights[i].lightPosition - lowResCoords);
@@ -102,11 +106,11 @@ float4 main(PixelInputType input) : SV_TARGET
         float attenuation = 1.0 / (constantAttenuation + linearAttenuation * distance + quadraticAttenuation * distance * distance);
 
         // Accumulate the light's contribution
-        finalColor += attenuation * lightColor;
+        finalColor += attenuation * shineColor;
     }
 
     // Apply the accumulated light color to the pixel's color
-    float4 litColor = float4(finalColor, 1.0) * input.color;
+    float4 litColor = float4(finalColor*lightColor, 1.0) * input.color;
 
     // Combine the lit color with the texture color, if a texture is present
     if (textureColor.x != 0)

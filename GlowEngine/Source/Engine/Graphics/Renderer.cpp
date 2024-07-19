@@ -16,6 +16,7 @@
 #include "Engine/Graphics/Window/Window.h"
 #include "Engine/Graphics/Textures/stb_image.h"
 #include "UI/GlowGui.h"
+#include "Shaders/ShaderManager.h"
 #include <filesystem>
 
 // define the amount of max lights we can have
@@ -29,7 +30,6 @@ Graphics::Renderer::Renderer(HWND handle)
   pixelShader(nullptr),
   vertexShader(nullptr),
   camera(nullptr),
-  constantBuffer(nullptr),
   sampler(nullptr),
   glowGui(nullptr),
   lights(0)
@@ -42,9 +42,18 @@ Graphics::Renderer::Renderer(HWND handle)
   initGraphics();
   // camera
   camera = new Visual::Camera(this);
-  
-  // setup and bind buffers
-  colorBuffer = new ConstantBuffer<ColorBuffer>(device);
+  // constant buffers
+  buffers.push_back(objectBuffer = new ConstantBuffer<cbPerObject>(device, deviceContext, 0, false, ShaderType::Vertex));
+  buffers.push_back(lightBuffer = new ConstantBuffer<PointLightBuffer>(device, deviceContext, 0, false, ShaderType::Pixel));
+  buffers.push_back(globalLightBuffer = new ConstantBuffer<GlobalLightBuffer>(device, deviceContext, 1, true, ShaderType::Pixel));
+  buffers.push_back(colorBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 2, false, ShaderType::Pixel));
+
+  // for fun <3
+  GlobalLightBuffer lightData;
+  lightData.cameraPosition = { 0,-10,0 };
+  lightData.lightColor = {1.5,1.1,1.75};
+  lightData.lightDirection = { 0, 1,0 };
+  globalLightBuffer->set(lightData);
 
   //background
   float bgCol[4] = { 0.5,0.3,0.4,1 };
@@ -64,19 +73,18 @@ void Graphics::Renderer::initGraphics()
   createRasterizer();
   createDepthStencil();
   setTopology();
-  createConstantBuffer();
   createSamplerState();
-  createLightBuffer();
   createImGuiSystem();
-
-  // set the rasterizer to wireframe for testing
-  // setRasterizerFillMode(D3D11_FILL_WIREFRAME);
 }
 
 // free all directX objects from memory
 void Graphics::Renderer::cleanup()
 {
-  constantBuffer->Release();
+  // remove all buffers from memory
+  for (auto& buffer : buffers)
+  {
+    delete buffer;
+  }
 }
 
 // the beginning of each frame of the render engine
@@ -94,18 +102,22 @@ void Graphics::Renderer::beginFrame()
   // start imGui frame
   glowGui->beginUpdate();
 
-  // Update the GPU constant buffer
+  // for now, we just have one light
+  // we will update this once we have a proper lighting solution
   if (*pointLightsArray)
   {
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-    deviceContext->Map(pointLightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-
-    memcpy(mappedResource.pData, *pointLightsArray, sizeof(PointLightBuffer) * MAXLIGHTS);
-    deviceContext->Unmap(pointLightBuffer, 0);
+    lightBuffer->set(pointLightsArray[0]->pointLight);
+    lightBuffer->updateAndBind();
   }
 
-  // bind the constant buffer to the shader
-  deviceContext->PSSetConstantBuffers(0, 1, &pointLightBuffer);
+  // globally applied buffers/shaders
+  for (auto& buffer : buffers)
+  {
+    if (buffer->isGlobal())
+    {
+      buffer->updateAndBind();
+    }
+  }
 
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
@@ -166,67 +178,19 @@ void Graphics::Renderer::createDeviceAndSwapChain()
 // there are three main shaders: pixel, pixelTex, vertex
 void Graphics::Renderer::loadShaders()
 {
-  // Get the path of the current executable
-  wchar_t buffer[MAX_PATH];
-  GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-  std::wstring executablePath = buffer;
+  shaderManager = new Shaders::ShaderManager(device, deviceContext);
 
-  // Get the parent directory of the executable directory
-  std::filesystem::path executableDir = executablePath;
-  std::filesystem::path shaderDirectory = executableDir.parent_path();
+  // load shaders into our game (shaders are defined in there)
+  shaderManager->load();
 
-  // Construct the full file paths for the shader files
-  std::wstring vertexShaderPath = (shaderDirectory / L"VertexShader.cso").wstring();
-  std::wstring pixelShaderPath = (shaderDirectory / L"PixelShader.cso").wstring();
-  std::wstring pixelTexShaderPath = (shaderDirectory / L"PixelShaderTex.cso").wstring();
-
-  // Load the vertex shader
-  HRESULT hr = D3DReadFileToBlob(vertexShaderPath.c_str(), &vertexShaderBlob);
-  if (FAILED(hr))
-  {
-    Logger::error("Failed to create vertex blob");
-  }
-  hr = device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), nullptr, &vertexShader);
-  if (FAILED(hr))
-  {
-    Logger::error("Failed to create vertex shader");
-  }
-
-  // Load the pixel shader
-  hr = D3DReadFileToBlob(pixelShaderPath.c_str(), &pixelShaderBlob);
-  if (FAILED(hr))
-  {
-    Logger::error("Failed to create pixel blob");
-  }
-  hr = device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(), pixelShaderBlob->GetBufferSize(), nullptr, &pixelShader);
-  if (FAILED(hr))
-  {
-    Logger::error("Failed to create pixel shader");
-  }
-
-  // Set the shaders to the device context
+  // bind our main shaders to the device context
+  vertexShader = shaderManager->getVertexShader("VertexShader");
+  pixelShader = shaderManager->getPixelShader("PixelShader");
   deviceContext->VSSetShader(vertexShader, nullptr, 0);
   deviceContext->PSSetShader(pixelShader, nullptr, 0);
 
-  // Define the input layout
-  D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = 
-  {
-      { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-      { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-      { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-      { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-  };
-
   // Create the input layout
-  hr = device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vertexShaderBlob->GetBufferPointer(), vertexShaderBlob->GetBufferSize(), &inputLayout);
-  if (FAILED(hr))
-  {
-    Logger::error("Failed to create input layout");
-  }
-
-  // Set the input layout to the device context 
-  deviceContext->IASetInputLayout(inputLayout);
-
+  shaderManager->setup();
 }
 
 // create the target view fo the renderer
@@ -321,69 +285,6 @@ void Graphics::Renderer::createDepthStencil()
   {
     Logger::error("Failed to create depth stencil view");
   }
-
-  // describe the depth stencil state
-  D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
-  ZeroMemory(&depthStencilStateDesc, sizeof(depthStencilStateDesc));
-
-  depthStencilStateDesc.DepthEnable = true;
-  depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-  depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS;
-
-  depthStencilStateDesc.StencilEnable = true;
-  depthStencilStateDesc.StencilReadMask = 0xFF;
-  depthStencilStateDesc.StencilWriteMask = 0xFF;
-
-  depthStencilStateDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-  depthStencilStateDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-  depthStencilStateDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-  depthStencilStateDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-  depthStencilStateDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-  depthStencilStateDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-  depthStencilStateDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-  depthStencilStateDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-  hr = device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
-  if (FAILED(hr))
-  {
-  }
-
-  deviceContext->OMSetDepthStencilState(depthStencilState, 1);
-}
-
-// setup a light buffer
-void Graphics::Renderer::createLightBuffer()
-{
-  // create a constant buffer
-  D3D11_BUFFER_DESC lightBufferDesc = {};
-  lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-  lightBufferDesc.ByteWidth = sizeof(LightBuffer);
-  lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-  lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-  lightBufferDesc.MiscFlags = 0;
-  lightBufferDesc.StructureByteStride = 0;
-
-  HRESULT result = device->CreateBuffer(&lightBufferDesc, nullptr, &lightBuffer);
-  if (FAILED(result)) {
-    Logger::error("Failed to create light buff");
-  }
-
-  ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-  HRESULT mapResult = deviceContext->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-  if (FAILED(mapResult)) 
-  {
-  }
-
-  // create light description
-  D3D11_BUFFER_DESC cbd;
-  ZeroMemory(&cbd, sizeof(D3D11_BUFFER_DESC));
-  cbd.Usage = D3D11_USAGE_DYNAMIC;
-  cbd.ByteWidth = sizeof(PointLightBuffer)*MAXLIGHTS;
-  cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-  cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-  device->CreateBuffer(&cbd, nullptr, &pointLightBuffer);
 }
 
 // create a sampler state for sampling textures
@@ -402,105 +303,35 @@ void Graphics::Renderer::createSamplerState()
   device->CreateSamplerState(&sampDesc, &sampler);
 }
 
-void Graphics::Renderer::createRenderTexture()
+void Graphics::Renderer::addBuffer(Buffer* buffer)
 {
-
-}
-
-// create a shadow map
-void Graphics::Renderer::createShadowMap()
-{
-  D3D11_TEXTURE2D_DESC depthTexDesc;
-  ZeroMemory(&depthTexDesc, sizeof(depthTexDesc));
-  depthTexDesc.Width = window->getWidth();
-  depthTexDesc.Height = window->getHeight();
-  depthTexDesc.MipLevels = 1;
-  depthTexDesc.ArraySize = 1;
-  depthTexDesc.Format = DXGI_FORMAT_R32_TYPELESS; // Use a typeless format for more flexibility
-  depthTexDesc.SampleDesc.Count = 1;
-  depthTexDesc.SampleDesc.Quality = 0;
-  depthTexDesc.Usage = D3D11_USAGE_DEFAULT;
-  depthTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE; // Bind as depth stencil and shader resource
-  depthTexDesc.CPUAccessFlags = 0;
-  depthTexDesc.MiscFlags = 0;
-
-  device->CreateTexture2D(&depthTexDesc, NULL, &shadowMap);
-
-  D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-  ZeroMemory(&dsvDesc, sizeof(dsvDesc));
-  dsvDesc.Format = DXGI_FORMAT_D32_FLOAT; // Use a format that includes a depth component
-  dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-  dsvDesc.Texture2D.MipSlice = 0;
-
-  device->CreateDepthStencilView(shadowMap, &dsvDesc, &shadowMapDSV);
-
-  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-  ZeroMemory(&srvDesc, sizeof(srvDesc));
-  srvDesc.Format = DXGI_FORMAT_R32_FLOAT; // Match the format for the shader resource
-  srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-  srvDesc.Texture2D.MostDetailedMip = 0;
-  srvDesc.Texture2D.MipLevels = 1;
-
-  ID3D11ShaderResourceView* shadowMapSRV;
-  device->CreateShaderResourceView(shadowMap, &srvDesc, &shadowMapSRV);
-
-  D3D11_VIEWPORT shadowViewport;
-  shadowViewport.Width = static_cast<float>(window->getWidth());
-  shadowViewport.Height = static_cast<float>(window->getHeight());
-  shadowViewport.MinDepth = 0.0f;
-  shadowViewport.MaxDepth = 1.0f;
-  shadowViewport.TopLeftX = 0;
-  shadowViewport.TopLeftY = 0;
-
-  deviceContext->RSSetViewports(1, &shadowViewport);
-}
-
-// create a constant buffer that should not be changed
-void Graphics::Renderer::createConstantBuffer()
-{
-  // create a constant buffer
-  ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
-
-  // set up the description of the constant buffer
-  constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  constantBufferDesc.ByteWidth = sizeof(cbPerObject);
-  constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-  constantBufferDesc.CPUAccessFlags = 0;
-  constantBufferDesc.MiscFlags = 0;
-  constantBufferDesc.StructureByteStride = 0;
-
-  // create the buffer itself
-  device->CreateBuffer(&constantBufferDesc, NULL, &constantBuffer);
+  buffers.push_back(buffer);
 }
 
 // bind the subresource and constant buffer to the renderer
-void Graphics::Renderer::updateConstantBuffer()
+void Graphics::Renderer::updateObjectBuffer()
 {
-  // update device context sub resource
-  deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &cbData, 0, 0);
-
-  // bind the constant buffer to the vertex shader
-  deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+  objectBuffer->updateAndBind();
 }
 
 // given the transform matrix, update the cb object's world matrix
-void Graphics::Renderer::updateConstantBufferWorldMatrix(Matrix transformMatrix)
+void Graphics::Renderer::updateObjectBufferWorldMatrix(Matrix transformMatrix)
 {
-  cbData.world = DirectX::XMMatrixTranspose(transformMatrix);
+  objectBuffer->get().world = DirectX::XMMatrixTranspose(transformMatrix);
 }
 
 // update the view and perspective matrices in the constant buffer using camera
-void Graphics::Renderer::updateConstantBufferCameraMatrices()
+void Graphics::Renderer::updateObjectBufferCameraMatrices()
 {
-  cbData.view = DirectX::XMMatrixTranspose(camera->getViewMatrix());
-  cbData.projection = DirectX::XMMatrixTranspose(camera->getPerspecitveMatrix());
+  objectBuffer->get().view = DirectX::XMMatrixTranspose(camera->getViewMatrix());
+  objectBuffer->get().projection = DirectX::XMMatrixTranspose(camera->getPerspecitveMatrix());
 }
 
 void Graphics::Renderer::drawSetColor(const Color& color)
 {
   ColorBuffer colorData = { color.r, color.g, color.b, color.a };
-  colorBuffer->update(deviceContext, colorData);
-  colorBuffer->bind(deviceContext, 2, ShaderType::Pixel);
+  colorBuffer->set(colorData);
+  colorBuffer->updateAndBind();
 }
 
 void Graphics::Renderer::toggleFullscreen()

@@ -8,8 +8,6 @@
 
 #pragma once
 #include "Engine/Entity/EntityList/EntityList.h"
-#include "Engine/Graphics/Particles/Particle.h"
-#include "Engine/Graphics/Particles/ParticleEmitter.h"
 #include "Engine/Entity/Entity.h"
 #include "Engine/Entity/EntityFactory.h"
 #include "Engine/GlowEngine.h"

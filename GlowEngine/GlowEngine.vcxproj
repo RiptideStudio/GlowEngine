@@ -35,18 +35,20 @@
     <ClInclude Include="Source\Engine\Entity\Entity.h" />
     <ClInclude Include="Source\Engine\Entity\EntityFactory.h" />
     <ClInclude Include="Source\Engine\Entity\EntityList\EntityList.h" />
+    <ClInclude Include="Source\Engine\Global.h" />
     <ClInclude Include="Source\Engine\GlowEngine.h" />
+    <ClInclude Include="Source\Engine\Graphics\Buffers\Buffer.h" />
+    <ClInclude Include="Source\Engine\Graphics\Buffers\ConstantBuffer.h" />
     <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h" />
     <ClInclude Include="Source\Engine\Graphics\Color\Color.h" />
-    <ClInclude Include="Source\Engine\Graphics\ConstantBuffer.h" />
     <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\Mesh.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\MeshLibrary.h" />
     <ClInclude Include="Source\Engine\Graphics\Models\Model.h" />
     <ClInclude Include="Source\Engine\Graphics\Models\ModelLibrary.h" />
-    <ClInclude Include="Source\Engine\Graphics\Particles\Particle.h" />
-    <ClInclude Include="Source\Engine\Graphics\Particles\ParticleEmitter.h" />
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
+    <ClInclude Include="Source\Engine\Graphics\Shaders\Shader.h" />
+    <ClInclude Include="Source\Engine\Graphics\Shaders\ShaderManager.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
@@ -68,7 +70,6 @@
     <ClInclude Include="Source\Engine\Systems\Logger\Log.h" />
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h" />
     <ClInclude Include="Source\Game\Behaviors\Behavior.h" />
-    <ClInclude Include="Source\Game\Behaviors\ParticleBehavior.h" />
     <ClInclude Include="Source\Game\Behaviors\PlayerBehavior.h" />
     <ClInclude Include="Source\Game\Scene\ForestScene\ForestScene.h" />
     <ClInclude Include="Source\Game\Scene\Scene.h" />
@@ -110,11 +111,12 @@
     <ClCompile Include="Source\Engine\GlowEngine.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Buffers\Buffer.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\Buffers\ConstantBuffer.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Camera\Camera.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Color\Color.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\ConstantBuffer.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\Mesh.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\MeshLibrary.cpp" />
@@ -122,11 +124,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Models\ModelLibrary.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\Particles\Particle.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\Particles\ParticleEmitter.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Shaders\Shader.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\Shaders\ShaderManager.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\GlowGui.cpp" />
@@ -172,7 +174,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Game\Behaviors\Behavior.cpp" />
-    <ClCompile Include="Source\Game\Behaviors\ParticleBehavior.cpp" />
     <ClCompile Include="Source\Game\Behaviors\PlayerBehavior.cpp" />
     <ClCompile Include="Source\Game\Scene\ForestScene\ForestScene.cpp" />
     <ClCompile Include="Source\Game\Scene\Scene.cpp" />

@@ -12,8 +12,8 @@
 #pragma comment(lib, "d3d11.lib")
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")
-#include "Engine/Graphics/Lighting/LightBuffer.h"
-#include "ConstantBuffer.h"
+#include "Buffers/ConstantBuffer.h"
+#include "Buffers/Buffer.h"
 
 namespace Visual
 {
@@ -26,17 +26,13 @@ namespace Graphics
   class Window;
 }
 
+namespace Shaders
+{
+  class ShaderManager;
+}
+
 namespace Graphics
 {
-
-  // define a constant buffer to be sent to the vertex shader
-  struct cbPerObject
-  {
-    DirectX::XMMATRIX world;
-    DirectX::XMMATRIX view;
-    DirectX::XMMATRIX projection;
-  };
-
   class Renderer
   {
 
@@ -57,21 +53,17 @@ namespace Graphics
     void setRenderTarget();
     void createBlendState();
     void createDepthStencil();
-    void createLightBuffer();
     void createSamplerState();
-    void createRenderTexture();
 
-    // shadow mapping
-    void createShadowMap();
+    // add a buffer to the list to track
+    void addBuffer(Buffer*);
 
-    // constant buffer - this needs to be set using the model's properties
-    void createConstantBuffer();
     // the constant buffer needs to be updated whenever a model is being rendered
-    void updateConstantBuffer();
+    void updateObjectBuffer();
     // update the transform matrix within the constant buffer
-    void updateConstantBufferWorldMatrix(Matrix world);
+    void updateObjectBufferWorldMatrix(Matrix world);
     // update the perspective and camera view matrix
-    void updateConstantBufferCameraMatrices();
+    void updateObjectBufferCameraMatrices();
 
     // set the target color
     void drawSetColor(const Color& color);
@@ -129,25 +121,6 @@ namespace Graphics
     // target view and texture
     ID3D11RenderTargetView* renderTargetView;
 
-    ID3D11Texture2D* renderTexture = nullptr;
-    ID3D11RenderTargetView* rtv = nullptr;
-    ID3D11ShaderResourceView* srv = nullptr;
-
-    // shadow mapping
-    ID3D11Texture2D* shadowMap;
-    ID3D11DepthStencilView* shadowMapDSV;
-
-    // shaders
-    ID3D11PixelShader* pixelShader;
-    ID3D11VertexShader* vertexShader;
-
-    // blobs
-    ID3DBlob* pixelShaderBlob;
-    ID3DBlob* vertexShaderBlob;
-
-    // layout
-    ID3D11InputLayout* inputLayout;
-
     // render target view
     ID3D11Texture2D* backBuffer;
 
@@ -157,17 +130,8 @@ namespace Graphics
 
     // sampler
     ID3D11SamplerState* sampler;
-    
-    // constant buffer
-    ID3D11Buffer* constantBuffer;
-    D3D11_BUFFER_DESC constantBufferDesc;
-
-    cbPerObject cbData; // the actual constant buffer object
-
-    // lighting buffer
-    ID3D11Buffer* lightBuffer;
-    ID3D11Buffer* pointLightBuffer;
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    ID3D11SamplerState* shadowSampler;
+    ID3D11ShaderResourceView* shadowShaderView;
 
     // blend state
     ID3D11BlendState* blendState;
@@ -178,10 +142,19 @@ namespace Graphics
     ID3D11DepthStencilState* depthStencilState;
     ID3D11ShaderResourceView* shadowMapSRV;
 
+    // shaders
+    ID3D11PixelShader* pixelShader;
+    ID3D11VertexShader* vertexShader;
+
     // buffers
     ConstantBuffer<ColorBuffer>* colorBuffer;
+    ConstantBuffer<cbPerObject>* objectBuffer;
+    ConstantBuffer<PointLightBuffer>* lightBuffer;
+    ConstantBuffer<GlobalLightBuffer>* globalLightBuffer;
 
-    // we hold a vector of constant buffers that stay unitialized 
+    // we hold a vector of constant buffers that are globally updated and bound
+    // you can decide to disable this when creating the buffer
+    std::vector<Buffer*> buffers;
 
     // background color
     float backgroundColor[4];
@@ -192,6 +165,8 @@ namespace Graphics
     Visual::Camera* camera;
     // window
     Graphics::Window* window;
+    // shader manager
+    Shaders::ShaderManager* shaderManager;
 
     // point lights - the renderer can have a variable amount of point lights
     int lights;

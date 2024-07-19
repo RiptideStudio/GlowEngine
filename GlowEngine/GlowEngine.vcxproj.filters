@@ -78,9 +78,6 @@
     <Filter Include="Source Files\Engine\Graphics\Window">
       <UniqueIdentifier>{465f5b7a-eb8b-463c-bc6c-93332681a2e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Graphics\Particles">
-      <UniqueIdentifier>{4d99596a-b8b6-44a6-a161-7923885334d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\Behaviors">
       <UniqueIdentifier>{094130be-fa54-4fff-811b-a79efdbd6a89}</UniqueIdentifier>
     </Filter>
@@ -107,6 +104,12 @@
     </Filter>
     <Filter Include="Source Files\Engine\Audio">
       <UniqueIdentifier>{e1d7382b-ddb6-4c42-aa03-310f1eb6859f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Buffers">
+      <UniqueIdentifier>{94904717-f6b5-4eca-80a9-0833eea8f305}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Shaders">
+      <UniqueIdentifier>{5bed3113-5f01-44b0-bc50-7c6837450d9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -200,16 +203,7 @@
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h">
       <Filter>Source Files\Engine\Graphics\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\Particles\Particle.h">
-      <Filter>Source Files\Engine\Graphics\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\Particles\ParticleEmitter.h">
-      <Filter>Source Files\Engine\Graphics\Particles</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Behaviors\Behavior.h">
-      <Filter>Source Files\Game\Behaviors</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Behaviors\ParticleBehavior.h">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Graphics\Meshes\Mesh.h">
@@ -278,9 +272,6 @@
     <ClInclude Include="Source\Engine\Graphics\Color\Color.h">
       <Filter>Source Files\Engine\Graphics\Color</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\ConstantBuffer.h">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Audio\Sound.h">
       <Filter>Source Files\Engine\Audio</Filter>
     </ClInclude>
@@ -289,6 +280,21 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Audio\SoundSystem.h">
       <Filter>Source Files\Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Buffers\Buffer.h">
+      <Filter>Source Files\Engine\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Buffers\ConstantBuffer.h">
+      <Filter>Source Files\Engine\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Shaders\Shader.h">
+      <Filter>Source Files\Engine\Graphics\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\Shaders\ShaderManager.h">
+      <Filter>Source Files\Engine\Graphics\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Global.h">
+      <Filter>Source Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -373,16 +379,7 @@
     <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp">
       <Filter>Source Files\Engine\Graphics\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\Particles\Particle.cpp">
-      <Filter>Source Files\Engine\Graphics\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\Particles\ParticleEmitter.cpp">
-      <Filter>Source Files\Engine\Graphics\Particles</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Behaviors\Behavior.cpp">
-      <Filter>Source Files\Game\Behaviors</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Behaviors\ParticleBehavior.cpp">
       <Filter>Source Files\Game\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Meshes\Mesh.cpp">
@@ -448,9 +445,6 @@
     <ClCompile Include="Source\Engine\Graphics\Color\Color.cpp">
       <Filter>Source Files\Engine\Graphics\Color</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\ConstantBuffer.cpp">
-      <Filter>Source Files\Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Audio\Sound.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
     </ClCompile>
@@ -459,6 +453,18 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Audio\SoundSystem.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Buffers\Buffer.cpp">
+      <Filter>Source Files\Engine\Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Buffers\ConstantBuffer.cpp">
+      <Filter>Source Files\Engine\Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Shaders\Shader.cpp">
+      <Filter>Source Files\Engine\Graphics\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Shaders\ShaderManager.cpp">
+      <Filter>Source Files\Engine\Graphics\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

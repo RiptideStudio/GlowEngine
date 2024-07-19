@@ -74,7 +74,7 @@ void Visual::Camera::update()
   viewMatrix = DirectX::XMMatrixLookAtLH(position, targetPosition, upDirection);
 
   // Update the renderer's view and perspective matrices
-  renderer->updateConstantBufferCameraMatrices();
+  renderer->updateObjectBufferCameraMatrices();
 }
 
 // controls our camera using input - this is currently debug, as we don't have a player
