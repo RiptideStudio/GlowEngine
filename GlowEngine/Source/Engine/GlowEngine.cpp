@@ -153,6 +153,9 @@ void Engine::GlowEngine::render()
   // render all systems
   sceneSystem->render();
 
+  // renderer update
+  renderer->update();
+
   // end renderer frame and present screen
   renderer->endFrame();
 }

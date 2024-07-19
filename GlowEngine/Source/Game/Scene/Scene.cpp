@@ -43,7 +43,6 @@ void Scene::Scene::updateEntities()
 void Scene::Scene::renderEntities()
 {
   entityList->render();
-  particleList->render();
 }
 
 // create an entity within a scene that will directly add it to the list

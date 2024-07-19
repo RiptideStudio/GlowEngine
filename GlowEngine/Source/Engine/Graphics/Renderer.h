@@ -65,6 +65,8 @@ namespace Graphics
     // update the perspective and camera view matrix
     void updateObjectBufferCameraMatrices();
 
+    Graphics::Window* getWindow() { return window;}
+
     // set the target color
     void drawSetColor(const Color& color);
 
@@ -81,8 +83,10 @@ namespace Graphics
 
     // clear the target view with a background colour
     void clearTargetView();
+    void setRenderTargetSize(float x, float y);
     void setBackgroundColor(float color[4]);
     void toggleDebugMode();
+    void update();
     bool isDebugMode();
 
     // set the topology with a default of trianglelist
@@ -101,11 +105,16 @@ namespace Graphics
 
     // get the back buffer
     ID3D11Texture2D* getBackBuffer();
+    ID3D11ShaderResourceView* getBackBufferSRV();
 
     // get the camera
     Visual::Camera* getCamera() { return camera; }
 
   private:
+
+    // render targets 
+    ID3D11ShaderResourceView* backBufferSRV;
+    D3D11_TEXTURE2D_DESC textureDesc;
 
     // window handle
     HWND windowHandle;
@@ -171,7 +180,7 @@ namespace Graphics
     // point lights - the renderer can have a variable amount of point lights
     int lights;
     bool fullscreen = false;
-    bool debug = true;
+    bool debug = false;
 
   };
 

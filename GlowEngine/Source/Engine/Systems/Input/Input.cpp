@@ -35,7 +35,6 @@ void Input::InputSystem::update()
   }
   if (focused)
   {
-    ShowCursor(false);
     // focus the mouse in the center of the screen
     RECT clientRect;
     GetClientRect(windowHandle, &clientRect);
@@ -49,7 +48,6 @@ void Input::InputSystem::update()
   }
   else
   {
-    ShowCursor(true);
   }
 }
 

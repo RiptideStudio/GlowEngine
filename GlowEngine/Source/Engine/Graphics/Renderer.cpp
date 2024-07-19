@@ -17,6 +17,7 @@
 #include "Engine/Graphics/Textures/stb_image.h"
 #include "UI/GlowGui.h"
 #include "Shaders/ShaderManager.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
 #include <filesystem>
 
 // define the amount of max lights we can have
@@ -121,6 +122,12 @@ void Graphics::Renderer::beginFrame()
 
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
+
+  glowGui->update();
+}
+
+void Graphics::Renderer::update()
+{
 }
 
 // the end of each frame at the renderer engine
@@ -128,7 +135,6 @@ void Graphics::Renderer::beginFrame()
 void Graphics::Renderer::endFrame()
 {
   // end ImGui draw
-  glowGui->endUpdate();
 
   // present the back buffer to the screen
   swapChain->Present(1, 0);
@@ -144,7 +150,7 @@ void Graphics::Renderer::createDeviceAndSwapChain()
   swapChainDesc.BufferCount = 2;
   swapChainDesc.SampleDesc.Count = 1;
   swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-  swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+  swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
   swapChainDesc.OutputWindow = windowHandle;
   swapChainDesc.Windowed = TRUE;
   swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -196,14 +202,41 @@ void Graphics::Renderer::loadShaders()
 // create the target view fo the renderer
 void Graphics::Renderer::createTargetView()
 {
-  // Create render target view
+  // Get the back buffer from the swap chain
   ID3D11Texture2D* backBuffer = nullptr;
-  swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
-  if (backBuffer)
-  {
-    device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
-    backBuffer->Release();
+  HRESULT hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
+  if (FAILED(hr)) {
+    // Handle error
+    return;
   }
+
+  // Create a render target view
+  hr = device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
+  if (FAILED(hr)) {
+    // Handle error
+    backBuffer->Release();
+    return;
+  }
+
+  // Describe the shader resource view
+  D3D11_TEXTURE2D_DESC backBufferDesc;
+  backBuffer->GetDesc(&backBufferDesc);
+
+  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+  srvDesc.Format = backBufferDesc.Format;
+  srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  srvDesc.Texture2D.MostDetailedMip = 0;
+  srvDesc.Texture2D.MipLevels = 1;
+
+  // Create a shader resource view
+  hr = device->CreateShaderResourceView(backBuffer, &srvDesc, &backBufferSRV);
+  if (FAILED(hr)) {
+    // Handle error
+    backBuffer->Release();
+    return;
+  }
+
+  backBuffer->Release();
 }
 
 // create the viewport for the renderer with given width and height
@@ -440,6 +473,11 @@ ID3D11Device* Graphics::Renderer::getDevice()
   return device;
 }
 
+ID3D11ShaderResourceView* Graphics::Renderer::getBackBufferSRV()
+{
+  return backBufferSRV;
+}
+
 // get the device context
 ID3D11DeviceContext* Graphics::Renderer::getDeviceContext()
 {
@@ -454,4 +492,17 @@ void Graphics::Renderer::createImGuiSystem()
 ID3D11Texture2D* Graphics::Renderer::getBackBuffer()
 {
   return backBuffer;
+}
+
+void Graphics::Renderer::setRenderTargetSize(float width, float height)
+{
+  // Set the viewport transform
+  D3D11_VIEWPORT viewport = {};
+  viewport.TopLeftX = 0;
+  viewport.TopLeftY = 0;
+  viewport.Width = width;
+  viewport.Height = height;
+  viewport.MinDepth = 0.0f;
+  viewport.MaxDepth = 1.0f;
+  deviceContext->RSSetViewports(1, &viewport);
 }

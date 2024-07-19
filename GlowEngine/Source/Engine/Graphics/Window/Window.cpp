@@ -41,7 +41,7 @@ bool Graphics::Window::setup()
     0, // window style
     windowClassName.c_str(), // class name
     windowName.c_str(), // window title
-    WS_OVERLAPPEDWINDOW, // window style
+    WS_BORDER, // window style
     CW_USEDEFAULT, // initial horizontal position of the window
     CW_USEDEFAULT, // initial vertical position of the window
     windowWidth, // width
@@ -119,7 +119,7 @@ void Graphics::Window::setFullscreen(bool val)
 {
   if (val)
   {
-    SetWindowLongPtr(windowHandle, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+    SetWindowLongPtr(windowHandle, GWL_STYLE, WS_BORDER | WS_VISIBLE);
     SetWindowPos(windowHandle, HWND_TOP, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED);
     ShowWindow(windowHandle, SW_MAXIMIZE);
   }
