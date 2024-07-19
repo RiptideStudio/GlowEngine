@@ -49,7 +49,6 @@ SamplerState SampleType;
 Texture2D shadowTexture;
 SamplerState shadowSampler;
 
-// main entrypoint
 // main entry point
 float4 main(PixelInputType input) : SV_TARGET
 {
@@ -118,5 +117,17 @@ float4 main(PixelInputType input) : SV_TARGET
         litColor *= textureColor;
     }
 
-    return litColor;
+    // Calculate fog factor
+    float fogStart = 125.0f; // Start distance for fog
+    float fogEnd = 250.0f; // End distance for fog
+    float fogDistance = length(input.worldpos.xyz - cameraPosition);
+    float fogFactor = saturate((fogEnd - fogDistance) / (fogEnd - fogStart));
+    
+    // Fog color
+    float3 fogColor = float3(0.5, 0.5, 0.75); // Gray fog
+
+    // Interpolate between the fog color and the lit color
+    float4 finalColorWithFog = lerp(float4(fogColor, 0.0), litColor, fogFactor);
+
+    return finalColorWithFog;
 }

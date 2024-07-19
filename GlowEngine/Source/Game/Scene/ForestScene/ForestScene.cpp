@@ -40,23 +40,23 @@ void Scene::ForestScene::init()
   instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
 
-  Audio::playSound("Forest");
+  Audio::playSound("Sunset");
 
-  for (int i = 0; i < 15; ++i)
+  for (int i = 0; i < 25; ++i)
   {
-    for (int j = 0; j < 15; ++j)
+    for (int j = 0; j < 25; ++j)
     {
-      float randomX = randomRange(-100, 100);
-      float randomZ = randomRange(-100, 100);
+      float randomX = randomRange(-500, 500);
+      float randomZ = randomRange(-500, 500);
       float randomScale = randomRange(1.5f, 2.f);
 
       float y = -10;
       Vector3D randomPos = { randomX,y,randomZ };
-      randomX = randomRange(-100, 100);
-      randomZ = randomRange(-100, 100);
+      randomX = randomRange(-500, 500);
+      randomZ = randomRange(-500, 500);
       Vector3D randomPos2 = { randomX,y,randomZ };
-      randomX = randomRange(-100, 100);
-      randomZ = randomRange(-100, 100);
+      randomX = randomRange(-500, 500);
+      randomZ = randomRange(-500, 500);
       Vector3D randomPos3 = { randomX,0,randomZ };
       randomScale = randomRange(1.f, 2.5f);
 
@@ -76,14 +76,14 @@ void Scene::ForestScene::update()
   // hotkeys for stress testing
   if (input->keyDown('G'))
   {
-    float randomX = randomRange(-100.f, 100.f);
+    float randomX = randomRange(-500, 500);
     float randomY = randomRange(0.f, 100.f);
-    float randomZ = randomRange(-100.f, 100.f);
+    float randomZ = randomRange(-500, 500);
     float randomScale = randomRange(1.f, 5.f);
     float randomRotx = randomRange(0.f, 360.f);
     float randomRoty = randomRange(0.f, 360.f);
     float randomRotz = randomRange(0.f, 360.f);
-    Entities::Actor* cube = createEntity({ randomX,-10,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,randomRotz }, "Cube", "Crystal");
+    Entities::Actor* cube = createEntity({ randomX,-9,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,0 }, "Cube", "Leaves");
     cube->setAnchored(true);
     std::cout << "Entities: " << entityList->getSize() << std::endl;
   }

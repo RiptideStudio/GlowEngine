@@ -33,7 +33,7 @@ void Audio::SoundLibrary::load()
         std::string fileType = entry.path().extension().string();
 
         // files must be of type ogg or mp3
-        if (fileType == ".ogg" || fileType == ".mp3")
+        if (fileType == ".ogg" || fileType == ".mp3" || fileType == ".wav")
         {
           Audio::Type type = Audio::Type::Sound;
           bool loop = false;

@@ -32,6 +32,7 @@ Audio::SoundSystem::SoundSystem() : System("Audio System")
     Logger::write("Loaded sound " + sound->getFilePath());
     ++it;
   }
+
 }
 
 Audio::SoundSystem::~SoundSystem()
@@ -54,23 +55,24 @@ void Audio::SoundSystem::playSound(std::string name)
   if (!sound)
     return;
 
-  // play the sound
-  FMOD::Channel* targetChannel = soundChannel;
-
   // change the channel based on type
   switch (sound->getType())
   {
   case Audio::Type::Music:
-    targetChannel = musicChannel;
-    break;
-  }
+      system->playSound(sound->get(), nullptr, false, &musicChannel);
+        break;
 
-  system->playSound(sound->get(), nullptr, false, &targetChannel);
+  case Audio::Type::Sound:
+      system->playSound(sound->get(), nullptr, false, &soundChannel);
+      break;
+  }
+  musicChannel->setVolume(0.3f);
 }
 
 void Audio::SoundSystem::update()
 {
   system->update();
+
 }
 
 void Audio::playSound(std::string name)
