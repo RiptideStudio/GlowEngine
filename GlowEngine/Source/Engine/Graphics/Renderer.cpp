@@ -93,9 +93,6 @@ void Graphics::Renderer::beginFrame()
   // set the render target and clear depth buffer
   setRenderTarget();
 
-  // start imGui frame
-  glowGui->beginUpdate();
-
   // temporary global light data for testing
   GlobalLightBuffer lightData;
   lightData.cameraPosition = { DirectX::XMVectorGetX(camera->getPosition()),DirectX::XMVectorGetY(camera->getPosition()),DirectX::XMVectorGetZ(camera->getPosition()) };
@@ -123,6 +120,7 @@ void Graphics::Renderer::beginFrame()
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
 
+  // update the GUI widgets
   glowGui->update();
 }
 
@@ -134,8 +132,6 @@ void Graphics::Renderer::update()
 // present the swapchain and draw the objects
 void Graphics::Renderer::endFrame()
 {
-  // end ImGui draw
-
   // present the back buffer to the screen
   swapChain->Present(1, 0);
 }
@@ -420,6 +416,20 @@ void Graphics::Renderer::clearTargetView()
   deviceContext->ClearRenderTargetView(renderTargetView, backgroundColor);
 }
 
+// set the position and scale of our render viewport
+void Graphics::Renderer::setRenderTargetProperties(float x, float y, float width, float height)
+{
+  // Set the viewport transform
+  D3D11_VIEWPORT viewport = {};
+  viewport.Width = width;
+  viewport.Height = height;
+  viewport.TopLeftX = x;
+  viewport.TopLeftY = y;
+  viewport.MinDepth = 0.0f;
+  viewport.MaxDepth = 1.0f;
+  deviceContext->RSSetViewports(1, &viewport);
+}
+
 // set the background color 
 void Graphics::Renderer::setBackgroundColor(float color[4])
 {
@@ -494,15 +504,3 @@ ID3D11Texture2D* Graphics::Renderer::getBackBuffer()
   return backBuffer;
 }
 
-void Graphics::Renderer::setRenderTargetSize(float width, float height)
-{
-  // Set the viewport transform
-  D3D11_VIEWPORT viewport = {};
-  viewport.TopLeftX = 0;
-  viewport.TopLeftY = 0;
-  viewport.Width = width;
-  viewport.Height = height;
-  viewport.MinDepth = 0.0f;
-  viewport.MaxDepth = 1.0f;
-  deviceContext->RSSetViewports(1, &viewport);
-}

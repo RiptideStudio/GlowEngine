@@ -10,21 +10,21 @@
 #include "Entity.h"
 
 // base entity constructor
-Entities::Entity::Entity()
+Entities::Entity::Entity(std::string name)
   :
   id(0),
-  name("Entity"),
+  name(name),
   destroyed(false)
 {
   addComponent(transform = new Components::Transform());
-  addComponent(sprite = new Components::Sprite3D("Cube"));
+  addComponent(sprite = new Components::Sprite3D());
 }
 
 // copy constructor for entity
 Entities::Entity::Entity(const Entity& other)
   :
   id(0),
-  name("Entity"),
+  name(other.name),
   destroyed(false),
   visible(other.visible)
 {

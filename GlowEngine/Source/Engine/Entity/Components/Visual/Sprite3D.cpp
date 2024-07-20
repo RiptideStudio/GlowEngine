@@ -169,6 +169,11 @@ void Components::Sprite3D::setTextureRepeat(bool val)
   repeatTexture = val;
 }
 
+void Components::Sprite3D::inspect()
+{
+  ImGui::Text(("Model: "+model->getName()).c_str());
+}
+
 // get the Sprite3D's model
 Models::Model* Components::Sprite3D::getModel()
 {

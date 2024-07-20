@@ -19,7 +19,8 @@ Components::Animation3D::Animation3D()
   running(false),
   loop(true)
 {
-  type = ComponentType::Animation3D;
+  type = Components::Component::Animation3D;
+  name = "Animation-3D";
 }
 
 // update the logic of the animation and change the frame

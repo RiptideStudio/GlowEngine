@@ -15,15 +15,17 @@ Scene::Scene::Scene()
   engine = EngineInstance::getEngine();
   input = engine->getInputSystem();
   factory = engine->getEntityFactory();
-  entityList = new Entities::EntityList();
-  particleList = new Entities::EntityList();
+  addEntityList();
   name = "Scene";
 }
 
 // exit a given scene
 void Scene::Scene::exit()
 {
-  entityList->clear();
+  for (auto& wrapper : entityLists)
+  {
+    wrapper->list->clear();
+  }
 }
 
 // render a scene
@@ -35,14 +37,19 @@ void Scene::Scene::render()
 // update a scene's given entities
 void Scene::Scene::updateEntities()
 {
-
-  entityList->update();
+  for (auto& wrapper : entityLists)
+  {
+    wrapper->list->update();
+  }
 }
 
 // render a scene's entities
 void Scene::Scene::renderEntities()
 {
-  entityList->render();
+  for (auto& wrapper : entityLists)
+  {
+    wrapper->list->render();
+  }
 }
 
 // create an entity within a scene that will directly add it to the list
@@ -60,7 +67,7 @@ Entities::Actor* Scene::Scene::createEntity(
   actor->setRotation(rotation);
   actor->setModel(modelName);
   actor->setTexture(textureName);
-
+  add(actor);
   return actor;
 }
 
@@ -78,7 +85,7 @@ Entities::Actor* Scene::Scene::instanceCreateExt(std::string name, Vector3D posi
   Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
   actor->setScale(scale);
   actor->setRotation(rotation);
-  entityList->add(actor);
+  add(actor);
   return actor;
 }
 
@@ -89,7 +96,37 @@ Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::stri
   actor->setRotation(rotation);
   actor->setModel(model);
   actor->setTexture(texture);
-  entityList->add(actor);
+  add(actor);
   return actor;
+}
+
+// add an entity to the root node list; we'll eventually be using the scene hierarchy to do most of this
+void Scene::Scene::add(Entities::Entity* entity)
+{
+  entityLists[0]->list->add(entity);
+}
+
+void Scene::Scene::clear()
+{
+  for (auto& list : entityLists)
+  {
+    list->list->clear();
+  }
+}
+
+// creates a new entity wrapper given a name
+void Scene::Scene::addEntityList(std::string name)
+{
+  Entities::EntityList* list = new Entities::EntityList();
+  Entities::EntityListWrapper* wrapper = new Entities::EntityListWrapper(list);
+
+  size_t size = entityLists.size();
+
+  wrapper->name = name;
+
+  if (size > 0)
+    wrapper->name += std::to_string(size);
+
+  entityLists.push_back(wrapper);
 }
 

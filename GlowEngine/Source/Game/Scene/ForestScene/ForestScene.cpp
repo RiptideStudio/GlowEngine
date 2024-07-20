@@ -24,20 +24,23 @@ void Scene::ForestScene::init()
   player->addComponent(new Game::PlayerBehavior());
   player->setHitboxSize(Vector3D(1.5,6,1.5));
 
-  Entities::Entity* plane = new Entities::Entity();
+  Entities::Entity* plane = new Entities::Entity("Plane");
   getComponentOfType(Sprite3D, plane)->setModel("Plane");
   getComponentOfType(Sprite3D, plane)->setTextures("Leaves");
   getComponentOfType(Sprite3D, plane)->setTextureRepeat(true);
   getComponentOfType(Transform, plane)->setScale({ 1000,1000,1000 });
   getComponentOfType(Transform, plane)->setPosition({ 0,-10,0 });
-  entityList->add(plane);
+  add(plane);
+
   Entities::Actor* leaves = createEntity({ 0,-10,0 }, { 1000,0,1000 }, { 0 }, "", "");
   leaves->setAnchored(true);
   leaves->setTextureRepeat(true);
   leaves->setAsPointLight(true);
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
-  instanceCreateExt("Monkey", { 10,10,-15 }, { 5,5,5 }, { 45,0,0 });
-  instanceCreateExt("Soup", { 10,-4,-15 }, { 3,3,3 });
+  leaves->setName("Plane Leaves");
+
+  instanceCreateExt("Monkey", { 10,5,-15 }, { 5,5,5 }, { 45,0,0 });
+  Entities::Actor* s = instanceCreateExt("Soup", { 10, 5, 15 }, { 3,3,3 });
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
 
   Audio::playSound("Sunset");
@@ -85,7 +88,6 @@ void Scene::ForestScene::update()
     float randomRotz = randomRange(0.f, 360.f);
     Entities::Actor* cube = createEntity({ randomX,-9,randomZ }, { randomScale ,randomScale ,randomScale }, { 0,0,0 }, "Cube", "Leaves");
     cube->setAnchored(true);
-    std::cout << "Entities: " << entityList->getSize() << std::endl;
   }
 }
 

@@ -18,7 +18,8 @@ namespace UI
 
     Widget(std::string name, std::string desc = "", ImGuiWindowFlags flags_ = ImGuiWindowFlags_NoCollapse);
 
-    virtual void render() {};
+    virtual void update() {};
+    virtual void init() {};
 
     void renderFrame();
     void beginFrame();
@@ -30,5 +31,7 @@ namespace UI
     std::string description;
 
     ImGuiWindowFlags flags;
+
+    bool loaded = false;
   };
 }

@@ -15,13 +15,21 @@
 
 // base constructor
 Entities::EntityList::EntityList()
+:
+  size(0),
+  name("Container")
 {
-  size = 0;
 }
 
 // add a given entity to the list
 void Entities::EntityList::add(Entities::Entity* entity)
 {
+  // ensure no duplicate named entities
+  if (entity->getName() == "Entity")
+  {
+    entity->setName("Entity"+std::to_string(activeList.size()));
+  }
+
   activeList.push_back(entity);
   size++;
 }

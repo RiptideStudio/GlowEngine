@@ -62,6 +62,7 @@
     <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_truetype.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGui\GlowGui.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Widget.h" />
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
@@ -156,6 +157,7 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\UI\ImGui\GlowGui.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Widget.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp" />
     <ClCompile Include="Source\Engine\main.cpp">

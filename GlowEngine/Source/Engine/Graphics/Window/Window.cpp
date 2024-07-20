@@ -13,7 +13,8 @@
 
 // construct the window
 Graphics::Window::Window()
-  : windowWidth(GetSystemMetrics(SM_CXSCREEN)/1.25f),
+  : 
+  windowWidth(GetSystemMetrics(SM_CXSCREEN)/1.25f),
   windowHeight(GetSystemMetrics(SM_CYSCREEN)/1.25f)
 {
   windowClassName = L"Otherglow Window";
@@ -41,7 +42,7 @@ bool Graphics::Window::setup()
     0, // window style
     windowClassName.c_str(), // class name
     windowName.c_str(), // window title
-    WS_BORDER, // window style
+    WS_OVERLAPPEDWINDOW, // window style
     CW_USEDEFAULT, // initial horizontal position of the window
     CW_USEDEFAULT, // initial vertical position of the window
     windowWidth, // width
@@ -61,6 +62,8 @@ bool Graphics::Window::setup()
   RECT rect = { 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
   AdjustWindowRect(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE);
   SetWindowPos(windowHandle, nullptr, 0, 0, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+
+  aspectRatio = (float)windowWidth / (float)windowHeight;
 
   return true;
 }

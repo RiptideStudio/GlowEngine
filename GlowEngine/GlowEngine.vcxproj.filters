@@ -117,6 +117,9 @@
     <Filter Include="Source Files\Engine\Graphics\UI\ImGui\Inspector">
       <UniqueIdentifier>{4aa15977-6e2a-400b-bed1-16f19d2f3dd6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\UI\ImGui\SceneEditor">
+      <UniqueIdentifier>{fbdced23-01ae-48f2-8231-8296fec5c5c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -308,6 +311,9 @@
     <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.h">
       <Filter>Source Files\Engine\Graphics\UI\ImGui\Inspector</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.h">
+      <Filter>Source Files\Engine\Graphics\UI\ImGui\SceneEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -483,6 +489,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.cpp">
       <Filter>Source Files\Engine\Graphics\UI\ImGui\Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\ImGui\SceneEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

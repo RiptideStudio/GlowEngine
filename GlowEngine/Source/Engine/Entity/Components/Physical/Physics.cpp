@@ -20,6 +20,7 @@ Components::Physics::Physics()
   priority = 1;
   targetVelocity = { 0,0,0 };
   type = ComponentType::Physics;
+  name = "Physics";
 }
 
 void Components::Physics::setVelocity(Vector3D vel)

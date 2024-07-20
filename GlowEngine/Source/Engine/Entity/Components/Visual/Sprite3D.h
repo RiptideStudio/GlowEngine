@@ -47,6 +47,9 @@ namespace Components
     // set a texuture to repeat
     void setTextureRepeat(bool val);
 
+    // ImGui
+    void inspect();
+
     // get the model
     Models::Model* getModel();
     

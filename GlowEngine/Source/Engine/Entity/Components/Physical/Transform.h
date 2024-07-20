@@ -34,6 +34,8 @@ namespace Components
     void setAnchored(bool val) { anchored = val; }
     // set dirty
     void setDirty(bool val) { dirty = val; }
+    // inspect
+    void inspect();
 
     // position
     void setPosition(Vector3D pos) { position = pos; dirty = true; }

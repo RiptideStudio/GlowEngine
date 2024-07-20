@@ -37,6 +37,7 @@ namespace Graphics
     HWND getHandle() { return windowHandle; }
     int getWidth();
     int getHeight();
+    float getAspectRatio() { return aspectRatio; }
 
     const std::wstring getName() { return windowName; }
     void setName(std::wstring name) { windowName = name; }
@@ -57,6 +58,8 @@ namespace Graphics
 
     // windows messages
     MSG msg = {};
+
+    float aspectRatio;
 
     // pointers
     Input::InputSystem* input;

@@ -21,6 +21,7 @@ Components::Transform::Transform()
 {
   recalculateMatrix();
   type = ComponentType::Transform;
+  name = "Transform";
 }
 
 // initialize the transform with position, scale, and rotation
@@ -35,9 +36,6 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
   recalculateMatrix();
   type = ComponentType::Transform;
 }
-
-// clone it baby
-
 
 // reclaculate the world matrix
 void Components::Transform::recalculateMatrix()
@@ -81,4 +79,11 @@ Components::Transform* Components::Transform::clone()
 {
   Transform* transform = new Transform(*this);
   return transform;
+}
+
+void Components::Transform::inspect()
+{
+  ImGui::SliderFloat("X", &position.x, position.x - 10, position.x + 10);
+  ImGui::SliderFloat("Y", &position.y, position.y - 10, position.y + 10);
+  ImGui::SliderFloat("Z", &position.z, position.z - 10, position.z + 10);
 }

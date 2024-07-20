@@ -24,10 +24,10 @@ void Scene::SceneSystem::update()
   currentScene->updateEntities();
 
   // restart the current scene
-  if (input->keyDown('R'))
+  if (input->keyTriggered('R'))
   {
-      currentScene->getEntityList()->clear();
-      currentScene->init();
+    currentScene->clear();
+    currentScene->init();
   }
 }
 

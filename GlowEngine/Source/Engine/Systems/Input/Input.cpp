@@ -21,6 +21,7 @@ Input::InputSystem::InputSystem(std::string systemName)
   mouseDelta = { 0 };
   scroll = 0;
   focused = true;
+  ShowCursor(FALSE);
 }
 
 // update the input state
@@ -46,9 +47,6 @@ void Input::InputSystem::update()
     previousMousePosition.x = center.x;
     previousMousePosition.y = center.y;
   }
-  else
-  {
-  }
 }
 
 void Input::InputSystem::updateKeyStates()
@@ -59,6 +57,11 @@ void Input::InputSystem::updateKeyStates()
 
 void Input::InputSystem::updateHotkeys()
 {
+  if (focused)
+    while (ShowCursor(FALSE) >= 0);
+  else
+    while (ShowCursor(TRUE) < 0);
+
   // toggle fullscreen
   if (keyReleased(VK_TAB))
   {
@@ -76,16 +79,17 @@ void Input::InputSystem::updateHotkeys()
       focused = false;
     }
   }
+
+  // refocus
+  if (keyTriggered(VK_RETURN))
+  {
+    focused = true;
+  }
+
   // toggle renderer debug mode
   if (keyTriggered('Q'))
   {
     engine->getRenderer()->toggleDebugMode();
-  }
-
-  // toggle the focus
-  if (keyTriggered('P'))
-  {
-    focused = !focused;
   }
 }
 

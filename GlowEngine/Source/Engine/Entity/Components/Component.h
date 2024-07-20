@@ -48,10 +48,14 @@ namespace Components
 
       const ComponentType getType();
 
+      // get our name
+      std::string getName() { return name; }
       // get the parent
       Entities::Entity* getParent();
       // set the parent entity
       void setParent(Entities::Entity* newParent);
+      // inspect in the editor
+      virtual void inspect() {};
 
       Entities::Entity* parent;
 

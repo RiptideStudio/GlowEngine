@@ -13,7 +13,8 @@
 // base component constructor
 Components::Component::Component()
   :
-  parent(nullptr)
+  parent(nullptr),
+  name("Component")
 {
   type = ComponentType::None;
 }
@@ -40,3 +41,4 @@ void Components::Component::setParent(Entities::Entity* newParent)
 {
   parent = newParent;
 }
+

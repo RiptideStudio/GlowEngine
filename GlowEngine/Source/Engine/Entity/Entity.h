@@ -19,7 +19,7 @@ namespace Entities
 
   public:
 
-    Entity();
+    Entity(std::string name = "Entity");
     Entity(const Entity& other);
 
     virtual ~Entity();

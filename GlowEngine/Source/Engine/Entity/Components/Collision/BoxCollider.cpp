@@ -16,6 +16,7 @@ Components::BoxCollider::BoxCollider(Vector3D newScale)
 {
   scale = newScale;
   type = ComponentType::Collider;
+  name = "Box Collider";
 }
 
 // return whether or not two colliders are colliding

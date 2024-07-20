@@ -46,6 +46,16 @@ namespace Scene
     Entities::Actor* instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation = { 0 });
     Entities::Actor* instanceCreateGeneral(std::string name, std::string model, std::string texture, Vector3D position, Vector3D scale, Vector3D rotation = {0});
 
+    // add an entity to the scene (allows us to make entities from code easily)
+    void add(Entities::Entity* entity);
+    // clear all entities
+    void clear();
+
+    // get the entity wrappers
+    std::vector<Entities::EntityListWrapper*>& getEntityWrappers() { return entityLists; }
+    // add a new list to the entity lists
+    void addEntityList(std::string name = "Container");
+
   protected:
 
     // system pointers
@@ -56,10 +66,11 @@ namespace Scene
 
     // entity list
     Entities::EntityList* entityList;
-    // particle list
-    Entities::EntityList* particleList;
     // entity factory
     Entities::EntityFactory* factory;
+
+    // we have a vector of all of our currently active entity lists
+    std::vector<Entities::EntityListWrapper*> entityLists;
 
   };
 

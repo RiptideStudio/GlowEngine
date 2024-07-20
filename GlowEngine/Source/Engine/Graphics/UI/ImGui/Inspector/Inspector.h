@@ -9,6 +9,11 @@
 #pragma once
 #include "Engine/Graphics/UI/ImGui/Widget.h"
 
+namespace Entities
+{
+  class Entity;
+}
+
 namespace UI
 {
   class Inspector : public Widget
@@ -18,7 +23,12 @@ namespace UI
 
     Inspector(std::string title, std::string desc = "", ImGuiWindowFlags flags = 0);
 
-    void render();
+    void update();
+
+    // the entity we want to inspect
+    void inspect(Entities::Entity* ent) { selectedEntity = ent; }
+
+    Entities::Entity* selectedEntity;
 
   };
 }

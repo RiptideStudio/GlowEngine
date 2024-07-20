@@ -83,8 +83,9 @@ namespace Graphics
 
     // clear the target view with a background colour
     void clearTargetView();
-    void setRenderTargetSize(float x, float y);
+    void setRenderTargetProperties(float x, float y, float width, float height);
     void setBackgroundColor(float color[4]);
+
     void toggleDebugMode();
     void update();
     bool isDebugMode();

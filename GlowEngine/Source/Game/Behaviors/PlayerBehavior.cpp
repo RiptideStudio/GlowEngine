@@ -20,6 +20,7 @@ Game::PlayerBehavior::PlayerBehavior()
   moveSpeed = 20.f;
   jumpSpeed = 25.f;
   god = false;
+  name = "Player Behavior";
 }
 
 // move our player

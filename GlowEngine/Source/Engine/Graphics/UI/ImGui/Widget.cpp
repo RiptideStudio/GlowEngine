@@ -21,8 +21,14 @@ UI::Widget::Widget(std::string title_, std::string desc, ImGuiWindowFlags flags_
 // main update frame, calls render of all elements
 void UI::Widget::renderFrame()
 {
+  if (!loaded)
+  {
+    init();
+    loaded = true;
+  }
+
   beginFrame();
-  render();
+  update();
   endFrame();
 }
 
