@@ -13,3 +13,9 @@ enum class ShaderType
   Pixel,
   Vertex
 };
+
+enum class EntityType
+{
+  Actor,
+  Entity
+};

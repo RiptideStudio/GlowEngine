@@ -33,9 +33,6 @@ namespace Scene
     void updateEntities();
     void renderEntities();
 
-    // get a scene's entity container
-    Entities::EntityList* getEntityList() { return entityList; }
-
     std::string getName() { return name; }
 
     // create an entity directly to this scene with already made components
@@ -48,6 +45,8 @@ namespace Scene
 
     // add an entity to the scene (allows us to make entities from code easily)
     void add(Entities::Entity* entity);
+    // add an entity to a specific list
+    void addToList(Entities::EntityList* list, Entities::Entity* ent);
     // clear all entities
     void clear();
 
@@ -55,6 +54,9 @@ namespace Scene
     std::vector<Entities::EntityListWrapper*>& getEntityWrappers() { return entityLists; }
     // add a new list to the entity lists
     void addEntityList(std::string name = "Container");
+
+    // get our global list
+    Entities::EntityList* getGlobalList() { return globalList; }
 
   protected:
 
@@ -64,8 +66,8 @@ namespace Scene
 
     std::string name;
 
-    // entity list
-    Entities::EntityList* entityList;
+    // entity list of all entities in the scene so we can collision check
+    Entities::EntityList* globalList;
     // entity factory
     Entities::EntityFactory* factory;
 

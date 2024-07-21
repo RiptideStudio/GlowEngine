@@ -45,7 +45,8 @@ namespace Graphics
     // frame updates
     void beginFrame();
     void endFrame();
-    
+    void update();
+
     void createDeviceAndSwapChain();
     void loadShaders();
     void createTargetView();
@@ -87,8 +88,8 @@ namespace Graphics
     void setBackgroundColor(float color[4]);
 
     void toggleDebugMode();
-    void update();
     bool isDebugMode();
+    bool& getDebugMode() { return debug; }
 
     // set the topology with a default of trianglelist
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

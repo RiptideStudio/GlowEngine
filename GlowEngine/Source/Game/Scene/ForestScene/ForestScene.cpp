@@ -19,12 +19,12 @@ void Scene::ForestScene::init()
 {
   // player entity
   Entities::Actor* player = instanceCreateExt("Player", {0,5,0}, {1,2,1}, 0);
-  player->addComponent(new Components::BoxCollider());
-  player->addComponent(new Components::Physics());
   player->addComponent(new Game::PlayerBehavior());
   player->setHitboxSize(Vector3D(1.5,6,1.5));
 
   Entities::Entity* plane = new Entities::Entity("Plane");
+  plane->addComponent(new Components::Transform());
+  plane->addComponent(new Components::Sprite3D());
   getComponentOfType(Sprite3D, plane)->setModel("Plane");
   getComponentOfType(Sprite3D, plane)->setTextures("Leaves");
   getComponentOfType(Sprite3D, plane)->setTextureRepeat(true);
@@ -39,8 +39,11 @@ void Scene::ForestScene::init()
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
   leaves->setName("Plane Leaves");
 
-  instanceCreateExt("Monkey", { 10,5,-15 }, { 5,5,5 }, { 45,0,0 });
+  Entities::Actor* m = instanceCreateExt("Monkey", { 10,5,-15 }, { 5,5,5 }, { 45,0,0 });
+  m->setTexture("Wood");
   Entities::Actor* s = instanceCreateExt("Soup", { 10, 5, 15 }, { 3,3,3 });
+  s->setHitboxSize({ 8,8,8 });
+  s->setTexture("Wood");
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
 
   for (int i = 0; i < 25; ++i)
@@ -62,11 +65,15 @@ void Scene::ForestScene::init()
       randomScale = randomRange(1.f, 2.5f);
 
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      //instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
+      Entities::Actor* r = instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
+      r->setStatic(true);
+      r->setAnchored(true);
 
       if (j % 5 == 0)
       {
-        //instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
+        Entities::Actor* t = instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
+        t->setStatic(true);
+        t->setAnchored(true);
       }
     }
   }

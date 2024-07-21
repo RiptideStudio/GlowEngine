@@ -22,6 +22,7 @@ namespace Components
 
     // initialize
     void init();
+    void update();
 
     // we want to avoid doing this as much as possible
     void recalculateMatrix();

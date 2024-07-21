@@ -34,7 +34,6 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
 
 void Components::Transform::init()
 {
-  recalculateMatrix();
   type = ComponentType::Transform;
   name = "Transform";
 
@@ -43,17 +42,23 @@ void Components::Transform::init()
   AddVariable(CreateVariable("Rotation", &rotation));
 }
 
+void Components::Transform::update()
+{
+  if (dirty)
+  {
+    recalculateMatrix();
+  }
+}
+
 // reclaculate the world matrix
 void Components::Transform::recalculateMatrix()
 {
   // rotation matrix
-  rotation.x *= 1 / 52.7f;
-  rotation.y *= 1 / 52.7f;
-  rotation.z *= 1 / 52.7f;
+  float radianFactor = 52.3f;
 
-  Matrix rotationMatrixX = DirectX::XMMatrixRotationX(rotation.x);
-  Matrix rotationMatrixY = DirectX::XMMatrixRotationY(rotation.y);
-  Matrix rotationMatrixZ = DirectX::XMMatrixRotationZ(rotation.z);
+  Matrix rotationMatrixX = DirectX::XMMatrixRotationX(rotation.x / radianFactor);
+  Matrix rotationMatrixY = DirectX::XMMatrixRotationY(rotation.y / radianFactor);
+  Matrix rotationMatrixZ = DirectX::XMMatrixRotationZ(rotation.z / radianFactor);
   Matrix rotationMatrix = rotationMatrixX * rotationMatrixY * rotationMatrixZ;
 
   // scale matrix

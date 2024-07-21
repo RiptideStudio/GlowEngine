@@ -10,6 +10,8 @@
 #include "GameSettings.h"
 #include "Engine/GlowEngine.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
+#include "Engine/Graphics/Renderer.h"
 
 void Editor::GameSettings::update()
 {
@@ -26,4 +28,8 @@ void Editor::GameSettings::update()
 
   ImGui::PopStyleVar();
   ImGui::PopStyleColor(1);
+
+  Graphics::Renderer* renderer = EngineInstance::getEngine()->getRenderer();
+
+  ImGui::Checkbox("Debug Mode", &renderer->getDebugMode());
 }

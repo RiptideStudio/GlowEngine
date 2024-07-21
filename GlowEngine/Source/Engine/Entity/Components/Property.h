@@ -26,13 +26,18 @@ struct Variable
 	VarType value;
 	VariableType type;
 
+  // construct a new variable 
 	Variable(std::string name_, VarType val) : name(name_), value(val)
 	{
     type = determineType(val);
 	}
 
+  // create a way to display our data in ImGui
+  void display();
+
 private:
 
+  // used to define a type for switch statement use in inspector
   static VariableType determineType(const VarType& val)
   {
     return std::visit([](auto&& arg) -> VariableType {

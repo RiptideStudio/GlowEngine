@@ -19,14 +19,25 @@
 #include "Engine/Graphics/Renderer.h"
 
 // construct actors with premade components
-Entities::Actor::Actor() : Entity(),
-    isLight(false),
-    light(nullptr)
+Entities::Actor::Actor() : Entity()
+{
+  init();
+}
+
+Entities::Actor::Actor(const Entity& other) : Entity(other)
+{
+  init();
+}
+
+void Entities::Actor::init()
 {
   engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
   addComponent(new Components::BoxCollider());
   addComponent(physics = new Components::Physics());
+  addComponent(transform = new Components::Transform());
+  addComponent(sprite = new Components::Sprite3D());
+  sprite->setModel("Cube");
 }
 
 // ** Physics ** //

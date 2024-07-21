@@ -19,6 +19,9 @@ namespace Entities
   public:
 
     Actor();
+    Actor(const Entity& other);
+    virtual ~Actor() = default;
+    void init();
 
     // ** Transform ** //
     void setPosition(Vector3D pos) { transform->setPosition(pos); }

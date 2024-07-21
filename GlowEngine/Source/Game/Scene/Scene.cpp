@@ -15,6 +15,7 @@ Scene::Scene::Scene()
   engine = EngineInstance::getEngine();
   input = engine->getInputSystem();
   factory = engine->getEntityFactory();
+  globalList = new Entities::EntityList();
   addEntityList();
   name = "Scene";
 }
@@ -22,10 +23,7 @@ Scene::Scene::Scene()
 // exit a given scene
 void Scene::Scene::exit()
 {
-  for (auto& wrapper : entityLists)
-  {
-    wrapper->list->clear();
-  }
+  clear();
 }
 
 // render a scene
@@ -37,10 +35,14 @@ void Scene::Scene::render()
 // update a scene's given entities
 void Scene::Scene::updateEntities()
 {
+  // update all of our entity lists
   for (auto& wrapper : entityLists)
   {
     wrapper->list->update();
   }
+
+  // check for collisions in our global list
+  globalList->updateColliders();
 }
 
 // render a scene's entities
@@ -75,23 +77,25 @@ Entities::Actor* Scene::Scene::createEntity(
 // lets you fully customize your entity with different complexity levels
 Entities::Actor* Scene::Scene::instanceCreate(std::string name, Vector3D position)
 {
-  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
-  entityList->add(actor);
+  Entities::Actor* actor = factory->createActor(name, position);
+  add(actor);
   return actor;
 }
 
 Entities::Actor* Scene::Scene::instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation)
 {
-  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
+  Entities::Actor* actor = factory->createActor(name, position);
   actor->setScale(scale);
   actor->setRotation(rotation);
+  actor->setPosition(position);
+  actor->setModel(name);
   add(actor);
   return actor;
 }
 
 Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::string model, std::string texture, Vector3D position, Vector3D scale, Vector3D rotation)
 {
-  Entities::Actor* actor = reinterpret_cast<Entities::Actor*>(factory->createEntity(name, position));
+  Entities::Actor* actor = factory->createActor(name, position);
   actor->setScale(scale);
   actor->setRotation(rotation);
   actor->setModel(model);
@@ -104,14 +108,22 @@ Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::stri
 void Scene::Scene::add(Entities::Entity* entity)
 {
   entityLists[0]->list->add(entity);
+  globalList->add(entity);
+}
+
+void Scene::Scene::addToList(Entities::EntityList* list, Entities::Entity* ent)
+{
+  list->add(ent);
+  globalList->add(ent);
 }
 
 void Scene::Scene::clear()
 {
-  for (auto& list : entityLists)
+  for (auto& wrapper : entityLists)
   {
-    list->list->clear();
+    wrapper->list->clear();
   }
+  globalList->clear();
 }
 
 // creates a new entity wrapper given a name

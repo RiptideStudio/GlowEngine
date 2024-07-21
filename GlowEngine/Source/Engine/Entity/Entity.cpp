@@ -16,8 +16,6 @@ Entities::Entity::Entity(std::string name)
   name(name),
   destroyed(false)
 {
-  addComponent(transform = new Components::Transform());
-  addComponent(sprite = new Components::Sprite3D());
   init();
 }
 

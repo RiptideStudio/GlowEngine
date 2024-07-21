@@ -38,6 +38,7 @@ Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11Device
   io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.Fonts->AddFontFromFileTTF("Assets/Fonts/CascadiaCode.ttf", 16);
 
   // create inspector
   Editor::Inspector* inspector = new Editor::Inspector("Inspector");

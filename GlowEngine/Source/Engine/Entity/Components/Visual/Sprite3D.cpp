@@ -66,14 +66,6 @@ void Components::Sprite3D::render()
   {
     return;
   }
-  else
-  {
-    if (transform->isDirty())
-    {
-      transform->recalculateMatrix();
-    }
-  }
-
 
   // check if this sprite has a texture
   if (!textures.empty())

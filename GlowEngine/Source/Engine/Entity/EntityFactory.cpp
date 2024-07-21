@@ -31,7 +31,7 @@ Entities::EntityFactory::EntityFactory(std::string directoryPath) : System("Enti
         std::string filePath = entry.path().string();
         std::string fileType = entry.path().extension().string();
         // check that the file is a json file
-        if (fileType == ".hjson" || fileType == ".json")
+        if (fileType == ".json")
         {
           addArchetype(fileName, filePath);
         }
@@ -76,20 +76,34 @@ Entities::Entity* Entities::EntityFactory::loadEntity(std::string filePath)
   return entity;
 }
 
-// creates an actor and adds it to the scene given a name
-Entities::Entity* Entities::EntityFactory::createEntity(std::string name, Vector3D position)
+// creates an entity given a name
+Entities::Entity* Entities::EntityFactory::createEntity(std::string name, Vector3D position, EntityType type)
 {
   // if archetype was invalid, return an empty entity
   if (!archetypes[name])
+  {
+    Logger::error("Failed to create entity " + name);
     return new Entities::Entity();
+  }
 
-  // if valid, clone the entity as an actor
+  // if valid, clone the entity
   Entities::Entity* entity = new Entities::Entity(*archetypes[name]);
 
-  if (entity)
+  return entity;
+}
+
+// creates an actor given a name
+Entities::Actor* Entities::EntityFactory::createActor(std::string name, Vector3D position, EntityType type)
+{
+  // if archetype was invalid, return an empty entity
+  if (!archetypes[name])
   {
-    entity->transform->setPosition(position);
+    Logger::error("Failed to create actor " + name);
+    return new Entities::Actor();
   }
+
+  // if valid, clone the entity
+  Entities::Actor* entity = new Entities::Actor(*archetypes[name]);
 
   return entity;
 }

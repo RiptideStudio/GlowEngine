@@ -12,6 +12,9 @@
 #include "stdafx.h"
 #include "EntityList.h"
 #include "Engine/Entity/Entity.h"
+#include "Engine/GlowEngine.h"
+#include "Game/Scene/Scene.h"
+#include "Game/Scene/SceneSystem.h"
 
 // base constructor
 Entities::EntityList::EntityList()
@@ -19,6 +22,7 @@ Entities::EntityList::EntityList()
   size(0),
   name("Container")
 {
+  
 }
 
 // add a given entity to the list
@@ -37,6 +41,9 @@ void Entities::EntityList::add(Entities::Entity* entity)
 // update a list of entities
 void Entities::EntityList::update()
 {
+  // update our parent scene to the current scene
+  parentScene = EngineInstance::getEngine()->getSceneSystem()->getCurrentScene();
+
   for (auto it = activeList.begin(); it != activeList.end(); )
   {
     // check for destroyed entities
@@ -48,26 +55,13 @@ void Entities::EntityList::update()
     }
     else
     {
-      // if we have a collider, at this entity to the collider list as well
-      if ((*it)->hasComponent(Components::Component::Collider))
-      {
-        Components::Collider* col = getComponentOfType(Collider, (*it));
-
-        if (!col->isStatic())
-        {
-          nonStaticList.push_back((*it));
-        }
-        colliderList.push_back((*it));
-      }
-
       // update the entity and increment the iterator
       (*it)->update();
       ++it;
+
+
     }
   }
-
-  // update all entities in the active list
-  checkCollisions();
 
   // destroy entities
   for (auto& entity : destroyList)
@@ -76,6 +70,15 @@ void Entities::EntityList::update()
     delete entity;
   }
   destroyList.clear();
+}
+
+// this function is used to update our global list and check for collisions
+void Entities::EntityList::updateColliders()
+{
+  checkCollisions();
+
+  colliderList.clear();
+  nonStaticList.clear();
 }
 
 // update a list of entities

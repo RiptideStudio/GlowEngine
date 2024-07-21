@@ -70,7 +70,7 @@ namespace Components
     bool dirty = true;
 
     // static colliders are not checked against any other static colliders
-    bool colliderIsStatic = true;
+    bool colliderIsStatic = false;
 
     // debug drawing 
     std::vector<unsigned> indices;

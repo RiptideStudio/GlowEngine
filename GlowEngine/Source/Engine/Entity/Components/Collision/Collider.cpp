@@ -24,14 +24,19 @@ void Components::Collider::update()
   // if we dont have a physics object, auto-mark as a static collider
   // if we do, and it's not anchored, then we are a moving collider
   Components::Physics* physics = getComponentOfType(Physics, parent);
+  Components::Transform* transform = getComponentOfType(Transform, parent);
 
+  // if we have no physics, no point in being not static
   if (!physics)
   {
     colliderIsStatic = true;
   }
-  else if (!physics->isAnchored())
+
+  // autosize will scale our collider
+  if (autoSize)
   {
-    colliderIsStatic = false;
+    calculateScale();
+    meshScale = scale / parent->transform->getScale();
   }
 }
 

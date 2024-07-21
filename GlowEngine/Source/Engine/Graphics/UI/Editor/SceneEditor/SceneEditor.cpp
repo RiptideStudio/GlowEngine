@@ -77,13 +77,12 @@ void Editor::SceneEditor::interact()
 	// create a new object
 	if (ImGui::BeginPopup("NewObject"))
 	{
-		if (ImGui::MenuItem("Create New Object"))
+		if (ImGui::MenuItem("Add New Object"))
 		{
 			if (selectedContainer)
 			{
 				Entities::Actor* ent = new Entities::Actor();
-				ent->setModel("Cube");
-				selectedContainer->list->add(ent);
+				currentScene->addToList(selectedContainer->list, ent);
 			}
 		}
 		ImGui::EndPopup();

@@ -12,6 +12,7 @@
 
 namespace Entities
 {
+
   class EntityFactory : public Systems::System
   {
 
@@ -27,7 +28,8 @@ namespace Entities
     Entities::Entity* loadEntity(std::string name);
 
     // create an entity and add it to the active scene (using loadEntity())
-    Entities::Entity* createEntity(std::string name, Vector3D position);
+    Entities::Entity* createEntity(std::string name, Vector3D position, EntityType type = EntityType::Entity);
+    Entities::Actor* createActor(std::string name, Vector3D position, EntityType type = EntityType::Entity);
 
   private:
 
