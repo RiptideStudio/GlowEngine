@@ -108,13 +108,11 @@ Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::stri
 void Scene::Scene::add(Entities::Entity* entity)
 {
   entityLists[0]->list->add(entity);
-  globalList->add(entity);
 }
 
 void Scene::Scene::addToList(Entities::EntityList* list, Entities::Entity* ent)
 {
   list->add(ent);
-  globalList->add(ent);
 }
 
 void Scene::Scene::clear()

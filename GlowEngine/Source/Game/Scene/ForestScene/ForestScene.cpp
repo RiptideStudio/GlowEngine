@@ -20,7 +20,7 @@ void Scene::ForestScene::init()
   // player entity
   Entities::Actor* player = instanceCreateExt("Player", {0,5,0}, {1,2,1}, 0);
   player->addComponent(new Game::PlayerBehavior());
-  player->setHitboxSize(Vector3D(1.5,6,1.5));
+  player->setHitboxSize(Vector3D(1,6,1));
 
   Entities::Entity* plane = new Entities::Entity("Plane");
   plane->addComponent(new Components::Transform());
@@ -55,7 +55,7 @@ void Scene::ForestScene::init()
       float randomScale = randomRange(1.5f, 2.f);
 
       float y = -10;
-      Vector3D randomPos = { randomX,y,randomZ };
+      Vector3D randomPos = { randomX,-3,randomZ };
       randomX = randomRange(-500, 500);
       randomZ = randomRange(-500, 500);
       Vector3D randomPos2 = { randomX,y,randomZ };
@@ -74,6 +74,7 @@ void Scene::ForestScene::init()
         Entities::Actor* t = instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
         t->setStatic(true);
         t->setAnchored(true);
+        t->setHitboxSize({ 2,8,2 });
       }
     }
   }

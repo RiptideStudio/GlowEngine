@@ -50,16 +50,27 @@ void Entities::EntityList::update()
     if ((*it)->isDestroyed())
     {
       destroyList.push_back(*it);
+
       // erase the entity from the active list and get the new iterator position
       it = activeList.erase(it);
     }
     else
     {
+      // add colliders to a separate list for update
+      Components::Collider* col = getComponentOfType(Collider, (*it));
+
+      if (col)
+      {
+        if (!col->isStatic())
+        {
+          parentScene->getGlobalList()->getNonStaticList().push_back((*it));
+        }
+        parentScene->getGlobalList()->getColliderList().push_back((*it));
+      }
+
       // update the entity and increment the iterator
       (*it)->update();
       ++it;
-
-
     }
   }
 
@@ -75,6 +86,9 @@ void Entities::EntityList::update()
 // this function is used to update our global list and check for collisions
 void Entities::EntityList::updateColliders()
 {
+  if (colliderList.empty())
+    return;
+
   checkCollisions();
 
   colliderList.clear();

@@ -30,6 +30,7 @@ void Editor::GameSettings::update()
   ImGui::PopStyleColor(1);
 
   Graphics::Renderer* renderer = EngineInstance::getEngine()->getRenderer();
+  ImGui::SameLine();
 
   ImGui::Checkbox("Debug Mode", &renderer->getDebugMode());
 }

@@ -102,6 +102,7 @@ void Entities::Actor::setHitboxSize(Vector3D size)
   if (collider)
   {
     collider->setHitboxSize(size);
+    collider->setAutoSize(false);
   }
 }
 
