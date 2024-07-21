@@ -15,7 +15,7 @@
 #include "Engine/Graphics/Textures/Texture.h"
 #include "Engine/Graphics/Window/Window.h"
 #include "Engine/Graphics/Textures/stb_image.h"
-#include "UI/ImGui/GlowGui.h"
+#include "UI/Editor/GlowGui.h"
 #include "Shaders/ShaderManager.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include <filesystem>

@@ -7,6 +7,7 @@
 */
 
 #pragma once
+#include "Property.h"
 
 namespace Entities
 {
@@ -59,15 +60,25 @@ namespace Components
 
       Entities::Entity* parent;
 
+      // add a variable to be modified in the editor
+      void AddVariable(Variable var) { variables.push_back(var); }
+
+      // get the variables vector
+      std::vector<Variable>& getVariables() { return variables; }
+
     protected:
       
       // component identifiers
       std::string name;
+      // type of component
       ComponentType type;
       // if this component should be updated
-      bool active = false;
+      bool active = true;
       // priority determines order of update
       int priority = 0;
+
+      // components have a list of variables we expose to the editor
+      std::vector<Variable> variables;
       
   };
 

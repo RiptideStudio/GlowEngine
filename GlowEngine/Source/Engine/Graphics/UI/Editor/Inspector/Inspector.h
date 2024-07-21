@@ -7,14 +7,14 @@
 */
 
 #pragma once
-#include "Engine/Graphics/UI/ImGui/Widget.h"
+#include "Engine/Graphics/UI/Editor/Widget.h"
 
 namespace Entities
 {
   class Entity;
 }
 
-namespace UI
+namespace Editor
 {
   class Inspector : public Widget
   {

@@ -29,8 +29,11 @@
     <ClInclude Include="Source\Engine\Entity\Components\Component.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Physical\Physics.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Physical\Transform.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Property.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Animation\Bone.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Models\Model.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Models\ModelLibrary.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Sprite3D.h" />
     <ClInclude Include="Source\Engine\Entity\Entity.h" />
     <ClInclude Include="Source\Engine\Entity\EntityFactory.h" />
@@ -44,26 +47,20 @@
     <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\Mesh.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\MeshLibrary.h" />
-    <ClInclude Include="Source\Engine\Graphics\Models\Model.h" />
-    <ClInclude Include="Source\Engine\Graphics\Models\ModelLibrary.h" />
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
     <ClInclude Include="Source\Engine\Graphics\Shaders\Shader.h" />
     <ClInclude Include="Source\Engine\Graphics\Shaders\ShaderManager.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\stb_image.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imconfig.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_internal.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_rectpack.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_textedit.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_truetype.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\GlowGui.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.h" />
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Widget.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Console\Console.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\GlowGui.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Inspector\Inspector.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Resources\Resources.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\SceneEditor\SceneEditor.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Settings\GameSettings.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Settings\Settings.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Widget.h" />
     <ClInclude Include="Source\Engine\Graphics\Window\Window.h" />
     <ClInclude Include="Source\Engine\Math\GlowMath.h" />
     <ClInclude Include="Source\Engine\Math\Lerp.h" />
@@ -79,6 +76,14 @@
     <ClInclude Include="Source\Game\Scene\SceneSystem.h" />
     <ClInclude Include="Source\Game\System\System.h" />
     <ClInclude Include="Source\Game\System\SystemInstance.h" />
+    <ClInclude Include="Source\Include\ImGui\imconfig.h" />
+    <ClInclude Include="Source\Include\ImGui\imgui.h" />
+    <ClInclude Include="Source\Include\ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="Source\Include\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="Source\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="Source\Include\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="Source\Include\ImGui\imstb_textedit.h" />
+    <ClInclude Include="Source\Include\ImGui\imstb_truetype.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stubs\stub.h" />
     <ClInclude Include="Source\Windows\Resource.h" />
@@ -101,8 +106,11 @@
     <ClCompile Include="Source\Engine\Entity\Components\Physical\Transform.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Property.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Animation3D.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Visual\Animation\Bone.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Models\Model.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Models\ModelLibrary.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Visual\Sprite3D.cpp" />
     <ClCompile Include="Source\Engine\Entity\Entity.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -123,10 +131,6 @@
     <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\Mesh.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\MeshLibrary.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\Models\Model.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\Models\ModelLibrary.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -134,31 +138,14 @@
     <ClCompile Include="Source\Engine\Graphics\Shaders\ShaderManager.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_demo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_draw.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_tables.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_widgets.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\GlowGui.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.cpp" />
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Widget.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Console\Console.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\GlowGui.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Inspector\Inspector.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Resources\Resources.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\SceneEditor\SceneEditor.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Settings\GameSettings.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Settings\Settings.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Widget.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Window\Window.cpp" />
     <ClCompile Include="Source\Engine\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -186,6 +173,27 @@
     <ClCompile Include="Source\Game\Scene\SceneSystem.cpp" />
     <ClCompile Include="Source\Game\System\System.cpp" />
     <ClCompile Include="Source\Game\System\SystemInstance.cpp" />
+    <ClCompile Include="Source\Include\ImGui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -357,7 +365,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mt.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
@@ -392,7 +400,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mt.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>

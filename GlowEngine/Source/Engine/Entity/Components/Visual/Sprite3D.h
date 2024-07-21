@@ -7,6 +7,7 @@
 */
 
 #pragma once
+#include "Engine/Entity/Components/Component.h"
 
 namespace Graphics
 {
@@ -46,9 +47,6 @@ namespace Components
     void setTextures(std::string singleTextureName);
     // set a texuture to repeat
     void setTextureRepeat(bool val);
-
-    // ImGui
-    void inspect();
 
     // get the model
     Models::Model* getModel();

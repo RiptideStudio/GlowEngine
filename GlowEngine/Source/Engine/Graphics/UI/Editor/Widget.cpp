@@ -9,7 +9,7 @@
 #include "stdafx.h"
 #include "Widget.h"
 
-UI::Widget::Widget(std::string title_, std::string desc, ImGuiWindowFlags flags_)
+Editor::Widget::Widget(std::string title_, std::string desc, ImGuiWindowFlags flags_)
   :
   title(title_),
   description(desc),
@@ -19,7 +19,7 @@ UI::Widget::Widget(std::string title_, std::string desc, ImGuiWindowFlags flags_
 }
 
 // main update frame, calls render of all elements
-void UI::Widget::renderFrame()
+void Editor::Widget::renderFrame()
 {
   if (!loaded)
   {
@@ -33,12 +33,12 @@ void UI::Widget::renderFrame()
 }
 
 // called on all widgets
-void UI::Widget::beginFrame()
+void Editor::Widget::beginFrame()
 {
   ImGui::Begin(title.c_str(), nullptr, flags);
 }
 
-void UI::Widget::endFrame()
+void Editor::Widget::endFrame()
 {
   ImGui::Text(description.c_str());
   ImGui::End();

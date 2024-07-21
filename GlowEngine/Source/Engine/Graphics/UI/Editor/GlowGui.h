@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace UI
+namespace Editor
 {
   class Widget;
 }
@@ -44,7 +44,7 @@ namespace Graphics
     float xPadding = 16;
     float yPadding = 16;
 
-    std::vector<UI::Widget*> widgets;
+    std::vector<Editor::Widget*> widgets;
     ImGuiWindowFlags gameWindowFlags = ImGuiWindowFlags_NoBackground |
       ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar |
       ImGuiWindowFlags_NoScrollWithMouse;

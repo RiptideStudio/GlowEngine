@@ -13,9 +13,12 @@
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Graphics/Window/Window.h"
-#include "Engine/Graphics/UI/ImGui/Widget.h"
-#include "Engine/Graphics/UI/ImGui/Inspector/Inspector.h"
-#include "Engine/Graphics/UI/ImGui/SceneEditor/SceneEditor.h"
+#include "Engine/Graphics/UI/Editor/Widget.h"
+#include "Engine/Graphics/UI/Editor/Inspector/Inspector.h"
+#include "Engine/Graphics/UI/Editor/SceneEditor/SceneEditor.h"
+#include "Engine/Graphics/UI/Editor/Settings/Settings.h"
+#include "Engine/Graphics/UI/Editor/Console/Console.h"
+#include "Engine/Graphics/UI/Editor/Resources/Resources.h"
 
 Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11DeviceContext* context, Graphics::Renderer* renderer)
   :
@@ -37,10 +40,19 @@ Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11Device
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
   // create inspector
-  UI::Inspector* inspector = new UI::Inspector("Inspector");
+  Editor::Inspector* inspector = new Editor::Inspector("Inspector");
   widgets.push_back(inspector);
+  // create settings
+  Editor::Settings* settings = new Editor::Settings("Settings");
+  widgets.push_back(settings);
+  // create console window
+  Editor::Console* console = new Editor::Console("Console");
+  widgets.push_back(console);
+  // create resources window
+  Editor::Resources* resources = new Editor::Resources("Resources");
+  widgets.push_back(resources);
   // create scene editor
-  UI::SceneEditor* editor = new UI::SceneEditor("Scene Editor");
+  Editor::SceneEditor* editor = new Editor::SceneEditor("Scene Editor");
   editor->inspector = inspector;
   widgets.push_back(editor);
 }
@@ -53,27 +65,24 @@ void Graphics::GlowGui::beginUpdate()
   ImGui::NewFrame();
 
   // Create a docking space
-  ImGuiIO& io = ImGui::GetIO();
   ImVec2 size = { (float)renderer->getWindow()->getWidth(), (float)renderer->getWindow()->getHeight() };
 
-  if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-  {
-    // define the main viewport of ImGui
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->Pos);
-    ImGui::SetNextWindowSize(size);
-    ImGui::SetNextWindowViewport(viewport->ID);
+  // define the main viewport of ImGui
+  ImGuiViewport* viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(viewport->Pos);
+  ImGui::SetNextWindowSize(size);
+  ImGui::SetNextWindowViewport(viewport->ID);
 
-    // define the flags for docking space
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-      ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-      ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+  // define the flags for docking space
+  ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+    ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+    ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
-    ImGui::Begin("DockSpace", nullptr, window_flags);
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    ImGui::DockSpace(dockspace_id);
-    ImGui::End();
-  }
+  // create docking space
+  ImGui::Begin("DockSpace", nullptr, window_flags);
+  ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+  ImGui::DockSpace(dockspace_id);
+  ImGui::End();
 }
 
 // anything called between the begin and end update is rendered
@@ -100,31 +109,6 @@ void Graphics::GlowGui::update()
   {
     widget->renderFrame();
   }
-
-  // Create another additional dockable window
-  ImGui::Begin("Game Settings", nullptr, ImGuiWindowFlags_NoCollapse);
-  ID3D11ShaderResourceView** r = EngineInstance::getEngine()->getTextureLibrary()->get("PlayButton")->getTextureView();
-
-  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0)); // Transparent button background
-  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0)); // No padding
-
-  if (ImGui::ImageButton((void*)(*r), {64,64}))
-  {
-    EngineInstance::getEngine()->getInputSystem()->setFocus(!EngineInstance::getEngine()->getInputSystem()->isFocused());
-  }
-  ImGui::PopStyleVar();
-  ImGui::PopStyleColor(1);
-  ImGui::End();
-
-  // Create another additional dockable window
-  ImGui::Begin("Console", nullptr, ImGuiWindowFlags_NoCollapse);
-  ImGui::Text("This is the Console window.");
-  ImGui::End();
-
-  // Create another additional dockable window
-  ImGui::Begin("Resources", nullptr, ImGuiWindowFlags_NoCollapse);
-  ImGui::Text("This is the Console window.");
-  ImGui::End();
 
   // finish drawing
   endUpdate();

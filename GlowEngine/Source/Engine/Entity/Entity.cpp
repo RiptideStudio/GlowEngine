@@ -18,6 +18,7 @@ Entities::Entity::Entity(std::string name)
 {
   addComponent(transform = new Components::Transform());
   addComponent(sprite = new Components::Sprite3D());
+  init();
 }
 
 // copy constructor for entity
@@ -39,6 +40,7 @@ Entities::Entity::Entity(const Entity& other)
   transform = getComponentOfType(Transform, this);
   sprite = getComponentOfType(Sprite3D, this);
   physics = getComponentOfType(Physics, this);
+  init();
 }
 
 // virtual destructor for entities
@@ -60,6 +62,12 @@ void Entities::Entity::load(const nlohmann::json& data)
   {
     component->load(data);
   }
+}
+
+void Entities::Entity::init()
+{
+  AddVariable(CreateVariable("Visible", &visible));
+  AddVariable(CreateVariable("Name", &name));
 }
 
 // update all the components of an entity

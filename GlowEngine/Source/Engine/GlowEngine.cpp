@@ -10,7 +10,7 @@
 #include "GlowEngine.h"
 #include "Game/Scene/Scene.h"
 #include "Engine/Graphics/Renderer.h"
-#include "Engine/Graphics/Models/ModelLibrary.h"
+#include "Engine/Entity/Components/Visual/Models/ModelLibrary.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include "Game/Scene/SceneSystem.h"
 #include "Engine/Graphics/Window/Window.h"

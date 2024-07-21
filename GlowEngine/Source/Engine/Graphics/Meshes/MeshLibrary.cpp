@@ -10,7 +10,7 @@
 #include "MeshLibrary.h"
 #include "Engine/Graphics/Meshes/Mesh.h"
 #include "Engine/Graphics/Renderer.h"
-#include "Engine/Graphics/Models/ModelLibrary.h"
+#include "Engine/Entity/Components/Visual/Models/ModelLibrary.h"
 #include "Engine/GlowEngine.h"
 
 // add a mesh to the library

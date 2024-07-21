@@ -12,20 +12,20 @@
 #include "Engine/Entity/EntityList/EntityList.h"
 #include "Engine/GlowEngine.h"
 #include "Game/Scene/SceneSystem.h"
-#include "Engine/Graphics/UI/ImGui/Inspector/Inspector.h"
+#include "Engine/Graphics/UI/Editor/Inspector/Inspector.h"
 
-UI::SceneEditor::SceneEditor(std::string title, std::string desc, ImGuiWindowFlags flags) : Widget(title, desc, flags)
+Editor::SceneEditor::SceneEditor(std::string title, std::string desc, ImGuiWindowFlags flags) : Widget(title, desc, flags)
 {
 
 }
 
-void UI::SceneEditor::init()
+void Editor::SceneEditor::init()
 {
 	sceneSystem = EngineInstance::getEngine()->getSceneSystem();
 	currentScene = sceneSystem->getCurrentScene();
 }
 
-void UI::SceneEditor::update()
+void Editor::SceneEditor::update()
 {
 	// add containers, move them around
 	interact();
@@ -58,10 +58,11 @@ void UI::SceneEditor::update()
 			// display each entity in the container
 			for (const auto& entity : container->getEntities())
 			{
+				// click on the entity to inspect it 
 				if (ImGui::Selectable(entity->getName().c_str()))
 				{
 					selectedEntity = entity;
-					inspector->inspect(entity);
+					inspector->inspect(entity); // set the inspector
 				}
 			}
 
@@ -71,7 +72,7 @@ void UI::SceneEditor::update()
 }
 
 // used to add new entity containers to the scene hierarchy when we right click
-void UI::SceneEditor::interact()
+void Editor::SceneEditor::interact()
 {
 	// create a new object
 	if (ImGui::BeginPopup("NewObject"))

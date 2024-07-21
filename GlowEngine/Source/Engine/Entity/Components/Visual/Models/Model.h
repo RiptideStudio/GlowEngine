@@ -77,7 +77,8 @@ namespace Models
     const int& getObjects() { return objects; }
     // set the name and get the name
     const void setName(std::string newName) { name = newName; }
-    const std::string getName() { return name; }
+    const std::string getName() const { return name; }
+    std::string& getName() { return name; }
 
     // get the model's buffer index
     ID3D11Buffer* getVertexBuffer(int index);

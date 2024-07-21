@@ -8,7 +8,7 @@
 
 #pragma once
 
-static enum class ShaderType
+enum class ShaderType
 {
   Pixel,
   Vertex

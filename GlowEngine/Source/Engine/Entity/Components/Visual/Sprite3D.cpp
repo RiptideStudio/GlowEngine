@@ -49,10 +49,12 @@ void Components::Sprite3D::init()
 {
   model = new Models::Model();
   texture = nullptr;
-  type = ComponentType::Sprite3D;
+  type = Components::Component::Sprite3D;
   name = "Sprite-3D";
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
+
+  AddVariable(CreateVariable("Model", &model->getName()));
 }
 
 // render a Sprite3D's model
@@ -167,11 +169,6 @@ void Components::Sprite3D::setTextures(std::string singleTextureName)
 void Components::Sprite3D::setTextureRepeat(bool val)
 {
   repeatTexture = val;
-}
-
-void Components::Sprite3D::inspect()
-{
-  ImGui::Text(("Model: "+model->getName()).c_str());
 }
 
 // get the Sprite3D's model

@@ -47,7 +47,7 @@ using namespace GlowMath;
 #include "Engine/Audio/SoundSystem.h"
 
 // components
-#include "Engine/Graphics/Models/Model.h"
+#include "Engine/Entity/Components/Visual/Models/Model.h"
 #include "Engine/Entity/Components/Physical/Transform.h"
 #include "Engine/Entity/Components/Visual/Sprite3D.h"
 #include "Engine/Entity/Components/Component.h"
@@ -55,11 +55,12 @@ using namespace GlowMath;
 #include "Engine/Entity/Components/Collision/Collider.h"
 #include "Engine/Entity/Components/Collision/BoxCollider.h"
 #include "Engine/Entity/Actor.h"
+#include "Engine/Entity/Components/Property.h"
 
 // ImGui
-#include "Engine/Graphics/UI/ImGuiFiles/imgui.h"
-#include "Engine/Graphics/UI/ImGuiFiles/imgui_impl_win32.h"
-#include "Engine/Graphics/UI/ImGuiFiles/imgui_impl_dx11.h"
+#include "Include/ImGui/imgui.h"
+#include "Include/ImGui/imgui_impl_win32.h"
+#include "Include/ImGui/imgui_impl_dx11.h"
 
 // graphics
 #include "Engine/Graphics/Color/Color.h"

@@ -7,7 +7,7 @@
 */
 
 #pragma once
-#include "Engine/Graphics/UI/ImGui/Widget.h"
+#include "Engine/Graphics/UI/Editor/Widget.h"
 
 
 namespace Entities
@@ -16,7 +16,7 @@ namespace Entities
   class EntityListWrapper;
 }
 
-namespace UI
+namespace Editor
 {
   class Inspector; // forward declare
 
@@ -32,7 +32,7 @@ namespace UI
     void interact();
 
     // other widgets we want access to
-    UI::Inspector* inspector;
+    Editor::Inspector* inspector;
 
   private:
 

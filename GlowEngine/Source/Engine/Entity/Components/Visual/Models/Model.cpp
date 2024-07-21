@@ -11,7 +11,7 @@
 #include "Engine/GlowEngine.h"
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Systems/Parsing/ObjectLoader.h"
-#include "Engine/Graphics/Models/ModelLibrary.h"
+#include "Engine/Entity/Components/Visual/Models/ModelLibrary.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include "Engine/Graphics/Meshes/MeshLibrary.h"
 #include "Engine/Graphics/Meshes/Mesh.h"
@@ -205,7 +205,7 @@ void Models::Model::render()
   deviceContext->IASetIndexBuffer(indexBuffers[getModelNames()[objectIndex]], DXGI_FORMAT_R16_UINT, 0);
 
   // draw the triangle
-  deviceContext->DrawIndexed(modelIndices[getModelNames()[objectIndex]].size(), 0, 0);
+  deviceContext->DrawIndexed((UINT)modelIndices[getModelNames()[objectIndex]].size(), 0, 0);
 
   // unbind the texture
   renderer->unBindTexture();

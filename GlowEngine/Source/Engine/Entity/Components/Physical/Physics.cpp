@@ -19,8 +19,13 @@ Components::Physics::Physics()
   gravity = 35.f;
   priority = 1;
   targetVelocity = { 0,0,0 };
-  type = ComponentType::Physics;
+  type = Components::Component::Physics;
   name = "Physics";
+
+  AddVariable(CreateVariable("Gravity", &gravity));
+  AddVariable(CreateVariable("Acceleration", &acceleration));
+  AddVariable(CreateVariable("Velocity", &velocity));
+  AddVariable(CreateVariable("Maximum Velocity", &maxVelocity));
 }
 
 void Components::Physics::setVelocity(Vector3D vel)

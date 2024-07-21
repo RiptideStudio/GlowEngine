@@ -16,8 +16,12 @@ namespace Components
   {
 
   public:
+
     Transform();
     Transform(Vector3D pos_, Vector3D scale_, Vector3D rotation_);
+
+    // initialize
+    void init();
 
     // we want to avoid doing this as much as possible
     void recalculateMatrix();
@@ -28,14 +32,8 @@ namespace Components
 
     Components::Transform* clone();
 
-    // anchored transforms do not move, and so they calculate their world matrix once and only once
-    bool isAnchored() { return anchored; }
-    // set a transform to be anchored
-    void setAnchored(bool val) { anchored = val; }
     // set dirty
     void setDirty(bool val) { dirty = val; }
-    // inspect
-    void inspect();
 
     // position
     void setPosition(Vector3D pos) { position = pos; dirty = true; }
@@ -63,7 +61,6 @@ namespace Components
     Matrix transformMatrix;
 
     bool dirty;
-    bool anchored;
 
   };
 

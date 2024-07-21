@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace UI
+namespace Editor
 {
 
   class Widget

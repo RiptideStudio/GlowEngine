@@ -43,8 +43,6 @@ void Scene::ForestScene::init()
   Entities::Actor* s = instanceCreateExt("Soup", { 10, 5, 15 }, { 3,3,3 });
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
 
-  Audio::playSound("Sunset");
-
   for (int i = 0; i < 25; ++i)
   {
     for (int j = 0; j < 25; ++j)
@@ -64,11 +62,11 @@ void Scene::ForestScene::init()
       randomScale = randomRange(1.f, 2.5f);
 
       Vector3D scale = { randomScale ,randomScale ,randomScale };
-      instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
+      //instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
 
       if (j % 5 == 0)
       {
-        instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
+        //instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
       }
     }
   }

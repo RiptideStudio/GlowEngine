@@ -57,9 +57,6 @@
     <Filter Include="Source Files\Engine\Entity\EntityList">
       <UniqueIdentifier>{8a1e5d0c-42e6-4528-973b-ede6e4014687}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Graphics\Models">
-      <UniqueIdentifier>{9d1d2d1d-d856-4e73-9912-743408b81327}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Entity\Components\Visual">
       <UniqueIdentifier>{6b43ca13-c8b0-4091-943f-1e20e7d8ce15}</UniqueIdentifier>
     </Filter>
@@ -96,9 +93,6 @@
     <Filter Include="Source Files\Engine\Graphics\UI">
       <UniqueIdentifier>{ec6c87c1-e2b5-444b-86c1-033bc360666f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Graphics\UI\ImGuiFiles">
-      <UniqueIdentifier>{616939ed-f3de-444b-a3e3-f0dbfe530f82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Engine\Graphics\Color">
       <UniqueIdentifier>{ed55f887-ad08-46c9-8d57-fbef40dd67ba}</UniqueIdentifier>
     </Filter>
@@ -111,14 +105,32 @@
     <Filter Include="Source Files\Engine\Graphics\Shaders">
       <UniqueIdentifier>{5bed3113-5f01-44b0-bc50-7c6837450d9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Graphics\UI\ImGui">
+    <Filter Include="Source Files\Engine\Entity\Components\Visual\Models">
+      <UniqueIdentifier>{9d1d2d1d-d856-4e73-9912-743408b81327}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Include">
+      <UniqueIdentifier>{60dd13eb-93b5-4f18-8550-94e1589b0fd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Include\ImGui">
+      <UniqueIdentifier>{6a6b6943-964e-4f26-b7ac-d5cec44f8ca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\UI\Editor">
       <UniqueIdentifier>{e672f0dd-47ee-421f-a5a7-a22223406fb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Graphics\UI\ImGui\Inspector">
+    <Filter Include="Source Files\Engine\Graphics\UI\Editor\Inspector">
       <UniqueIdentifier>{4aa15977-6e2a-400b-bed1-16f19d2f3dd6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Graphics\UI\ImGui\SceneEditor">
+    <Filter Include="Source Files\Engine\Graphics\UI\Editor\SceneEditor">
       <UniqueIdentifier>{fbdced23-01ae-48f2-8231-8296fec5c5c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\UI\Editor\Console">
+      <UniqueIdentifier>{ab4679a4-d27d-483e-b1e3-4da944d73f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\UI\Editor\Resources">
+      <UniqueIdentifier>{bdc8541c-8a8c-4e42-b15e-f9cb9f1911ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics\UI\Editor\Settings">
+      <UniqueIdentifier>{016b677d-541e-48fd-9b57-a7cd443f70b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,12 +184,6 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Systems\Parsing\ObjectLoader.h">
       <Filter>Source Files\Engine\Systems\Parsing</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\Models\Model.h">
-      <Filter>Source Files\Engine\Graphics\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\Models\ModelLibrary.h">
-      <Filter>Source Files\Engine\Graphics\Models</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\Entity\Components\Visual\Sprite3D.h">
       <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
@@ -242,30 +248,6 @@
     <ClInclude Include="Source\Engine\Entity\Components\Collision\BoxCollider.h">
       <Filter>Source Files\Engine\Entity\Components\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imconfig.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_internal.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_rectpack.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_textedit.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imstb_truetype.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Entity\EntityFactory.h">
       <Filter>Source Files\Engine\Entity</Filter>
     </ClInclude>
@@ -302,17 +284,62 @@
     <ClInclude Include="Source\Engine\Global.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\GlowGui.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui</Filter>
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Models\Model.h">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Models</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Widget.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui</Filter>
+    <ClInclude Include="Source\Engine\Entity\Components\Visual\Models\ModelLibrary.h">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Models</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui\Inspector</Filter>
+    <ClInclude Include="Source\Include\ImGui\imconfig.h">
+      <Filter>Source Files\Include\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.h">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui\SceneEditor</Filter>
+    <ClInclude Include="Source\Include\ImGui\imgui.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\ImGui\imgui_impl_dx11.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\ImGui\imgui_impl_win32.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\ImGui\imgui_internal.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\ImGui\imstb_rectpack.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\ImGui\imstb_textedit.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Include\ImGui\imstb_truetype.h">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\GlowGui.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Widget.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Inspector\Inspector.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\SceneEditor\SceneEditor.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\SceneEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Settings\GameSettings.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Console\Console.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Resources\Resources.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Settings\Settings.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Property.h">
+      <Filter>Source Files\Engine\Entity\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -363,12 +390,6 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Parsing\ObjectLoader.cpp">
       <Filter>Source Files\Engine\Systems\Parsing</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\Models\Model.cpp">
-      <Filter>Source Files\Engine\Graphics\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\Models\ModelLibrary.cpp">
-      <Filter>Source Files\Engine\Graphics\Models</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Entity\Components\Visual\Sprite3D.cpp">
       <Filter>Source Files\Engine\Entity\Components\Visual</Filter>
@@ -427,27 +448,6 @@
     <ClCompile Include="Source\Engine\Entity\Components\Collision\BoxCollider.cpp">
       <Filter>Source Files\Engine\Entity\Components\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_demo.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_draw.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_tables.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_widgets.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_dx11.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGuiFiles\imgui_impl_win32.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGuiFiles</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Entity\EntityFactory.cpp">
       <Filter>Source Files\Engine\Entity</Filter>
     </ClCompile>
@@ -481,17 +481,59 @@
     <ClCompile Include="Source\Engine\Graphics\Shaders\ShaderManager.cpp">
       <Filter>Source Files\Engine\Graphics\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\GlowGui.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui</Filter>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Models\Model.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Models</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Widget.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui</Filter>
+    <ClCompile Include="Source\Engine\Entity\Components\Visual\Models\ModelLibrary.cpp">
+      <Filter>Source Files\Engine\Entity\Components\Visual\Models</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\Inspector\Inspector.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui\Inspector</Filter>
+    <ClCompile Include="Source\Include\ImGui\imgui.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Graphics\UI\ImGui\SceneEditor\SceneEditor.cpp">
-      <Filter>Source Files\Engine\Graphics\UI\ImGui\SceneEditor</Filter>
+    <ClCompile Include="Source\Include\ImGui\imgui_demo.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_draw.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_impl_dx11.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_impl_win32.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_tables.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Include\ImGui\imgui_widgets.cpp">
+      <Filter>Source Files\Include\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\GlowGui.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Widget.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Inspector\Inspector.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\SceneEditor\SceneEditor.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\SceneEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Settings\GameSettings.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Console\Console.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Resources\Resources.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Settings\Settings.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Property.cpp">
+      <Filter>Source Files\Engine\Entity\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

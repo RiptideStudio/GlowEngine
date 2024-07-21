@@ -16,12 +16,9 @@ Components::Transform::Transform()
   position({ 0, 0, 10 }),
   scale({ 1, 1, 1}),
   rotation({ 0,0,0 }),
-  dirty(true),
-  anchored(false)
+  dirty(true)
 {
-  recalculateMatrix();
-  type = ComponentType::Transform;
-  name = "Transform";
+  init();
 }
 
 // initialize the transform with position, scale, and rotation
@@ -30,11 +27,20 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
   position(pos_),
   scale(scale_),
   rotation(rotation_),
-  dirty(true),
-  anchored(false)
+  dirty(true)
+{
+  init();
+}
+
+void Components::Transform::init()
 {
   recalculateMatrix();
   type = ComponentType::Transform;
+  name = "Transform";
+
+  AddVariable(CreateVariable("Position", &position));
+  AddVariable(CreateVariable("Scale", &scale));
+  AddVariable(CreateVariable("Rotation", &rotation));
 }
 
 // reclaculate the world matrix
@@ -81,9 +87,3 @@ Components::Transform* Components::Transform::clone()
   return transform;
 }
 
-void Components::Transform::inspect()
-{
-  ImGui::SliderFloat("X", &position.x, position.x - 10, position.x + 10);
-  ImGui::SliderFloat("Y", &position.y, position.y - 10, position.y + 10);
-  ImGui::SliderFloat("Z", &position.z, position.z - 10, position.z + 10);
-}
