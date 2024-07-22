@@ -31,8 +31,8 @@ namespace Editor
     void update();
     void interact();
 
-    // other widgets we want access to
-    Editor::Inspector* inspector;
+    // avoid duplicate logic
+    void DragContainer(Entities::EntityListWrapper*, int);
 
   private:
 

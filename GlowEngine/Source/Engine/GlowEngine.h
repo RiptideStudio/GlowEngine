@@ -90,13 +90,19 @@ namespace Engine
 
     // core engine properties (fps, delta time)
     bool running;
-    int fps;
-    int totalFrames;
-    int frameTime;
-    float deltaTime;
     HWND windowHandle;
 
     // if we are in play mode
     bool playing;
+
+    // statistics
+    float totalTime;
+    float frameCount;
+    float fpsTimer;
+    int fps;
+    int totalFrames;
+    int frameTime;
+    float deltaTime;
+
   };
 }

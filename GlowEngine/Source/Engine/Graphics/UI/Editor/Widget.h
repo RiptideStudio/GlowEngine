@@ -8,6 +8,11 @@
 
 #pragma once
 
+namespace Graphics
+{
+  class GlowGui;
+}
+
 namespace Editor
 {
 
@@ -24,6 +29,8 @@ namespace Editor
     void renderFrame();
     void beginFrame();
     void endFrame();
+
+    Graphics::GlowGui* ui;
 
   protected:
 

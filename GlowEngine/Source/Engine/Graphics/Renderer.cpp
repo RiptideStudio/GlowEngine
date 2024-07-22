@@ -48,6 +48,7 @@ Graphics::Renderer::Renderer(HWND handle)
   buffers.push_back(lightBuffer = new ConstantBuffer<PointLightBuffer>(device, deviceContext, 0, false, ShaderType::Pixel));
   buffers.push_back(globalLightBuffer = new ConstantBuffer<GlobalLightBuffer>(device, deviceContext, 1, true, ShaderType::Pixel));
   buffers.push_back(colorBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 2, false, ShaderType::Pixel));
+  buffers.push_back(outlineBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 3, false, ShaderType::Pixel));
 
   //background
   float bgCol[4] = { 0.5,0.3,0.4,1 };
@@ -361,6 +362,14 @@ void Graphics::Renderer::drawSetColor(const Color& color)
   ColorBuffer colorData = { color.r, color.g, color.b, color.a };
   colorBuffer->set(colorData);
   colorBuffer->updateAndBind();
+}
+
+// sets the color we want to outline an object
+void Graphics::Renderer::DrawSetOutline(const Color& color)
+{
+  ColorBuffer outlineData = { color.r, color.g, color.b, color.a };
+  outlineBuffer->set(outlineData);
+  outlineBuffer->updateAndBind();
 }
 
 void Graphics::Renderer::toggleFullscreen()

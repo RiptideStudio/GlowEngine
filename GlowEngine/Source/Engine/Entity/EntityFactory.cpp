@@ -47,7 +47,6 @@ void Entities::EntityFactory::addArchetype(std::string name, std::string filePat
   if (fs::exists(filePath))
   {
     archetypes[name] = loadEntity(filePath);
-    Logger::write("Added entity archetype from " + filePath);
   }
 }
 
@@ -70,9 +69,10 @@ Entities::Entity* Entities::EntityFactory::loadEntity(std::string filePath)
   }
   catch (const std::exception& e)
   {
-    Logger::error("Failed to load " + filePath);
+    Logger::error("Failed to load entity archetype from " + filePath);
   }
 
+  Logger::write("Created entity archetype from " + filePath);
   return entity;
 }
 
@@ -82,12 +82,18 @@ Entities::Entity* Entities::EntityFactory::createEntity(std::string name, Vector
   // if archetype was invalid, return an empty entity
   if (!archetypes[name])
   {
-    Logger::error("Failed to create entity " + name);
+    Logger::error("Failed to create entity from " + name);
     return new Entities::Entity();
   }
 
   // if valid, clone the entity
   Entities::Entity* entity = new Entities::Entity(*archetypes[name]);
+
+  if (!entity->transform && !entity->sprite)
+  {
+    entity->addComponent(entity->transform = new Components::Transform());
+    entity->addComponent(entity->sprite = new Components::Sprite3D());
+  }
 
   return entity;
 }

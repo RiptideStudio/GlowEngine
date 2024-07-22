@@ -16,7 +16,10 @@
 
 Editor::SceneEditor::SceneEditor(std::string title, std::string desc, ImGuiWindowFlags flags) : Widget(title, desc, flags)
 {
-
+	currentScene = nullptr;
+	sceneSystem = nullptr;
+	selectedContainer = nullptr;
+	selectedEntity = nullptr;
 }
 
 void Editor::SceneEditor::init()
@@ -37,6 +40,7 @@ void Editor::SceneEditor::update()
 	}
 
 	// for each list of entities, we want to display them and their name
+	int i = 0;
 	for (const auto& wrapper : currentScene->getEntityWrappers())
 	{
 		const auto& container = wrapper->list;
@@ -48,7 +52,6 @@ void Editor::SceneEditor::update()
 		// Check for right-click within the bounding box
 		if (ImGui::IsMouseHoveringRect(start, end) && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
-			selectedContainer = wrapper;
 			ImGui::OpenPopup("NewObject");
 		}
 
@@ -56,18 +59,52 @@ void Editor::SceneEditor::update()
 		{
 			// if collapsed, don't display entities
 			// display each entity in the container
+			DragContainer(wrapper,i);
+
+			int j = 0;
 			for (const auto& entity : container->getEntities())
 			{
 				// click on the entity to inspect it 
-				if (ImGui::Selectable(entity->getName().c_str()))
+				if (ImGui::Selectable(entity->getName().c_str())) // start entity menu *
 				{
 					selectedEntity = entity;
-					inspector->inspect(entity); // set the inspector
+					Inspector::inspect(entity); // set the inspector
 				}
+
+				// drag a selectable button (this lets us reorganize our tree)
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+				{
+					// Set the payload to carry the entity pointer
+					ImGui::SetDragDropPayload("ENTITY", &j, sizeof(int));
+					ImGui::Text(entity->getName().c_str());
+
+					// end the drag sourrce
+					ImGui::EndDragDropSource();
+				}
+
+				// Set the drop target to reposition the entity
+				if (ImGui::BeginDragDropTarget()) 
+				{
+					// set the entity's order within the list
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) 
+					{
+						int srcIndex = *(const int*)payload->Data;
+						int dstIndex = j;
+						container->ReorderEntities(srcIndex, dstIndex);
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				j++; // end of entity menu *
 			}
 
 			ImGui::TreePop(); // end container menu *
 		}
+		else
+		{
+			DragContainer(wrapper,i);
+		}
+		i++;
 	}
 }
 
@@ -99,3 +136,29 @@ void Editor::SceneEditor::interact()
 	}
 }
 
+void Editor::SceneEditor::DragContainer(Entities::EntityListWrapper* wrapper, int i)
+{
+	// drag a selectable button(this lets us reorganize our tree)
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+	{
+		// Set the payload to carry the entity pointer
+		ImGui::SetDragDropPayload("ENTITYLIST", &i, sizeof(int));
+		ImGui::Text(wrapper->name.c_str());
+
+		// end the drag sourrce
+		ImGui::EndDragDropSource();
+	}
+
+	// Set the drop target to reposition the entity
+	if (ImGui::BeginDragDropTarget())
+	{
+		// set the entity's order within the list
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITYLIST"))
+		{
+			int srcIndex = *(const int*)payload->Data;
+			int dstIndex = i;
+			currentScene->ReorderLists(srcIndex, dstIndex);
+		}
+		ImGui::EndDragDropTarget();
+	}
+}

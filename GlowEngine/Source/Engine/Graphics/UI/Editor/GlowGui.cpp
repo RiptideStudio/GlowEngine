@@ -19,6 +19,7 @@
 #include "Engine/Graphics/UI/Editor/Settings/Settings.h"
 #include "Engine/Graphics/UI/Editor/Console/Console.h"
 #include "Engine/Graphics/UI/Editor/Resources/Resources.h"
+#include "Engine/Graphics/UI/Editor/Inspector/EngineInspector.h"
 
 Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11DeviceContext* context, Graphics::Renderer* renderer)
   :
@@ -43,6 +44,9 @@ Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11Device
   // create inspector
   Editor::Inspector* inspector = new Editor::Inspector("Inspector");
   widgets.push_back(inspector);
+  // engine inspector
+  Editor::EngineInspector* engineInspector = new Editor::EngineInspector("Engine");
+  widgets.push_back(engineInspector);
   // create settings
   Editor::Settings* settings = new Editor::Settings("Settings");
   widgets.push_back(settings);
@@ -54,7 +58,6 @@ Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11Device
   widgets.push_back(resources);
   // create scene editor
   Editor::SceneEditor* editor = new Editor::SceneEditor("Scene Editor");
-  editor->inspector = inspector;
   widgets.push_back(editor);
 }
 

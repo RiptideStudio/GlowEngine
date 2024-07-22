@@ -31,10 +31,13 @@ Engine::GlowEngine::GlowEngine()
   textureLibrary(nullptr),
   window(nullptr),
   windowHandle(NULL),
-  totalFrames(0)
+  totalTime(0),
+  frameCount(0),
+  fpsTimer(0),
+  totalFrames(0),
+  fps(60)
 {
   EngineInstance::setup(this);
-  fps = 60;
 }
 
 // start the engine - returns false if failed, true on success
@@ -70,11 +73,6 @@ bool Engine::GlowEngine::run()
   window->updateWindow();
 
   // calculate delta time
-  float dt = 0.f;
-  float totalTime = 0.f;
-  float frameCount = 0;
-  float fpsTimer = 0;
-
   LARGE_INTEGER frequency, prevTime, currTime;
 
   QueryPerformanceFrequency(&frequency);
@@ -104,13 +102,12 @@ bool Engine::GlowEngine::run()
     // render systems
     render();
 
+    // update our FPS
     if (fpsTimer >= 1.0f)
     {
-      int fps = frameCount;
+      fps = frameCount;
       frameCount = 0;
       fpsTimer -= 1.0f;
-
-      Logger::write("Real FPS: "+std::to_string(fps));
     }
   } 
 

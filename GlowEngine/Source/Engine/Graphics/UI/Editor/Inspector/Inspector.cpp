@@ -9,6 +9,9 @@
 #include "stdafx.h"
 #include "Inspector.h"
 
+Entities::Entity* Editor::Inspector::selectedEntity = nullptr;
+Entities::Entity* Editor::Inspector::previousEntity = nullptr;
+
 Editor::Inspector::Inspector(std::string title, std::string desc, ImGuiWindowFlags flags): Widget(title, desc, flags)
 {
 
@@ -19,8 +22,7 @@ void Editor::Inspector::update()
 	// if we have a selected entity, we allow changing its properties
 	if (selectedEntity)
 	{
-		Components::Transform* transform = getComponentOfType(Transform, selectedEntity);
-		transform->recalculateMatrix();
+		selectedEntity->SetSelected(true);
 
 		ImGui::NewLine();
 		ImGui::Separator();
@@ -57,5 +59,35 @@ void Editor::Inspector::update()
 			}
 		}
 
+		DragEntity();
+	}
+}
+
+// called while we are dragging an entity or have one selected
+void Editor::Inspector::DragEntity()
+{
+	Components::Transform* transform = getComponentOfType(Transform, selectedEntity);
+	transform->recalculateMatrix();
+
+	float pos[3] = {transform->getPosition().x,transform->getPosition().y,transform->getPosition().z};
+	if (ImGui::DragFloat3("Position", pos))
+	{
+		transform->setPosition({ pos[0],pos[1],pos[2] });
+	}
+}
+
+// when we inspect an entity, select it and track previous and current
+void Editor::Inspector::inspect(Entities::Entity* ent)
+{
+	previousEntity = selectedEntity;
+	selectedEntity = ent;
+
+	if (previousEntity)
+	{
+		previousEntity->SetSelected(false);
+	}
+	if (previousEntity && !ent)
+	{
+		previousEntity->SetSelected(false);
 	}
 }

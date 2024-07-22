@@ -15,9 +15,6 @@
     <Filter Include="Source Files\Engine\Graphics">
       <UniqueIdentifier>{1cee3f7b-64f1-4ba9-89a4-d6faad792ed8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Stubs">
-      <UniqueIdentifier>{031acc3e-eeac-4070-94d0-dc3f01d5b4d0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Windows">
       <UniqueIdentifier>{fc739bc9-938a-4aae-8bb0-7e43acf4a884}</UniqueIdentifier>
     </Filter>
@@ -132,13 +129,13 @@
     <Filter Include="Source Files\Engine\Graphics\UI\Editor\Settings">
       <UniqueIdentifier>{016b677d-541e-48fd-9b57-a7cd443f70b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Systems\World">
+      <UniqueIdentifier>{a38faa17-2ea9-49d6-9d79-dec5c611b1bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
       <Filter>Source Files\Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Stubs\stub.h">
-      <Filter>Source Files\Stubs</Filter>
     </ClInclude>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Source Files</Filter>
@@ -341,6 +338,15 @@
     <ClInclude Include="Source\Engine\Entity\Components\Property.h">
       <Filter>Source Files\Engine\Entity\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Source\stub.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Systems\World\Grid.h">
+      <Filter>Source Files\Engine\Systems\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\Inspector\EngineInspector.h">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Inspector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -357,9 +363,6 @@
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Stubs\stub.cpp">
-      <Filter>Source Files\Stubs</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\Systems\Logger\Log.cpp">
       <Filter>Source Files\Engine\Systems\Logger</Filter>
@@ -534,6 +537,15 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Entity\Components\Property.cpp">
       <Filter>Source Files\Engine\Entity\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Systems\World\Grid.cpp">
+      <Filter>Source Files\Engine\Systems\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\Inspector\EngineInspector.cpp">
+      <Filter>Source Files\Engine\Graphics\UI\Editor\Inspector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

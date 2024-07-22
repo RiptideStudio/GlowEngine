@@ -47,9 +47,7 @@ void Visual::Camera::update()
 {
   // stop camera functionality if we are not focused in the window
   if (!input->isFocused())
-  {
     return;
-  }
 
   // update our camera controller - this handles input and calculates our forward direction, right, and target
   cameraController();

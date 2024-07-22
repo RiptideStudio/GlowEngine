@@ -37,6 +37,8 @@ namespace Entities
     void destroy();
     // return if destroyed
     bool isDestroyed() { return destroyed; }
+    // if we are selected by the inspector
+    bool IsSelected() { return selected; }
     // if visible
     bool isVisible() { return visible; }
     // get the name
@@ -53,6 +55,8 @@ namespace Entities
 
     // add a variable to be modified in the editor
     void AddVariable(Variable var) { variables.push_back(var); }
+    // set selected
+    void SetSelected(bool val) { selected = val; }
 
     // core components are public for easy modification and access
     Components::Transform* transform;
@@ -64,7 +68,9 @@ namespace Entities
     int id;
     bool destroyed;
     bool visible = true;
+    bool selected = false; // if we are selected by the inspector
     bool needsComponentSort = true; // flag for sorting components
+
     std::string name;
 
     std::vector<Components::Component*> components; // entity component list

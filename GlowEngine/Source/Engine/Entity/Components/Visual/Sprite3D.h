@@ -38,6 +38,8 @@ namespace Components
     void init();
     // render - this calls model->render() as well
     void render();
+    // draw outline
+    void DrawOutline();
 
     // set the sprite's model
     void setModel(const std::string modelName);

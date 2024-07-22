@@ -12,6 +12,7 @@
 
 namespace Editor
 {
+	class Inspector;
 
 	class Settings : public Widget
 	{
@@ -24,7 +25,6 @@ namespace Editor
 
 	private:
 
-		// define setting subsections here; separated into classes for containerization
 		GameSettings gameSettings;
 
 	};

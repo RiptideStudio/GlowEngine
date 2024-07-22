@@ -12,15 +12,14 @@
 namespace Editor
 {
 
-	class Console : public Widget
+	class EngineInspector : public Widget
 	{
 
 	public:
 
-		Console(std::string title, std::string desc = "", ImGuiWindowFlags flags = 0) : Widget(title, desc, flags) {};
+		EngineInspector(std::string title, std::string desc = "", ImGuiWindowFlags flags = 0) : Widget(title, desc, flags) {};
 
 		void update();
-
 
 	};
 

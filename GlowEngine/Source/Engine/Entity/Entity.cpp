@@ -41,6 +41,12 @@ Entities::Entity::Entity(const Entity& other)
   init();
 }
 
+void Entities::Entity::init()
+{
+  AddVariable(CreateVariable("Visible", &visible));
+  AddVariable(CreateVariable("Name", &name));
+}
+
 // virtual destructor for entities
 Entities::Entity::~Entity()
 {
@@ -60,12 +66,6 @@ void Entities::Entity::load(const nlohmann::json& data)
   {
     component->load(data);
   }
-}
-
-void Entities::Entity::init()
-{
-  AddVariable(CreateVariable("Visible", &visible));
-  AddVariable(CreateVariable("Name", &name));
 }
 
 // update all the components of an entity

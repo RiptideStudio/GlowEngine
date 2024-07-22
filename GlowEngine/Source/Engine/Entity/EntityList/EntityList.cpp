@@ -15,6 +15,7 @@
 #include "Engine/GlowEngine.h"
 #include "Game/Scene/Scene.h"
 #include "Game/Scene/SceneSystem.h"
+#include <algorithm>
 
 // base constructor
 Entities::EntityList::EntityList()
@@ -168,4 +169,12 @@ Entities::Entity* Entities::EntityList::find(std::string name)
     }
   }
   return nullptr;
+}
+
+// given a source index and a destination index, we move two entities within a list
+void Entities::EntityList::ReorderEntities(int srcIndex, int dstIndex)
+{
+  auto entity = activeList[srcIndex];
+  activeList.erase(activeList.begin() + srcIndex);
+  activeList.insert(activeList.begin() + dstIndex, entity);
 }

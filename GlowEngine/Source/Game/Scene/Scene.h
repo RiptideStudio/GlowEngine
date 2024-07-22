@@ -39,8 +39,8 @@ namespace Scene
     Entities::Actor* createEntity(Vector3D pos, Vector3D scale, Vector3D rotation, std::string modelName, std::string textureName = "");
 
     // create an entity and add it to the scene
-    Entities::Actor* instanceCreate(std::string name, Vector3D position);
-    Entities::Actor* instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation = { 0 });
+    Entities::Entity* instanceCreate(std::string name, Vector3D position);
+    Entities::Entity* instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation = { 0 });
     Entities::Actor* instanceCreateGeneral(std::string name, std::string model, std::string texture, Vector3D position, Vector3D scale, Vector3D rotation = {0});
 
     // add an entity to the scene (allows us to make entities from code easily)
@@ -49,6 +49,8 @@ namespace Scene
     void addToList(Entities::EntityList* list, Entities::Entity* ent);
     // clear all entities
     void clear();
+    // reorder lists to determine which ones get updated first
+    void ReorderLists(int src, int dst);
 
     // get the entity wrappers
     std::vector<Entities::EntityListWrapper*>& getEntityWrappers() { return entityLists; }
@@ -57,6 +59,7 @@ namespace Scene
 
     // get our global list
     Entities::EntityList* getGlobalList() { return globalList; }
+    int getEntityCount() { return entityList->getEntities().size(); }
 
   protected:
 
@@ -66,8 +69,10 @@ namespace Scene
 
     std::string name;
 
-    // entity list of all entities in the scene so we can collision check
+    // entity list of all colliders
     Entities::EntityList* globalList;
+    // dummy list that contains all entities for statistics
+    Entities::EntityList* entityList;
     // entity factory
     Entities::EntityFactory* factory;
 

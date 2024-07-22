@@ -68,8 +68,11 @@ namespace Graphics
 
     Graphics::Window* getWindow() { return window;}
 
-    // set the target color
+    // helpful drawing functions 
+    // set the target render color
     void drawSetColor(const Color& color);
+    // set the outline color, if any
+    void DrawSetOutline(const Color& color);
 
     // toggle fullscreen
     void toggleFullscreen();
@@ -159,6 +162,7 @@ namespace Graphics
 
     // buffers
     ConstantBuffer<ColorBuffer>* colorBuffer;
+    ConstantBuffer<ColorBuffer>* outlineBuffer;
     ConstantBuffer<cbPerObject>* objectBuffer;
     ConstantBuffer<PointLightBuffer>* lightBuffer;
     ConstantBuffer<GlobalLightBuffer>* globalLightBuffer;

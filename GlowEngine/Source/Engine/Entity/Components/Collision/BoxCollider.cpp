@@ -12,8 +12,10 @@
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Graphics/Meshes/MeshLibrary.h"
 
-Components::BoxCollider::BoxCollider(Vector3D newScale)
+Components::BoxCollider::BoxCollider(Vector3D newScale, bool isStatic, bool autoResize)
 {
+  colliderIsStatic = isStatic;
+  autoSize = autoResize;
   scale = newScale;
   type = ComponentType::Collider;
   name = "Box Collider";
@@ -56,6 +58,12 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
 {
   // Get the physics and transform components
   Components::Physics* physics = getComponentOfType(Physics, parent);
+
+  if (!physics)
+  {
+    return;
+  }
+
   Components::Transform* transform = getComponentOfType(Transform, parent);
   const BoxCollider* otherBox = dynamic_cast<const BoxCollider*>(other);
 

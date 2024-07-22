@@ -7,3 +7,11 @@
 */
 
 #pragma once
+
+namespace StubNamespace
+{
+  class StubClass
+  {
+
+  };
+}

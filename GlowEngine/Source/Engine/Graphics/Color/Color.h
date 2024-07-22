@@ -21,6 +21,7 @@ public:
   static const Color Blue;
   static const Color White;
   static const Color Clear;
+  static const Color Outline;
 
 };
 

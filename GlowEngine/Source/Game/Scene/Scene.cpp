@@ -16,6 +16,7 @@ Scene::Scene::Scene()
   input = engine->getInputSystem();
   factory = engine->getEntityFactory();
   globalList = new Entities::EntityList();
+  entityList = new Entities::EntityList();
   addEntityList();
   name = "Scene";
 }
@@ -75,20 +76,21 @@ Entities::Actor* Scene::Scene::createEntity(
 
 // boilerplate for adding an entity directly to the scene
 // lets you fully customize your entity with different complexity levels
-Entities::Actor* Scene::Scene::instanceCreate(std::string name, Vector3D position)
+Entities::Entity* Scene::Scene::instanceCreate(std::string name, Vector3D position)
 {
-  Entities::Actor* actor = factory->createActor(name, position);
+  Entities::Entity* actor = factory->createEntity(name, position);
+  actor->transform->setPosition(position);
   add(actor);
   return actor;
 }
 
-Entities::Actor* Scene::Scene::instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation)
+Entities::Entity* Scene::Scene::instanceCreateExt(std::string name, Vector3D position, Vector3D scale, Vector3D rotation)
 {
-  Entities::Actor* actor = factory->createActor(name, position);
-  actor->setScale(scale);
-  actor->setRotation(rotation);
-  actor->setPosition(position);
-  actor->setModel(name);
+  Entities::Entity* actor = factory->createEntity(name, position);
+  actor->transform->setScale(scale);
+  actor->transform->setRotation(rotation);
+  actor->transform->setPosition(position);
+  actor->sprite->setModel(name);
   add(actor);
   return actor;
 }
@@ -108,6 +110,7 @@ Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::stri
 void Scene::Scene::add(Entities::Entity* entity)
 {
   entityLists[0]->list->add(entity);
+  entityList->add(entity);
 }
 
 void Scene::Scene::addToList(Entities::EntityList* list, Entities::Entity* ent)
@@ -122,6 +125,14 @@ void Scene::Scene::clear()
     wrapper->list->clear();
   }
   globalList->clear();
+  entityList->clear();
+}
+
+void Scene::Scene::ReorderLists(int src, int dst)
+{
+  auto list = entityLists[src];
+  entityLists.erase(entityLists.begin() + src);
+  entityLists.insert(entityLists.begin() + dst, list);
 }
 
 // creates a new entity wrapper given a name

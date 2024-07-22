@@ -33,7 +33,7 @@ void Entities::Actor::init()
 {
   engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
-  addComponent(new Components::BoxCollider());
+  addComponent(new Components::BoxCollider({1,1,1},false));
   addComponent(physics = new Components::Physics());
   addComponent(transform = new Components::Transform());
   addComponent(sprite = new Components::Sprite3D());

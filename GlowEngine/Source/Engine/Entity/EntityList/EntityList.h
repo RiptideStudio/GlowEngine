@@ -40,6 +40,7 @@ namespace Entities
   {
 
   public:
+
     EntityList();
 
     void add(Entities::Entity* entity);
@@ -62,6 +63,11 @@ namespace Entities
     std::vector<Entities::Entity*>& getColliderList() { return colliderList; }
     std::vector<Entities::Entity*>& getNonStaticList() { return nonStaticList; }
 
+    // reorder the entities by id
+    void ReorderEntities(int srcIndex, int dstIndex);
+    // set the id
+    void SetOrder(int order_) { order = order_; }
+
   private:
 
     // vectors of lists for handling updates and collisions
@@ -76,6 +82,8 @@ namespace Entities
 
     // size of current active list
     int size;
+    // order of our container in the scene hierarchy, determines execution order as well
+    int order; 
     std::unordered_map<std::string, int> nameCount;
 
     // name of entity list for display purposes

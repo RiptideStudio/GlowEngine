@@ -61,7 +61,7 @@ bool Graphics::Window::setup()
   // position the window to be in the centre of the screen
   RECT rect = { 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
   AdjustWindowRect(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE);
-  SetWindowPos(windowHandle, nullptr, 0, 0, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+  SetWindowPos(windowHandle, nullptr, 64, 64, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
   aspectRatio = (float)windowWidth / (float)windowHeight;
 
@@ -137,14 +137,15 @@ void Graphics::Window::setFullscreen(bool val)
 // update messages, return false if we quit the window
 bool Graphics::Window::updateMessages()
 {
-  if (GetMessage(&msg, nullptr, 0, 0))
+  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) 
   {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
-    if (msg.message == WM_QUIT)
+    if (msg.message == WM_QUIT) 
     {
       return false;
     }
+    return true;
   }
   return true;
 }

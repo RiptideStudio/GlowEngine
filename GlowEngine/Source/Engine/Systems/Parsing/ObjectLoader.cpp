@@ -159,7 +159,7 @@ void Parse::ObjectLoader::parseAssimp()
   // Check for errors
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
   {
-    Logger::error("Failed to load scene " + fileName);
+    Logger::error("Failed to load model " + fileName);
     return;
   }
 

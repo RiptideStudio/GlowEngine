@@ -1,3 +1,4 @@
+
 // pixel shader input struct
 struct PixelInputType
 {
@@ -27,6 +28,11 @@ cbuffer ColorRegister : register(b2)
     ColorBuffer colorBuffer;
 };
 
+cbuffer OutlineRegister : register(b3)
+{
+    ColorBuffer outlineBuffer;
+};
+
 // GPU fog buffer
 cbuffer GlobalLightBuffer : register(b1)
 {
@@ -52,10 +58,15 @@ SamplerState shadowSampler;
 // main entry point
 float4 main(PixelInputType input) : SV_TARGET
 {
-    // draw the object an entire color if so
-    if (colorBuffer.objectColor.x != 0)
+    // draw the object an entire color
+    if (colorBuffer.objectColor.a != 0)
     {
         return colorBuffer.objectColor;
+    }
+    // outlined object are slightly scaled up
+    if (outlineBuffer.objectColor.a != 0)
+    {
+        return outlineBuffer.objectColor;
     }
     
     // Get the texture color

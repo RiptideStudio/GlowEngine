@@ -88,7 +88,6 @@ void Components::Sprite3D::render()
   // bind the constant buffer and update subresource
   renderer->updateObjectBuffer();
 
-  // each models contain several objects, we need to loop through them 
   for (int i = 0; i < model->getObjects(); ++i)
   {
     // set the texture - each object in a model might have a different texture
@@ -104,6 +103,28 @@ void Components::Sprite3D::render()
 
     // render the model
     model->render();
+
+    // render the outline if our parent is selected
+    DrawOutline();
+  }
+}
+
+// draw the outline of this sprite 
+void Components::Sprite3D::DrawOutline()
+{
+  if (parent->IsSelected())
+  {
+    Components::Transform* transform = getComponentOfType(Transform, parent);
+    renderer->DrawSetOutline(Color::Outline);
+    Vector3D outlineScale = transform->getScale() * 1.02f;
+    Vector3D oldScale = transform->getScale();
+    transform->setScale(outlineScale);
+    transform->recalculateMatrix();
+    renderer->updateObjectBufferWorldMatrix(transform->getTransformMatrix());
+    renderer->updateObjectBuffer();
+    transform->setScale(oldScale);
+    model->render();
+    renderer->DrawSetOutline(Color::Clear);
   }
 }
 

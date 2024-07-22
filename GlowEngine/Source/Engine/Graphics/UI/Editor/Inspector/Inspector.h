@@ -24,11 +24,13 @@ namespace Editor
     Inspector(std::string title, std::string desc = "", ImGuiWindowFlags flags = 0);
 
     void update();
+    void DragEntity();
 
     // the entity we want to inspect
-    void inspect(Entities::Entity* ent) { selectedEntity = ent; }
+    static void inspect(Entities::Entity* ent);
 
-    Entities::Entity* selectedEntity;
+    static Entities::Entity* selectedEntity;
+    static Entities::Entity* previousEntity;
 
   };
 }

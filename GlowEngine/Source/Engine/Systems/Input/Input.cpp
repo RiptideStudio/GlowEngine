@@ -34,19 +34,16 @@ void Input::InputSystem::update()
     mouseDelta.x = currentMousePosition.x - previousMousePosition.x;
     mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
   }
-  if (focused)
-  {
-    // focus the mouse in the center of the screen
-    RECT clientRect;
-    GetClientRect(windowHandle, &clientRect);
-    POINT center = { (clientRect.right - clientRect.left) / 2, (clientRect.bottom - clientRect.top) / 2 };
-    ClientToScreen(windowHandle, &center);
-    SetCursorPos(center.x, center.y);
+  // focus the mouse in the center of the screen
+  RECT clientRect;
+  GetClientRect(windowHandle, &clientRect);
+  POINT center = { (clientRect.right - clientRect.left) / 2, (clientRect.bottom - clientRect.top) / 2 };
+  ClientToScreen(windowHandle, &center);
+  SetCursorPos(center.x, center.y);
 
-    // update previous mouse position to the center
-    previousMousePosition.x = center.x;
-    previousMousePosition.y = center.y;
-  }
+  // update previous mouse position to the center
+  previousMousePosition.x = center.x;
+  previousMousePosition.y = center.y;
 }
 
 void Input::InputSystem::updateKeyStates()
