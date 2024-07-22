@@ -9,7 +9,7 @@
 #include "stdafx.h"
 #include "Window.h"
 #include "Engine/GlowEngine.h"
-
+#include "Engine/Graphics/Renderer.h"
 
 // construct the window
 Graphics::Window::Window()
@@ -78,6 +78,17 @@ void Graphics::Window::updateWindow()
   // system initialization
   engine = EngineInstance::getEngine();
   input = engine->getInputSystem();
+}
+
+// helpful static functions for getting width and height of the window
+int Graphics::Window::GetHeight()
+{
+  return EngineInstance::getEngine()->getRenderer()->getWindow()->getHeight();
+}
+
+int Graphics::Window::GetWidth()
+{
+  return EngineInstance::getEngine()->getRenderer()->getWindow()->getWidth();
 }
 
 // windows message callback

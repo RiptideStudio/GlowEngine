@@ -102,6 +102,7 @@ void Editor::SceneEditor::update()
 		}
 		else
 		{
+			// we need two calls to this so we can select it inside and outside loop
 			DragContainer(wrapper,i);
 		}
 		i++;
@@ -136,6 +137,7 @@ void Editor::SceneEditor::interact()
 	}
 }
 
+// code to drag and re-place our entity containers and entities within the scene editor list
 void Editor::SceneEditor::DragContainer(Entities::EntityListWrapper* wrapper, int i)
 {
 	// drag a selectable button(this lets us reorganize our tree)

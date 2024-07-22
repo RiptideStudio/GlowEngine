@@ -21,10 +21,5 @@ void Editor::EngineInspector::update()
   // write the FPS values to the console
   ImGui::Text(("FPS: " + std::to_string(engine->getFps())).c_str());
   ImGui::Text(("Delta Time: " + std::to_string(engine->getDeltaTime())).c_str());
-  ImGui::Text(("Frames Elapsed: " + std::to_string(engine->getTotalFrames())).c_str());
-  ImGui::SameLine();
-  ImGui::Spacing();
   ImGui::Text(("Entities: " + std::to_string(engine->getSceneSystem()->getCurrentScene()->getEntityCount())).c_str());
-
-  ImGui::Checkbox("Debug Mode", &renderer->getDebugMode());
 }

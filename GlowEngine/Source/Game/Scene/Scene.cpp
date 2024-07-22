@@ -151,3 +151,26 @@ void Scene::Scene::addEntityList(std::string name)
   entityLists.push_back(wrapper);
 }
 
+// pick an entity from a scene given an origin vector and a direction, finds the first one
+Entities::Entity* Scene::Scene::RayPick(Vector3D origin, Vector3D dir)
+{
+  float closestDistance = FLT_MAX;
+  Entities::Entity* closestEntity = nullptr;
+
+  for (const auto& entity : globalList->getEntities())
+  {
+    //BoundingBox box = entity->getBoundingBox();
+    //float distance;
+    //if (RayIntersectsBoundingBox(rayOrigin, rayDirection, box, distance))
+    //{
+    //  if (distance < closestDistance)
+    //  {
+    //    closestDistance = distance;
+    //    closestEntity = entity;
+    //  }
+    //}
+  }
+
+  return closestEntity;
+}
+

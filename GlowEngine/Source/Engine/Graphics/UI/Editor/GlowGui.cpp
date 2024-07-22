@@ -20,6 +20,7 @@
 #include "Engine/Graphics/UI/Editor/Console/Console.h"
 #include "Engine/Graphics/UI/Editor/Resources/Resources.h"
 #include "Engine/Graphics/UI/Editor/Inspector/EngineInspector.h"
+#include "Engine/Graphics/UI/Editor/GameWindow/GameWindow.h"
 
 Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11DeviceContext* context, Graphics::Renderer* renderer)
   :
@@ -41,6 +42,8 @@ Graphics::GlowGui::GlowGui(HWND windowHandle, ID3D11Device* device, ID3D11Device
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   io.Fonts->AddFontFromFileTTF("Assets/Fonts/CascadiaCode.ttf", 16);
 
+  // create game window first
+  gameWindow = new Editor::GameWindow("Otherglow");
   // create inspector
   Editor::Inspector* inspector = new Editor::Inspector("Inspector");
   widgets.push_back(inspector);
@@ -95,18 +98,9 @@ void Graphics::GlowGui::update()
 {
   // beginning updates
   beginUpdate();
-
-  // start the game window
-  ImGui::Begin("Otherglow", nullptr, gameWindowFlags);
-
-  // calculate the size of our game window compared to other ImGui windows
-  calculateGameWindowSize();
-
-  // resize our viewport to fit the game window size
-  // NOTE: In the future, I would like to replace this with ImGui::Image() where the image is a texture of the rendered scene
-  renderer->setRenderTargetProperties(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y + yPadding, availableSize.x + xPadding, availableSize.y + yPadding);
-
-  ImGui::End();
+  
+  // update our game window
+  gameWindow->renderFrame();
 
   // render each of our ImGui widgets
   for (auto& widget : widgets)
@@ -132,29 +126,4 @@ void Graphics::GlowGui::cleanUp()
   ImGui_ImplDX11_Shutdown();
   ImGui_ImplWin32_Shutdown();
   ImGui::DestroyContext();
-}
-
-void Graphics::GlowGui::calculateGameWindowSize()
-{
-  // calculate the aspect ratio
-  const float aspectRatio = EngineInstance::getEngine()->getWindow()->getAspectRatio();
-
-  availableSize = ImGui::GetContentRegionAvail();
-
-  // Calculate the new size to maintain the aspect ratio
-  float newWidth = availableSize.x;
-  float newHeight = availableSize.x / aspectRatio;
-
-  if (newHeight > availableSize.y)
-  {
-    newHeight = availableSize.y;
-    newWidth = availableSize.y * aspectRatio;
-  }
-
-  // Set the new size of the ImGui window based on the aspect ratio
-  ImVec2 newSize(newWidth, newHeight);
-  ImGui::SetNextWindowSize(newSize);
-
-  // Update the size after setting the new window size
-  availableSize = newSize;
 }

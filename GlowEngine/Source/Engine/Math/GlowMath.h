@@ -8,6 +8,11 @@
 
 #pragma once
 
+namespace Components
+{
+  class BoundingBox;
+}
+
 namespace GlowMath
 {
 
@@ -16,6 +21,12 @@ namespace GlowMath
   {
 
   public:
+
+    // convert a vector to world coordinates
+    static Vector3D ScreenToWorldCoords(Vector3D coords);
+    static Vector3D XMVectorToVector3D(DirectX::XMVECTOR vector);
+    static Vector3D XMFloatToVector3D(DirectX::XMFLOAT3 XMFloat);
+    static bool RayIntersectsBoundingBox(const Vector3D& rayOrigin, const Vector3D& rayDirection, const Components::BoundingBox& box, float& t);
 
     // default of zeroed vector
     Vector3D(float x = 0, float y = 0, float z = 0);

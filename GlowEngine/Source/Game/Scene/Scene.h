@@ -61,6 +61,9 @@ namespace Scene
     Entities::EntityList* getGlobalList() { return globalList; }
     int getEntityCount() { return entityList->getEntities().size(); }
 
+    // cast a ray and grab an entity from our scene
+    Entities::Entity* RayPick(Vector3D origin, Vector3D dir);
+
   protected:
 
     // system pointers

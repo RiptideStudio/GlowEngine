@@ -54,6 +54,7 @@
     <ClInclude Include="Source\Engine\Graphics\Textures\Texture.h" />
     <ClInclude Include="Source\Engine\Graphics\Textures\TextureLibrary.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\Editor\Console\Console.h" />
+    <ClInclude Include="Source\Engine\Graphics\UI\Editor\GameWindow\GameWindow.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\Editor\GlowGui.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\Editor\Inspector\EngineInspector.h" />
     <ClInclude Include="Source\Engine\Graphics\UI\Editor\Inspector\Inspector.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Source\Engine\Graphics\Textures\Texture.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Textures\TextureLibrary.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\Editor\Console\Console.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\UI\Editor\GameWindow\GameWindow.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\Editor\GlowGui.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\Editor\Inspector\EngineInspector.cpp" />
     <ClCompile Include="Source\Engine\Graphics\UI\Editor\Inspector\Inspector.cpp" />

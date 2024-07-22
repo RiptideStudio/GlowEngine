@@ -24,6 +24,9 @@ namespace Graphics
     // update
     void updateWindow();
 
+    static int GetHeight();
+    static int GetWidth();
+
     // windows callbacks
     LRESULT CALLBACK windowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     static LRESULT CALLBACK windowProcStatic(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
