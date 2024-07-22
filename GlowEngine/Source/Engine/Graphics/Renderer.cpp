@@ -129,16 +129,19 @@ void Graphics::Renderer::beginFrame()
 
 void Graphics::Renderer::RenderToTexture()
 {
-
-  // Clear the render target
-  deviceContext->ClearRenderTargetView(renderTargetViewGui, backgroundColor);
+  // clear the depth stencil
+  deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
   // Set the render target
   deviceContext->OMSetRenderTargets(1, &renderTargetViewGui, depthStencilView);
 
+  // Clear the render target
+  deviceContext->ClearRenderTargetView(renderTargetViewGui, backgroundColor);
+
   // Render your scene here
   engine->getSceneSystem()->render();
 
+  // Optionally, reset the render target to the original back buffer
   deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
 }
 
