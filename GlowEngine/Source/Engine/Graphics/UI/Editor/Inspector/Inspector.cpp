@@ -66,14 +66,14 @@ void Editor::Inspector::update()
 // called while we are dragging an entity or have one selected
 void Editor::Inspector::DragEntity()
 {
-	Components::Transform* transform = getComponentOfType(Transform, selectedEntity);
-	transform->recalculateMatrix();
+	//Components::Transform* transform = getComponentOfType(Transform, selectedEntity);
+	//transform->recalculateMatrix();
 
-	float pos[3] = {transform->getPosition().x,transform->getPosition().y,transform->getPosition().z};
-	if (ImGui::DragFloat3("Position", pos))
-	{
-		transform->setPosition({ pos[0],pos[1],pos[2] });
-	}
+	//float pos[3] = {transform->getPosition().x,transform->getPosition().y,transform->getPosition().z};
+	//if (ImGui::DragFloat3("Position", pos))
+	//{
+	//	transform->setPosition({ pos[0],pos[1],pos[2] });
+	//}
 }
 
 // when we inspect an entity, select it and track previous and current

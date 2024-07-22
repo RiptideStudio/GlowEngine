@@ -62,6 +62,7 @@ namespace Entities
     Components::Transform* transform;
     Components::Sprite3D* sprite;
     Components::Physics* physics;
+    Components::BoundingBox* boundingBox;
 
   protected:
 

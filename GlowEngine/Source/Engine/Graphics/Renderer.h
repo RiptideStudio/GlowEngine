@@ -97,6 +97,9 @@ namespace Graphics
     // set the topology with a default of trianglelist
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+    // render our game to a texture
+    void RenderToTexture();
+
     // manage point lights
     void addPointLight(PointLight* light);
     void updatePointLight(PointLight* light);
@@ -110,7 +113,7 @@ namespace Graphics
 
     // get the back buffer
     ID3D11Texture2D* getBackBuffer();
-    ID3D11ShaderResourceView* getBackBufferSRV();
+    ID3D11ShaderResourceView* GetGameTexture();
 
     // get the camera
     Visual::Camera* getCamera() { return camera; }
@@ -126,6 +129,11 @@ namespace Graphics
 
     // ImGui system
     Graphics::GlowGui* glowGui;
+
+    // for rendering scene to a texture
+    ID3D11Texture2D* renderTargetTexture = nullptr;
+    ID3D11RenderTargetView* renderTargetViewGui = nullptr;
+    ID3D11ShaderResourceView* shaderResourceView = nullptr;
 
     // devices
     ID3D11Device* device;

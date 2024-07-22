@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "Scene.h"
+#include "Engine/Graphics/Renderer.h"
 
 // base scene constructor
 Scene::Scene::Scene()
@@ -157,18 +158,19 @@ Entities::Entity* Scene::Scene::RayPick(Vector3D origin, Vector3D dir)
   float closestDistance = FLT_MAX;
   Entities::Entity* closestEntity = nullptr;
 
-  for (const auto& entity : globalList->getEntities())
+  for (const auto& entity : entityList->getEntities())
   {
-    //BoundingBox box = entity->getBoundingBox();
-    //float distance;
-    //if (RayIntersectsBoundingBox(rayOrigin, rayDirection, box, distance))
-    //{
-    //  if (distance < closestDistance)
-    //  {
-    //    closestDistance = distance;
-    //    closestEntity = entity;
-    //  }
-    //}
+    Components::BoundingBox* box = getComponentOfType(BoundingBox,entity);
+
+    float distance;
+    if (Vector3D::RayIntersectsBoundingBox(origin, dir, box, distance))
+    {
+      if (distance < closestDistance)
+      {
+        closestDistance = distance;
+        closestEntity = entity;
+      }
+    }
   }
 
   return closestEntity;

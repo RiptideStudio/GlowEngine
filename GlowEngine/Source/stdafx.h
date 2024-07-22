@@ -54,6 +54,7 @@ using namespace GlowMath;
 #include "Engine/Entity/Components/Physical/Physics.h"
 #include "Engine/Entity/Components/Collision/Collider.h"
 #include "Engine/Entity/Components/Collision/BoxCollider.h"
+#include "Engine/Entity/Components/Collision/BoundingBox.h"
 #include "Engine/Entity/Actor.h"
 #include "Engine/Entity/Components/Property.h"
 

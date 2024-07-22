@@ -82,7 +82,7 @@ void Graphics::GlowGui::beginUpdate()
 
   // define the flags for docking space
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-    ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+    ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground |
     ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
   // create docking space
@@ -107,9 +107,6 @@ void Graphics::GlowGui::update()
   {
     widget->renderFrame();
   }
-
-  // finish drawing
-  endUpdate();
 }
 
 // draw the ImGui render data and end the frame

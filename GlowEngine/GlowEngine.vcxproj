@@ -24,6 +24,7 @@
     <ClInclude Include="Source\Engine\Audio\SoundSystem.h" />
     <ClInclude Include="Source\Engine\EngineInstance.h" />
     <ClInclude Include="Source\Engine\Entity\Actor.h" />
+    <ClInclude Include="Source\Engine\Entity\Components\Collision\BoundingBox.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Collision\BoxCollider.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Collision\Collider.h" />
     <ClInclude Include="Source\Engine\Entity\Components\Component.h" />
@@ -100,6 +101,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Engine\Entity\Actor.cpp" />
+    <ClCompile Include="Source\Engine\Entity\Components\Collision\BoundingBox.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Collision\BoxCollider.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Collision\Collider.cpp" />
     <ClCompile Include="Source\Engine\Entity\Components\Component.cpp">

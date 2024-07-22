@@ -32,10 +32,12 @@ namespace Components
       BoxCollider,
       Physics,
       Collider,
+      BoundingBox,
       None
     };
 
     public:
+
       Component();
 
       virtual void update() {};

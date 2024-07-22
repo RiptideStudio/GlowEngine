@@ -44,7 +44,6 @@ void Components::Collider::update()
 // we also call our collider callback for anything specific
 void Components::Collider::leaveCollision(const Components::Collider* other)
 {
-  Logger::write("Left collision");
   collidingObjects.erase(other);
   collided = false;
   colliding = false;
@@ -107,7 +106,7 @@ void Components::Collider::calculateScale()
 {
   // find out vertices
   const std::map<std::string, std::vector<Vertex>>& modelVertices = parent->sprite->getModel()->getModelVertices();
-  const Components::Transform& transform = *parent->transform;
+  Components::Transform& transform = *parent->transform;
 
   // Find the model in the map
   if (parent->sprite->getModel()->getModelNames().empty())
@@ -177,6 +176,7 @@ void Components::Collider::calculateScale()
     this->vertices.push_back(v);
   }
 
+  Components::BoundingBox* boundingBox = getComponentOfType(BoundingBox, parent);
   dirty = parent->transform->isDirty();
 }
 

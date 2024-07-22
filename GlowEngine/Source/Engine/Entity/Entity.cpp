@@ -38,11 +38,12 @@ Entities::Entity::Entity(const Entity& other)
   transform = getComponentOfType(Transform, this);
   sprite = getComponentOfType(Sprite3D, this);
   physics = getComponentOfType(Physics, this);
-  init();
 }
 
 void Entities::Entity::init()
 {
+  addComponent(boundingBox = new Components::BoundingBox());
+
   AddVariable(CreateVariable("Visible", &visible));
   AddVariable(CreateVariable("Name", &name));
 }

@@ -19,6 +19,7 @@
 #include "Shaders/ShaderManager.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include <filesystem>
+#include "Game/Scene/SceneSystem.h"
 
 // define the amount of max lights we can have
 #define MAXLIGHTS 8
@@ -60,13 +61,13 @@ void Graphics::Renderer::initGraphics()
 {
   // create each component of the pipeline starting device and swap chain
   createDeviceAndSwapChain();
+  createDepthStencil();
   createTargetView();
   loadShaders();
   createBlendState();
   createViewport();
   setRenderTarget();
   createRasterizer();
-  createDepthStencil();
   setTopology();
   createSamplerState();
   createImGuiSystem();
@@ -85,14 +86,15 @@ void Graphics::Renderer::cleanup()
 // the beginning of each frame of the render engine
 void Graphics::Renderer::beginFrame()
 {
+  RenderToTexture();
   // update the camera matrix
   camera->update();
 
-  // clear the target view for drawing
-  clearTargetView();
-
   // set the render target and clear depth buffer
   setRenderTarget();
+
+  // clear the target view for drawing
+  clearTargetView();
 
   // temporary global light data for testing
   GlobalLightBuffer lightData;
@@ -125,14 +127,33 @@ void Graphics::Renderer::beginFrame()
   glowGui->update();
 }
 
+void Graphics::Renderer::RenderToTexture()
+{
+
+  // Clear the render target
+  deviceContext->ClearRenderTargetView(renderTargetViewGui, backgroundColor);
+
+  // Set the render target
+  deviceContext->OMSetRenderTargets(1, &renderTargetViewGui, depthStencilView);
+
+  // Render your scene here
+  engine->getSceneSystem()->render();
+
+  deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+}
+
 void Graphics::Renderer::update()
 {
+
 }
 
 // the end of each frame at the renderer engine
 // present the swapchain and draw the objects
 void Graphics::Renderer::endFrame()
-{
+{ 
+  // end imgui updates
+  glowGui->endUpdate();
+
   // present the back buffer to the screen
   swapChain->Present(1, 0);
 }
@@ -155,11 +176,18 @@ void Graphics::Renderer::createDeviceAndSwapChain()
   swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
   // Create a device, device context, and swap chain using the information in the swapChainDesc structure
+#if defined(DEBUG) || defined(_DEBUG)
+  UINT createDeviceFlags = D3D11_CREATE_DEVICE_DEBUG;
+#else
+  UINT createDeviceFlags = 0;
+#endif
+
+  // Create a device, device context, and swap chain using the information in the swapChainDesc structure
   D3D_FEATURE_LEVEL featureLevel;
   HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
     D3D_DRIVER_TYPE_HARDWARE,
     NULL,
-    0,
+    D3D11_CREATE_DEVICE_DEBUG,
     NULL,
     0,
     D3D11_SDK_VERSION,
@@ -215,21 +243,50 @@ void Graphics::Renderer::createTargetView()
     return;
   }
 
-  // Describe the shader resource view
-  D3D11_TEXTURE2D_DESC backBufferDesc;
-  backBuffer->GetDesc(&backBufferDesc);
+  // Describe the texture
+  D3D11_TEXTURE2D_DESC textureDesc = {};
+  textureDesc.Width = window->getWidth();
+  textureDesc.Height = window->getHeight();
+  textureDesc.MipLevels = 1;
+  textureDesc.ArraySize = 1;
+  textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  textureDesc.SampleDesc.Count = 1;
+  textureDesc.Usage = D3D11_USAGE_DEFAULT;
+  textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
+  hr = device->CreateTexture2D(&textureDesc, nullptr, &renderTargetTexture);
+  if (FAILED(hr))
+  {
+    // Handle error
+    return;
+  }
+
+  // Describe the render target view
+  D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+  rtvDesc.Format = textureDesc.Format;
+  rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+
+  hr = device->CreateRenderTargetView(renderTargetTexture, &rtvDesc, &renderTargetViewGui);
+  if (FAILED(hr))
+  {
+    // Handle error
+    renderTargetTexture->Release();
+    return;
+  }
+
+  // Describe the shader resource view
   D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-  srvDesc.Format = backBufferDesc.Format;
+  srvDesc.Format = textureDesc.Format;
   srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   srvDesc.Texture2D.MostDetailedMip = 0;
   srvDesc.Texture2D.MipLevels = 1;
 
-  // Create a shader resource view
-  hr = device->CreateShaderResourceView(backBuffer, &srvDesc, &backBufferSRV);
-  if (FAILED(hr)) {
+  hr = device->CreateShaderResourceView(renderTargetTexture, &srvDesc, &shaderResourceView);
+  if (FAILED(hr))
+  {
     // Handle error
-    backBuffer->Release();
+    renderTargetViewGui->Release();
+    renderTargetTexture->Release();
     return;
   }
 
@@ -265,7 +322,7 @@ void Graphics::Renderer::setRenderTarget()
 void Graphics::Renderer::createBlendState()
 {
   D3D11_BLEND_DESC blendDesc = { 0 };
-  blendDesc.RenderTarget[0].BlendEnable = TRUE;
+  blendDesc.RenderTarget[0].BlendEnable = FALSE;
   blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
   blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
   blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
@@ -277,6 +334,7 @@ void Graphics::Renderer::createBlendState()
   ID3D11BlendState* pBlendState = NULL;
   device->CreateBlendState(&blendDesc, &pBlendState);
   deviceContext->OMSetBlendState(pBlendState, NULL, 0xffffffff);
+  pBlendState->Release();
 }
 
 // create a depth stencil to define stencil tests and depth ordering
@@ -492,9 +550,9 @@ ID3D11Device* Graphics::Renderer::getDevice()
   return device;
 }
 
-ID3D11ShaderResourceView* Graphics::Renderer::getBackBufferSRV()
+ID3D11ShaderResourceView* Graphics::Renderer::GetGameTexture()
 {
-  return backBufferSRV;
+  return shaderResourceView;
 }
 
 // get the device context

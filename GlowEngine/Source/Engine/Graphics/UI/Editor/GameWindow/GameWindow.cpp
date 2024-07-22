@@ -19,18 +19,18 @@
 // when we are focused on our game window, we can click on objects to select them
 void Editor::GameWindow::update()
 {
-  // calculate the game window size
-  calculateGameWindowSize();
-
-  // resize our viewport to fit the game window size
-  // NOTE: In the future, I would like to replace this with ImGui::Image() where the image is a texture of the rendered scene
-  EngineInstance::getEngine()->getRenderer()->setRenderTargetProperties(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y + yPadding, availableSize.x + xPadding, availableSize.y + yPadding);
+  // render the game to an ImGui texture
+  ID3D11ShaderResourceView* texture = EngineInstance::getEngine()->getRenderer()->GetGameTexture();
+  if (texture)
+  {
+    ImGui::Image((void*)texture, { (float)Graphics::Window::GetWidth(),(float)Graphics::Window::GetHeight() });
+  }
 
   // Check if the game window is focused and a mouse click occurred
-  if (ImGui::IsWindowFocused() && ImGui::IsMouseClicked(0)) 
+  if (ImGui::IsWindowFocused() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
   {
     ImVec2 mousePos = ImGui::GetMousePos();
-    Vector3D screenCoords(mousePos.x, mousePos.y, 0.0f);
+    Vector3D screenCoords(mousePos.x, mousePos.y, 0.f);
 
     Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
 
@@ -43,12 +43,23 @@ void Editor::GameWindow::update()
 
     // Perform ray picking
     Entities::Entity* selectedEntity = RayPickEntity(worldCoords, viewMatrix, perspectiveMatrix);
-
-    // If an entity is selected, inspect it
-    if (selectedEntity != nullptr) {
-      Inspector::inspect(selectedEntity);
-    }
+    Inspector::inspect(selectedEntity);
   }
+}
+
+// grab an entity by casting a ray into the scene based on our mouse coordinates, and then return that entity
+Entities::Entity* Editor::GameWindow::RayPickEntity(Vector3D worldCoords, DirectX::XMMATRIX view, DirectX::XMMATRIX perspective)
+{
+  Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
+
+  Vector3D rayOrigin = Vector3D::XMVectorToVector3D(camera->getPosition());
+  Vector3D rayDirection = worldCoords - rayOrigin; // Compute the direction of the ray
+
+  rayDirection.normalize();
+
+  // Perform ray picking in the scene
+  Entities::Entity* pickedEntity = EngineInstance::getEngine()->getSceneSystem()->getCurrentScene()->RayPick(rayOrigin, rayDirection);
+  return pickedEntity;
 }
 
 // calculate the size of our game window
@@ -75,24 +86,4 @@ void Editor::GameWindow::calculateGameWindowSize()
 
   // Update the size after setting the new window size
   availableSize = newSize;
-}
-
-// grab an entity by casting a ray into the scene based on our mouse coordinates, and then return that entity
-Entities::Entity* Editor::GameWindow::RayPickEntity(Vector3D worldCoords, DirectX::XMMATRIX view, DirectX::XMMATRIX perspective)
-{
-  Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
-
-  Vector3D rayOrigin = Vector3D::XMVectorToVector3D(camera->getPosition());
-  Vector3D rayDirection = worldCoords - rayOrigin; // Compute the direction of the ray
-
-  // Normalize the ray direction
-  DirectX::XMFLOAT3 rayDirFloat(rayDirection.x, rayDirection.y, rayDirection.z);
-  DirectX::XMVECTOR rayDir = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&rayDirFloat));
-  DirectX::XMFLOAT3 normalizedRayDir;
-  DirectX::XMStoreFloat3(&normalizedRayDir, rayDir);
-
-  // Perform ray picking in the scene
-  Entities::Entity* pickedEntity = EngineInstance::getEngine()->getSceneSystem()->getCurrentScene()->RayPick(rayOrigin, Vector3D::XMFloatToVector3D(normalizedRayDir));
-
-  return pickedEntity;
 }

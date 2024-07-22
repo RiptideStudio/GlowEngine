@@ -53,12 +53,63 @@ Vector3D GlowMath::Vector3D::XMFloatToVector3D(DirectX::XMFLOAT3 XMFloat)
   return Vector3D(XMFloat.x,XMFloat.y,XMFloat.z);
 }
 
-bool GlowMath::Vector3D::RayIntersectsBoundingBox(const Vector3D& rayOrigin, const Vector3D& rayDirection, const Components::BoundingBox& box, float& t)
+// given a ray, return whether or not it intersects with our bounding box
+bool GlowMath::Vector3D::RayIntersectsBoundingBox(const Vector3D& rayOrigin, const Vector3D& rayDirection, const Components::BoundingBox* box, float& t)
 {
-  // Implementation of ray-box intersection test (e.g., using the slab method or any other appropriate method)
-  // Update 't' with the distance from the ray origin to the intersection point
-  // Return true if the ray intersects the bounding box, false otherwise
-  return false; // Placeholder
+  Vector3D min = box->min;
+  Vector3D max = box->max;
+
+  float tMin = (min.x - rayOrigin.x) / rayDirection.x;
+  float tMax = (max.x - rayOrigin.x) / rayDirection.x;
+
+  if (rayDirection.x == 0) {
+    tMin = (min.x > rayOrigin.x || max.x < rayOrigin.x) ? -FLT_MAX : FLT_MAX;
+    tMax = tMin;
+  }
+
+  if (tMin > tMax) std::swap(tMin, tMax);
+
+  float tyMin = (min.y - rayOrigin.y) / rayDirection.y;
+  float tyMax = (max.y - rayOrigin.y) / rayDirection.y;
+
+  if (rayDirection.y == 0) {
+    tyMin = (min.y > rayOrigin.y || max.y < rayOrigin.y) ? -FLT_MAX : FLT_MAX;
+    tyMax = tyMin;
+  }
+
+  if (tyMin > tyMax) std::swap(tyMin, tyMax);
+
+  if ((tMin > tyMax) || (tyMin > tMax))
+    return false;
+
+  if (tyMin > tMin)
+    tMin = tyMin;
+
+  if (tyMax < tMax)
+    tMax = tyMax;
+
+  float tzMin = (min.z - rayOrigin.z) / rayDirection.z;
+  float tzMax = (max.z - rayOrigin.z) / rayDirection.z;
+
+  if (rayDirection.z == 0) {
+    tzMin = (min.z > rayOrigin.z || max.z < rayOrigin.z) ? -FLT_MAX : FLT_MAX;
+    tzMax = tzMin;
+  }
+
+  if (tzMin > tzMax) std::swap(tzMin, tzMax);
+
+  if ((tMin > tzMax) || (tzMin > tMax))
+    return false;
+
+  if (tzMin > tMin)
+    tMin = tzMin;
+
+  if (tzMax < tMax)
+    tMax = tzMax;
+
+  t = tMin;
+
+  return true;
 }
 
 GlowMath::Vector3D::Vector3D(float x, float y, float z)
