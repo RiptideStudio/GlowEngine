@@ -35,6 +35,7 @@ void Editor::GameWindow::update()
   {
     DrawCrosshair();
   }
+  else
   // Check if the game window is focused and a mouse click occurred
   if (ImGui::IsWindowFocused()) 
   {

@@ -19,6 +19,7 @@ Components::BoxCollider::BoxCollider(Vector3D newScale, bool isStatic, bool auto
   scale = newScale;
   type = ComponentType::Collider;
   name = "Box Collider";
+  simulation = true;
 
   AddVariable(CreateVariable("Hitbox Size", &scale));
   AddVariable(CreateVariable("Static", &colliderIsStatic));

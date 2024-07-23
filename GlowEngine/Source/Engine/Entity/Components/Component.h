@@ -67,6 +67,8 @@ namespace Components
 
       // get the variables vector
       std::vector<Variable>& getVariables() { return variables; }
+      // if this component can be simulated
+      bool IsSimulation() { return simulation; }
 
     protected:
       
@@ -78,6 +80,8 @@ namespace Components
       bool active = true;
       // priority determines order of update
       int priority = 0;
+      // if this component is simulated (updated when in editor or paused)
+      bool simulation = true;
 
       // components have a list of variables we expose to the editor
       std::vector<Variable> variables;

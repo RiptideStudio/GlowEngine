@@ -71,11 +71,17 @@ void Graphics::GlowGui::beginUpdate()
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
 
-
   // define the flags for docking space
   ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
     ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
     ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+  ImVec2 size = { (float)renderer->getWindow()->getWidth(), (float)renderer->getWindow()->getHeight() };
+  // define the main viewport of ImGui
+  ImGuiViewport* viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(viewport->Pos);
+  ImGui::SetNextWindowSize(size);
+  ImGui::SetNextWindowViewport(viewport->ID);
 
   // create docking space
   ImGui::Begin("DockSpace", nullptr, window_flags);

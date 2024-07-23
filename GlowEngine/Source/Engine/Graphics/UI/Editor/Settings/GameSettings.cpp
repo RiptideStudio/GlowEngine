@@ -92,4 +92,5 @@ void Editor::GameSettings::OnStop()
 {
   engine->SetPaused(true);
   engine->setPlaying(false);
+  sceneSystem->getCurrentScene()->restart();
 }

@@ -66,9 +66,8 @@ float4 main(PixelInputType input) : SV_TARGET
     // outlined object are slightly scaled up
     if (outlineBuffer.objectColor.a != 0)
     {
-        return outlineBuffer.objectColor;
+        outlineBuffer.objectColor;
     }
-    
     // Get the texture color
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
     
@@ -135,10 +134,10 @@ float4 main(PixelInputType input) : SV_TARGET
     float fogFactor = saturate((fogEnd - fogDistance) / (fogEnd - fogStart));
     
     // Fog color
-    float3 fogColor = float3(0.5, 0.5, 0.75); // Gray fog
+    float3 fogColor = float3(0.5, 0.5, 0.5); 
 
     // Interpolate between the fog color and the lit color
-    float4 finalColorWithFog = lerp(float4(fogColor, 0.0), litColor, fogFactor);
+    float4 finalColorWithFog = lerp(float4(fogColor, 1.0), litColor, fogFactor);
 
     return finalColorWithFog;
 }

@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "EngineInstance.h"
+#include "GlowEngine.h"
 
 Engine::GlowEngine* EngineInstance::engine = nullptr;
 
@@ -22,4 +23,14 @@ Engine::GlowEngine* EngineInstance::getEngine()
 void EngineInstance::setup(Engine::GlowEngine* newEngine)
 {
   engine = newEngine;
+}
+
+bool EngineInstance::IsPlaying()
+{
+  return EngineInstance::getEngine()->isPlaying();
+}
+
+bool EngineInstance::IsPaused()
+{
+  return EngineInstance::getEngine()->IsPaused();
 }

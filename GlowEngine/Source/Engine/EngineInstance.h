@@ -23,6 +23,9 @@ class EngineInstance
     static Engine::GlowEngine* getEngine();
     static void setup(Engine::GlowEngine* engine);
 
+    static bool IsPlaying();
+    static bool IsPaused();
+
   private:
 
     static Engine::GlowEngine* engine;

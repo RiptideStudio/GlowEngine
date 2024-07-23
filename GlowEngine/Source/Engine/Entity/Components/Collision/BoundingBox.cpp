@@ -16,6 +16,7 @@ Components::BoundingBox::BoundingBox()
 {
   name = "Bounding Box";
   type = ComponentType::BoundingBox;
+  simulation = false;
 
   AddVariable(CreateVariable("Min Box Size", &min));
   AddVariable(CreateVariable("Max Box Size", &max));

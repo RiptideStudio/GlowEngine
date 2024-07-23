@@ -13,8 +13,7 @@
 #include "Engine/GlowEngine.h"
 
 // create a PlayerBehavior
-Game::PlayerBehavior::PlayerBehavior()
-  : Behavior()
+Game::PlayerBehavior::PlayerBehavior() : Behavior()
 {
   type = Components::Component::ComponentType::Behavior;
   moveSpeed = 20.f;
@@ -72,20 +71,6 @@ void Game::PlayerBehavior::update()
   {
     physics->setVelocityY(jumpSpeed);
     transform->setPosition(transform->getPosition() + Vector3D(0, 0.1, 0));
-  }
-
-  // godmode lets us fly unbound by physics and collision!
-  if (1)
-  {
-    if (input->keyDown(VK_SPACE))
-    {
-      physics->setVelocityY(moveSpeed);
-      physics->setAcceleration(0);
-    }
-    if (input->keyDown(VK_SHIFT))
-    {
-      physics->setVelocityY(-moveSpeed);
-    }
   }
 
   // for diagonal movement

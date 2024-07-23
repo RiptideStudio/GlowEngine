@@ -41,6 +41,7 @@ namespace Components
     // calculate the scale, original scale, and vertices of the parent mesh if it exists
     // this must be called at least once for accurate debug drawing and collisions
     void calculateScale();
+    void CalculateMeshScale(Vector3D hitboxSize);
 
     // general getters
     bool isColliding();

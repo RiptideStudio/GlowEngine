@@ -12,11 +12,11 @@
 #include "Engine/GlowEngine.h"
 
 // create a behavior
-Game::Behavior::Behavior()
-  : Component()
+Game::Behavior::Behavior() : Component()
 {
   type = Components::Component::ComponentType::Behavior;
   engine = EngineInstance::getEngine();
   input = engine->getInputSystem();
+  simulation = false;
 }
 

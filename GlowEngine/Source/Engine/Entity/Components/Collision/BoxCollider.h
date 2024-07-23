@@ -20,7 +20,7 @@ namespace Components
 
   public:
 
-    BoxCollider(Vector3D newScale = { 1,1,1 }, bool static = true, bool autoResize = true);
+    BoxCollider(Vector3D newScale = { 1,1,1 }, bool isStatic = true, bool autoResize = true);
 
     virtual void renderDebug();
 

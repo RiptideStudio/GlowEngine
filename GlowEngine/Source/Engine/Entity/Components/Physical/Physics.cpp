@@ -21,6 +21,7 @@ Components::Physics::Physics()
   targetVelocity = { 0,0,0 };
   type = Components::Component::Physics;
   name = "Physics";
+  simulation = false;
 
   AddVariable(CreateVariable("Gravity", &gravity));
   AddVariable(CreateVariable("Acceleration", &acceleration));

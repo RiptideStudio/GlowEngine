@@ -13,14 +13,6 @@
 
 void Components::Collider::update()
 {
-  // recalculate the real scale of the mesh when our transform changes
-  // this can be modified to only be done if the scale changes in the future
-  if (dirty)
-  {
-    calculateScale();
-    dirty = false;
-  }
-
   // if we dont have a physics object, auto-mark as a static collider
   // if we do, and it's not anchored, then we are a moving collider
   Components::Physics* physics = getComponentOfType(Physics, parent);
@@ -32,11 +24,22 @@ void Components::Collider::update()
     colliderIsStatic = true;
   }
 
-  // autosize will scale our collider
-  if (autoSize)
+  // recalculate the real scale of the mesh when our transform changes
+  // this can be modified to only be done if the scale changes in the future
+  if (transform->isDirty() || dirty)
   {
-    calculateScale();
-    meshScale = scale / parent->transform->getScale();
+    // autosize will calculate the bounding box dynamically
+    if (autoSize)
+    {
+      calculateScale();
+      meshScale = scale / parent->transform->getScale();
+    }
+    else
+    {
+      // we just want to change our mesh scale to our actual scale and update vertices
+      CalculateMeshScale(scale);
+    }
+    dirty = false;
   }
 }
 
@@ -178,6 +181,14 @@ void Components::Collider::calculateScale()
 
   Components::BoundingBox* boundingBox = getComponentOfType(BoundingBox, parent);
   dirty = parent->transform->isDirty();
+}
+
+void Components::Collider::CalculateMeshScale(Vector3D hitboxSize)
+{
+  calculateScale();
+  meshScale = hitboxSize / parent->transform->getScale();
+  scale = hitboxSize;
+  dirty = false;
 }
 
 

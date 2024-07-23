@@ -67,7 +67,7 @@ void Editor::SceneEditor::update()
 			for (const auto& entity : container->getEntities())
 			{
 				// click on the entity to inspect it 
-				if (ImGui::Selectable(entity->getName().c_str())) // start entity menu *
+				if (ImGui::Selectable((entity->getName()+"##"+std::to_string(j)).c_str())) // start entity menu *
 				{
 					selectedEntity = entity;
 					Inspector::inspect(entity); // set the inspector
@@ -79,6 +79,7 @@ void Editor::SceneEditor::update()
 				if (ImGui::IsMouseHoveringRect(start, end) && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !EngineInstance::getEngine()->isPlaying())
 				{
 					Vector3D entityPosition = getComponentOfType(Transform, selectedEntity)->getPosition();
+					camera->setTarget(nullptr);
 					camera->SetPosition(entityPosition + Vector3D(0,0,15));
 					camera->SetRotation(-90,0);
 				}

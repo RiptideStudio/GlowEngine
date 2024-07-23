@@ -38,6 +38,8 @@ Entities::Entity::Entity(const Entity& other)
   transform = getComponentOfType(Transform, this);
   sprite = getComponentOfType(Sprite3D, this);
   physics = getComponentOfType(Physics, this);
+
+  init();
 }
 
 void Entities::Entity::init()
@@ -72,7 +74,19 @@ void Entities::Entity::update()
 {
   for (auto& component : components)
   {
-    component->update();
+    if (!EngineInstance::IsPlaying())
+    {
+      // some components (physics, colliders) don't get updated or simulated in editor
+      if (component->IsSimulation())
+      {
+        component->update();
+      }
+    }
+    else
+    {
+      // we are playing, so we update every component
+      component->update();
+    }
   }
 }
 

@@ -104,7 +104,6 @@ void Components::Sprite3D::render()
     // render the model
     model->render();
 
-    // render the outline if our parent is selected
     DrawOutline();
   }
 }
