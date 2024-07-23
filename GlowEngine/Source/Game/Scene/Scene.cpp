@@ -22,10 +22,17 @@ Scene::Scene::Scene()
   name = "Scene";
 }
 
-// exit a given scene
+// exit a given scene; this doesn't do anything right now, because we have no data we want to unload
+// this may be useful in the future, but for now it will just restart the scene
 void Scene::Scene::exit()
 {
+  restart();
+}
+
+void Scene::Scene::restart()
+{
   clear();
+  init();
 }
 
 // render a scene
@@ -160,7 +167,15 @@ Entities::Entity* Scene::Scene::RayPick(Vector3D origin, Vector3D dir)
 
   for (const auto& entity : entityList->getEntities())
   {
+    if (!entity->isVisible())
+      continue;
+
     Components::BoundingBox* box = getComponentOfType(BoundingBox,entity);
+    if (!box)
+      continue;
+
+    if ((box->min == 0 && box->max == 0))
+      continue;
 
     float distance;
     if (Vector3D::RayIntersectsBoundingBox(origin, dir, box, distance))

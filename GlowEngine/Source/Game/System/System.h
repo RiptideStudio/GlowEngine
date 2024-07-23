@@ -29,6 +29,8 @@ namespace Systems
     // get the system's name
     const std::string getName() { return name; }
 
+    bool IsSimulation() { return isSimulation; }
+    void SetAsSimulation(bool val) { isSimulation = val; }
 
     // all systems have access to core engine and other important systems
     Engine::GlowEngine* engine;
@@ -38,6 +40,8 @@ namespace Systems
   protected:
 
     std::string name;
+    bool isSimulation = false;
+
   };
 
 }

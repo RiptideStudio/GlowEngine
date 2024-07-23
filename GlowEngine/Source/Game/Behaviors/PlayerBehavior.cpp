@@ -40,7 +40,6 @@ void Game::PlayerBehavior::update()
 
   forward.y = 0;
   forward.normalize();
-
   camera->setTarget(parent);
 
   Vector3D forwardVelocity = forward * moveSpeed;
@@ -76,11 +75,12 @@ void Game::PlayerBehavior::update()
   }
 
   // godmode lets us fly unbound by physics and collision!
-  if (god)
+  if (1)
   {
     if (input->keyDown(VK_SPACE))
     {
       physics->setVelocityY(moveSpeed);
+      physics->setAcceleration(0);
     }
     if (input->keyDown(VK_SHIFT))
     {

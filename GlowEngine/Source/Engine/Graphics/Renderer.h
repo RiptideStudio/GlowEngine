@@ -51,13 +51,13 @@ namespace Graphics
     void loadShaders();
     void createTargetView();
     void createViewport();
-    void setRenderTarget();
     void createBlendState();
     void createDepthStencil();
     void createSamplerState();
 
     // add a buffer to the list to track
     void addBuffer(Buffer*);
+    void UpdateBuffers();
 
     // the constant buffer needs to be updated whenever a model is being rendered
     void updateObjectBuffer();
@@ -98,7 +98,8 @@ namespace Graphics
     void setTopology(D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // render our game to a texture
-    void RenderToTexture();
+    void SetRenderTarget();
+    void SetDefaultRenderTarget();
 
     // manage point lights
     void addPointLight(PointLight* light);

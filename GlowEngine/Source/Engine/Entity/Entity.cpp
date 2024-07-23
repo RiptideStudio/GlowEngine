@@ -42,8 +42,6 @@ Entities::Entity::Entity(const Entity& other)
 
 void Entities::Entity::init()
 {
-  addComponent(boundingBox = new Components::BoundingBox());
-
   AddVariable(CreateVariable("Visible", &visible));
   AddVariable(CreateVariable("Name", &name));
 }

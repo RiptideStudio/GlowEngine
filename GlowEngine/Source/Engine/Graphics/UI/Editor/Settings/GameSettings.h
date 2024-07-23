@@ -16,8 +16,19 @@ namespace Editor
 	{
 
 	public:
+		
+		GameSettings();
 
 		void update();
+
+		void OnPlay();
+		void OnPause();
+		void OnStop();
+
+	private:
+
+		Engine::GlowEngine* engine;
+		Scene::SceneSystem* sceneSystem;
 
 	};
 

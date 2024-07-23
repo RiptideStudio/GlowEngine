@@ -35,11 +35,19 @@ void Editor::Widget::renderFrame()
 // called on all widgets
 void Editor::Widget::beginFrame()
 {
+  if (borderless)
+  {
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+  }
   ImGui::Begin(title.c_str(), nullptr, flags);
 }
 
 void Editor::Widget::endFrame()
 {
-  ImGui::Text(description.c_str());
   ImGui::End();
+  if (borderless)
+  {
+    ImGui::PopStyleVar(2);
+  }
 }

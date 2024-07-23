@@ -16,25 +16,25 @@ namespace Editor
 
   public:
 
-    GameWindow(std::string title, std::string desc = "", ImGuiWindowFlags flags = 0) : Widget(title, desc, flags)
+    GameWindow(std::string title, std::string desc = "", ImGuiWindowFlags flags = 
+      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar |
+      ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar |
+      ImGuiWindowFlags_NoScrollWithMouse) 
+      : Widget(title, desc, flags)
     {
-      flags = ImGuiWindowFlags_NoBackground |
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar |
-        ImGuiWindowFlags_NoScrollWithMouse;
+      borderless = true;
     }
     
     void update();
     void calculateGameWindowSize();
+    void DrawCrosshair();
 
-    Entities::Entity* RayPickEntity(Vector3D vector, DirectX::XMMATRIX view, DirectX::XMMATRIX perspective);
+    Entities::Entity* RayPickEntity(Vector3D vector, DirectX::XMMATRIX view);
 
   private:
 
-    // padding for our game window so it clamps correctly
-    float xPadding = 16;
-    float yPadding = 16;
-
     // game window properties
     ImVec2 availableSize;
+    ImVec2 gameScreenPosition;
   };
 }

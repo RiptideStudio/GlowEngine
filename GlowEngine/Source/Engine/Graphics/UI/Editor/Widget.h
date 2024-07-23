@@ -30,8 +30,6 @@ namespace Editor
     void beginFrame();
     void endFrame();
 
-    Graphics::GlowGui* ui;
-
   protected:
 
     std::string title;
@@ -40,5 +38,6 @@ namespace Editor
     ImGuiWindowFlags flags;
 
     bool loaded = false;
+    bool borderless = false; // if this window has a border
   };
 }

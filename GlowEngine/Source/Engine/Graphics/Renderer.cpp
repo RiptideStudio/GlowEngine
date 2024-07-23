@@ -66,7 +66,6 @@ void Graphics::Renderer::initGraphics()
   loadShaders();
   createBlendState();
   createViewport();
-  setRenderTarget();
   createRasterizer();
   setTopology();
   createSamplerState();
@@ -86,63 +85,20 @@ void Graphics::Renderer::cleanup()
 // the beginning of each frame of the render engine
 void Graphics::Renderer::beginFrame()
 {
-  RenderToTexture();
+  // Set our render target to draw to a texture that isn't the back buffer
+  SetRenderTarget();
+
   // update the camera matrix
   camera->update();
 
-  // set the render target and clear depth buffer
-  setRenderTarget();
-
-  // clear the target view for drawing
-  clearTargetView();
-
-  // temporary global light data for testing
-  GlobalLightBuffer lightData;
-  lightData.cameraPosition = { DirectX::XMVectorGetX(camera->getPosition()),DirectX::XMVectorGetY(camera->getPosition()),DirectX::XMVectorGetZ(camera->getPosition()) };
-  lightData.lightColor = { 1.5,1.1,1.75 };
-  lightData.lightDirection = { 0, 1,0 };
-  globalLightBuffer->set(lightData);
-
-  // for now, we just have one light
-  // we will update this once we have a proper lighting solution
-  if (*pointLightsArray)
-  {
-    lightBuffer->set(pointLightsArray[0]->pointLight);
-    lightBuffer->updateAndBind();
-  }
-
-  // globally applied buffers/shaders
-  for (auto& buffer : buffers)
-  {
-    if (buffer->isGlobal())
-    {
-      buffer->updateAndBind();
-    }
-  }
+  // update our buffer data
+  UpdateBuffers();
 
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
 
   // update the GUI widgets
   glowGui->update();
-}
-
-void Graphics::Renderer::RenderToTexture()
-{
-  // clear the depth stencil
-  deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-  // Set the render target
-  deviceContext->OMSetRenderTargets(1, &renderTargetViewGui, depthStencilView);
-
-  // Clear the render target
-  deviceContext->ClearRenderTargetView(renderTargetViewGui, backgroundColor);
-
-  // Render your scene here
-  engine->getSceneSystem()->render();
-
-  // Optionally, reset the render target to the original back buffer
-  deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
 }
 
 void Graphics::Renderer::update()
@@ -153,7 +109,10 @@ void Graphics::Renderer::update()
 // the end of each frame at the renderer engine
 // present the swapchain and draw the objects
 void Graphics::Renderer::endFrame()
-{ 
+{
+  // set the default render target of the backbuffer
+  SetDefaultRenderTarget();
+
   // end imgui updates
   glowGui->endUpdate();
 
@@ -179,18 +138,11 @@ void Graphics::Renderer::createDeviceAndSwapChain()
   swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
   // Create a device, device context, and swap chain using the information in the swapChainDesc structure
-#if defined(DEBUG) || defined(_DEBUG)
-  UINT createDeviceFlags = D3D11_CREATE_DEVICE_DEBUG;
-#else
-  UINT createDeviceFlags = 0;
-#endif
-
-  // Create a device, device context, and swap chain using the information in the swapChainDesc structure
   D3D_FEATURE_LEVEL featureLevel;
   HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
     D3D_DRIVER_TYPE_HARDWARE,
     NULL,
-    D3D11_CREATE_DEVICE_DEBUG,
+    0,
     NULL,
     0,
     D3D11_SDK_VERSION,
@@ -238,7 +190,7 @@ void Graphics::Renderer::createTargetView()
     return;
   }
 
-  // Create a render target view
+  // Create a render target view for our back buffer - this is the default one
   hr = device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
   if (FAILED(hr)) {
     // Handle error
@@ -246,7 +198,7 @@ void Graphics::Renderer::createTargetView()
     return;
   }
 
-  // Describe the texture
+  // create a texture to render to a separate texture than the back buffer
   D3D11_TEXTURE2D_DESC textureDesc = {};
   textureDesc.Width = window->getWidth();
   textureDesc.Height = window->getHeight();
@@ -311,21 +263,11 @@ void Graphics::Renderer::createViewport()
   deviceContext->RSSetViewports(1, &viewport);
 }
 
-// set the render target
-void Graphics::Renderer::setRenderTarget()
-{
-  // clear depth buffer
-  deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-  // set render target
-  deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
-}
-
 // create a blend state so we can have alpha
 void Graphics::Renderer::createBlendState()
 {
   D3D11_BLEND_DESC blendDesc = { 0 };
-  blendDesc.RenderTarget[0].BlendEnable = FALSE;
+  blendDesc.RenderTarget[0].BlendEnable = TRUE;
   blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
   blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
   blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
@@ -394,9 +336,60 @@ void Graphics::Renderer::createSamplerState()
   device->CreateSamplerState(&sampDesc, &sampler);
 }
 
+// renders our game to a texture 
+void Graphics::Renderer::SetRenderTarget()
+{
+  // clear the depth stencil
+  deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+  // Set the render target
+  deviceContext->OMSetRenderTargets(1, &renderTargetViewGui, depthStencilView);
+
+  // Clear the render target
+  deviceContext->ClearRenderTargetView(renderTargetViewGui, backgroundColor);
+}
+
+// set the render target
+void Graphics::Renderer::SetDefaultRenderTarget()
+{
+  // clear depth buffer
+  deviceContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+  // set render target
+  deviceContext->OMSetRenderTargets(1, &renderTargetView, depthStencilView);
+}
+
 void Graphics::Renderer::addBuffer(Buffer* buffer)
 {
   buffers.push_back(buffer);
+}
+
+// updates all of our automatically bound buffers and some manual ones for testing
+void Graphics::Renderer::UpdateBuffers()
+{
+  // temporary global light data for testing
+  GlobalLightBuffer lightData;
+  lightData.cameraPosition = { DirectX::XMVectorGetX(camera->getPosition()),DirectX::XMVectorGetY(camera->getPosition()),DirectX::XMVectorGetZ(camera->getPosition()) };
+  lightData.lightColor = { 1.5,1.1,1.75 };
+  lightData.lightDirection = { 0, 1,0 };
+  globalLightBuffer->set(lightData);
+
+  // for now, we just have one light
+  // we will update this once we have a proper lighting solution
+  if (*pointLightsArray)
+  {
+    lightBuffer->set(pointLightsArray[0]->pointLight);
+    lightBuffer->updateAndBind();
+  }
+
+  // globally applied buffers/shaders
+  for (auto& buffer : buffers)
+  {
+    if (buffer->isGlobal())
+    {
+      buffer->updateAndBind();
+    }
+  }
 }
 
 // bind the subresource and constant buffer to the renderer

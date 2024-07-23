@@ -18,7 +18,7 @@ static float lightSize = 1;
 void Scene::ForestScene::init()
 {
   // player entity
-  Entities::Entity* player = instanceCreateExt("Player", {0,5,0}, {1,2,1}, 0);
+  Entities::Entity* player = instanceCreateExt("Player", {20,5,0}, {1,2,1}, 0);
   player->addComponent(new Game::PlayerBehavior());
   player->addComponent(new Components::Physics());
   player->addComponent(new Components::BoxCollider({ 1,6,1 },false,false));
@@ -40,9 +40,10 @@ void Scene::ForestScene::init()
   leaves->updatePointLight(leaves->getPosition(), 50, lightColor);
   leaves->setName("Plane Leaves");
 
-  Entities::Entity* m = instanceCreateExt("Monkey", { 10,5,-15 }, { 5,5,5 }, { 45,0,0 });
+  Entities::Entity* m = instanceCreateExt("Monkey", { 15,0,-5 }, { 5,5,5 }, { 45,0,0 });
   m->addComponent(new Components::Physics());
   m->addComponent(new Components::BoxCollider());
+  m->addComponent(new Components::BoundingBox());
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
 
   for (int i = 0; i < 25; ++i)

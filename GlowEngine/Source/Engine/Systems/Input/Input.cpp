@@ -24,6 +24,16 @@ Input::InputSystem::InputSystem(std::string systemName)
   ShowCursor(FALSE);
 }
 
+bool Input::InputSystem::KeyDown(int key)
+{
+  return EngineInstance::getEngine()->getInputSystem()->keyDown(key);
+}
+
+bool Input::InputSystem::KeyPressed(int key)
+{
+  return EngineInstance::getEngine()->getInputSystem()->keyTriggered(key);
+}
+
 // update the input state
 void Input::InputSystem::update()
 {
@@ -54,7 +64,7 @@ void Input::InputSystem::updateKeyStates()
 
 void Input::InputSystem::updateHotkeys()
 {
-  if (focused)
+  if (!engine->IsPaused())
     while (ShowCursor(FALSE) >= 0);
   else
     while (ShowCursor(TRUE) < 0);
@@ -64,23 +74,27 @@ void Input::InputSystem::updateHotkeys()
   {
     engine->getRenderer()->toggleFullscreen();
   }
+
   // terminate engine on escape
   if (keyTriggered(VK_ESCAPE))
   {
-    if (!focused)
+    if (!engine->isPlaying())
     {
       engine->stop();
     }
     else
     {
-      focused = false;
+      engine->SetPaused(true);
     }
   }
 
   // refocus
   if (keyTriggered(VK_RETURN))
   {
-    focused = true;
+    if (engine->isPlaying())
+    {
+      engine->SetPaused(false);
+    }
   }
 
   // toggle renderer debug mode

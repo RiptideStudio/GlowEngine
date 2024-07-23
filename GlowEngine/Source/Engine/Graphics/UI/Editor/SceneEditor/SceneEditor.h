@@ -16,6 +16,11 @@ namespace Entities
   class EntityListWrapper;
 }
 
+namespace Visual
+{
+  class Camera;
+}
+
 namespace Editor
 {
   class Inspector; // forward declare
@@ -39,6 +44,7 @@ namespace Editor
     // quick pointers
     Scene::SceneSystem* sceneSystem;
     Scene::Scene* currentScene;
+    Visual::Camera* camera;
 
     Entities::EntityListWrapper* selectedContainer;
     Entities::Entity* selectedEntity;

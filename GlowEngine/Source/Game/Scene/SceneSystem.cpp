@@ -26,8 +26,7 @@ void Scene::SceneSystem::update()
   // restart the current scene
   if (input->keyTriggered('R'))
   {
-    currentScene->clear();
-    currentScene->init();
+    currentScene->restart();
   }
 }
 
@@ -72,7 +71,7 @@ void Scene::SceneSystem::setCurrentScene(std::string name)
 // exit the current scene
 void Scene::SceneSystem::exitCurrentScene()
 {
-
+  currentScene->exit();
 }
 
 // add a new scene to the map of scenes

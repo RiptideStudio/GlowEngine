@@ -112,6 +112,31 @@ bool GlowMath::Vector3D::RayIntersectsBoundingBox(const Vector3D& rayOrigin, con
   return true;
 }
 
+Vector3D GlowMath::Vector3D::ViewToWorldSpace(const Vector3D& viewCoords, const DirectX::XMMATRIX& inverseView)
+{
+  DirectX::XMVECTOR view = DirectX::XMVectorSet(viewCoords.x, viewCoords.y, viewCoords.z, 0.0f);
+  DirectX::XMVECTOR worldSpace = DirectX::XMVector4Transform(view, inverseView);
+  DirectX::XMFLOAT3 worldSpaceCoords;
+  DirectX::XMStoreFloat3(&worldSpaceCoords, worldSpace);
+  return Vector3D(worldSpaceCoords.x, worldSpaceCoords.y, worldSpaceCoords.z);
+}
+
+Vector3D GlowMath::Vector3D::NDCToViewSpace(const Vector3D& ndcCoords, const DirectX::XMMATRIX inverseProjection)
+{
+  DirectX::XMVECTOR ndc = DirectX::XMVectorSet(ndcCoords.x, ndcCoords.y, ndcCoords.z, 1.0f);
+  DirectX::XMVECTOR viewSpace = DirectX::XMVector4Transform(ndc, inverseProjection);
+  DirectX::XMFLOAT3 viewSpaceCoords;
+  DirectX::XMStoreFloat3(&viewSpaceCoords, viewSpace);
+  return Vector3D(viewSpaceCoords.x, viewSpaceCoords.y, viewSpaceCoords.z);
+}
+
+Vector3D GlowMath::Vector3D::ScreenToNDC(const ImVec2& screenCoords, const ImVec2& screenSize)
+{
+  float ndcX = (2.0f * screenCoords.x) / screenSize.x - 1.0f;
+  float ndcY = 1.0f - (2.0f * screenCoords.y) / screenSize.y;
+  return Vector3D(ndcX, ndcY, 0.0f);
+}
+
 GlowMath::Vector3D::Vector3D(float x, float y, float z)
   :
   x(x),
@@ -175,6 +200,11 @@ Vector3D GlowMath::Vector3D::operator*(const Vector3D& other)
 Vector3D GlowMath::Vector3D::operator*(const float& other)
 {
   return Vector3D(x * other, y * other, z * other);
+}
+
+bool GlowMath::Vector3D::operator==(const float& other)
+{
+  return (x == other && y == other && z == other);
 }
 
 Vector3D GlowMath::Vector3D::operator/(const Vector3D& other)

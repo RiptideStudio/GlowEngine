@@ -13,6 +13,8 @@ namespace Components
   class BoundingBox;
 }
 
+class ImVec2;
+
 namespace GlowMath
 {
 
@@ -27,6 +29,9 @@ namespace GlowMath
     static Vector3D XMVectorToVector3D(DirectX::XMVECTOR vector);
     static Vector3D XMFloatToVector3D(DirectX::XMFLOAT3 XMFloat);
     static bool RayIntersectsBoundingBox(const Vector3D& rayOrigin, const Vector3D& rayDirection, const Components::BoundingBox* box, float& t);
+    static Vector3D ViewToWorldSpace(const Vector3D& viewCoords, const DirectX::XMMATRIX& inverseView);
+    static Vector3D NDCToViewSpace(const Vector3D& ndccoords, const DirectX::XMMATRIX inverseProjection);
+    static Vector3D ScreenToNDC(const ImVec2& screenCoords, const ImVec2& screenSize);
 
     // default of zeroed vector
     Vector3D(float x = 0, float y = 0, float z = 0);
@@ -49,6 +54,8 @@ namespace GlowMath
     // multiply operator
     Vector3D operator*(const Vector3D& other);
     Vector3D operator*(const float& other);
+
+    bool operator==(const float& other);
 
     // division
     Vector3D operator/(const Vector3D& other);

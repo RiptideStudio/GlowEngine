@@ -13,6 +13,7 @@
 #include "Engine/GlowEngine.h"
 #include "Game/Scene/SceneSystem.h"
 #include "Engine/Graphics/UI/Editor/Inspector/Inspector.h"
+#include "Engine/Graphics/Camera/Camera.h"
 
 Editor::SceneEditor::SceneEditor(std::string title, std::string desc, ImGuiWindowFlags flags) : Widget(title, desc, flags)
 {
@@ -26,6 +27,7 @@ void Editor::SceneEditor::init()
 {
 	sceneSystem = EngineInstance::getEngine()->getSceneSystem();
 	currentScene = sceneSystem->getCurrentScene();
+	camera = EngineInstance::getEngine()->getCamera();
 }
 
 void Editor::SceneEditor::update()
@@ -69,6 +71,16 @@ void Editor::SceneEditor::update()
 				{
 					selectedEntity = entity;
 					Inspector::inspect(entity); // set the inspector
+				}
+
+				// check if we've double clicked on an entity and go to it
+				start = ImGui::GetCursorScreenPos();
+				end = ImVec2(start.x + ImGui::GetContentRegionAvail().x, start.y + ImGui::GetTextLineHeightWithSpacing());
+				if (ImGui::IsMouseHoveringRect(start, end) && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !EngineInstance::getEngine()->isPlaying())
+				{
+					Vector3D entityPosition = getComponentOfType(Transform, selectedEntity)->getPosition();
+					camera->SetPosition(entityPosition + Vector3D(0,0,15));
+					camera->SetRotation(-90,0);
 				}
 
 				// drag a selectable button (this lets us reorganize our tree)

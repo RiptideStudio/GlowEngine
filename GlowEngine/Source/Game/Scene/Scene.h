@@ -25,8 +25,8 @@ namespace Scene
     virtual void init() {};
     virtual void update() {};
 
-    // exit a scene
     void exit();
+    void restart();
 
     virtual void render();
 

@@ -35,6 +35,9 @@ Engine::GlowEngine::GlowEngine()
   frameCount(0),
   fpsTimer(0),
   totalFrames(0),
+  inEditor(true),
+  paused(true),
+  playing(false),
   fps(60)
 {
   EngineInstance::setup(this);
@@ -125,14 +128,21 @@ void Engine::GlowEngine::stop()
 // loop through and update each system
 void Engine::GlowEngine::update()
 {
-  // if we're paused, don't update but keep rendering
-  if (!input->isFocused())
-    return;
-
   // update all systems
   for (auto system : SystemInstance::getSystems())
   {
-    system->update();
+    // systems that are simulations 
+    if (paused)
+    {
+      if (system->IsSimulation())
+      {
+        system->update();
+      }
+    }
+    else
+    {
+      system->update();
+    }
   }
 }
 
@@ -191,6 +201,7 @@ void Engine::GlowEngine::createLaterSystems()
   // scene system
   sceneSystem = new Scene::SceneSystem("SceneSystem");
   sceneSystem->init();
+  sceneSystem->SetAsSimulation(true);
   // initialize later system core pointers
   initializeSystemCorePointers();
   // set the first scene

@@ -67,7 +67,11 @@ namespace Engine
 
     // if we are playing
     bool isPlaying();
+    bool InEditor() { return inEditor; }
+    bool IsPaused() { return paused; }
+    void EnableEditor(bool val) { inEditor = val; }
     void setPlaying(bool val);
+    void SetPaused(bool val) { paused = val; }
 
     // get the window handle from the window class
     HWND getWindowHandle();
@@ -94,6 +98,8 @@ namespace Engine
 
     // if we are in play mode
     bool playing;
+    bool inEditor;
+    bool paused;
 
     // statistics
     float totalTime;

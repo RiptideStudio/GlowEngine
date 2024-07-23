@@ -43,6 +43,9 @@ namespace Visual
     const Vector3D getRightVector();
     // set the target
     void setTarget(Entities::Entity* newTarget);
+    // set the position
+    void SetPosition(Vector3D pos);
+    void SetRotation(float yaw_, float pitch_);
 
     // get the position
     XMVector getPosition() { return position; }

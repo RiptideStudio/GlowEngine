@@ -19,36 +19,47 @@
 // when we are focused on our game window, we can click on objects to select them
 void Editor::GameWindow::update()
 {
+  // calculate the size of the game window
+  calculateGameWindowSize();
+  gameScreenPosition = ImGui::GetCursorScreenPos();
+
   // render the game to an ImGui texture
   ID3D11ShaderResourceView* texture = EngineInstance::getEngine()->getRenderer()->GetGameTexture();
   if (texture)
   {
-    ImGui::Image((void*)texture, { (float)Graphics::Window::GetWidth(),(float)Graphics::Window::GetHeight() });
+    ImGui::Image((void*)texture, availableSize);
   }
 
-  // Check if the game window is focused and a mouse click occurred
-  if (ImGui::IsWindowFocused() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
+  // while we're playing
+  if (EngineInstance::getEngine()->isPlaying())
   {
-    ImVec2 mousePos = ImGui::GetMousePos();
-    Vector3D screenCoords(mousePos.x, mousePos.y, 0.f);
+    DrawCrosshair();
+  }
+  // Check if the game window is focused and a mouse click occurred
+  if (ImGui::IsWindowFocused()) 
+  {
+    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    {
+      ImVec2 mousePos = ImGui::GetMousePos();
+      Vector3D screenCoords(mousePos.x, mousePos.y, 0.f);
 
-    Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
+      Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
+      // Get the view and projection matrices
+      DirectX::XMMATRIX viewMatrix = camera->getViewMatrix();
+      DirectX::XMMATRIX perspectiveMatrix = camera->getPerspecitveMatrix();
 
-    // Get the view and projection matrices
-    DirectX::XMMATRIX viewMatrix = camera->getViewMatrix();
-    DirectX::XMMATRIX perspectiveMatrix = camera->getPerspecitveMatrix();
+      // Convert screen coordinates to world coordinates
+      Vector3D worldCoords = Vector3D::ScreenToWorldCoords(screenCoords);
 
-    // Convert screen coordinates to world coordinates
-    Vector3D worldCoords = Vector3D::ScreenToWorldCoords(screenCoords);
-
-    // Perform ray picking
-    Entities::Entity* selectedEntity = RayPickEntity(worldCoords, viewMatrix, perspectiveMatrix);
-    Inspector::inspect(selectedEntity);
+      // Perform ray picking
+      Entities::Entity* selectedEntity = RayPickEntity(worldCoords, viewMatrix);
+      Inspector::inspect(selectedEntity);
+    }
   }
 }
 
 // grab an entity by casting a ray into the scene based on our mouse coordinates, and then return that entity
-Entities::Entity* Editor::GameWindow::RayPickEntity(Vector3D worldCoords, DirectX::XMMATRIX view, DirectX::XMMATRIX perspective)
+Entities::Entity* Editor::GameWindow::RayPickEntity(Vector3D worldCoords, DirectX::XMMATRIX view)
 {
   Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
 
@@ -82,8 +93,30 @@ void Editor::GameWindow::calculateGameWindowSize()
 
   // Set the new size of the ImGui window based on the aspect ratio
   ImVec2 newSize(newWidth, newHeight);
-  ImGui::SetNextWindowSize(newSize);
 
   // Update the size after setting the new window size
   availableSize = newSize;
+}
+
+void Editor::GameWindow::DrawCrosshair()
+{
+  // draw a crosshair at the middle of our window
+  ImGuiIO& io = ImGui::GetIO();
+  ImDrawList* draw_list = ImGui::GetForegroundDrawList();
+
+  // Screen dimensions
+  float screenWidth = availableSize.x;
+  float screenHeight = availableSize.y;
+
+  // Crosshair properties
+  float centerX = gameScreenPosition.x + screenWidth * 0.5f;
+  float centerY = gameScreenPosition.y + screenHeight * 0.5f;
+  float crosshairSize = 10.0f; // Size of the crosshair lines
+  ImU32 color = IM_COL32(255, 255, 255, 255); // White color
+
+  // Draw vertical line
+  draw_list->AddLine(ImVec2(centerX, centerY - crosshairSize), ImVec2(centerX, centerY + crosshairSize), color, 2.0f);
+
+  // Draw horizontal line
+  draw_list->AddLine(ImVec2(centerX - crosshairSize, centerY), ImVec2(centerX + crosshairSize, centerY), color, 2.0f);
 }

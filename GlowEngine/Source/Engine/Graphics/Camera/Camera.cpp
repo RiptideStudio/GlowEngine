@@ -21,7 +21,7 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
   cameraSpeed(20),
   mouseSensitivity(0.1f)
 {
-  position = { 0 };
+  position = { 5,0,5,1.f };
   rotation = 0;
   viewMatrix = {};
   perspectiveMatrix = {};
@@ -45,18 +45,14 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
 // update the camera - this is essentially the camera controller
 void Visual::Camera::update()
 {
-  // stop camera functionality if we are not focused in the window
-  if (!input->isFocused())
-    return;
-
   // update our camera controller - this handles input and calculates our forward direction, right, and target
   cameraController();
 
   // update our target position
   if (target)
   {
-    Vector3D targetPos = target->transform->getPosition();
-    position = DirectX::XMVectorSet(targetPos.x, targetPos.y+height, targetPos.z, 1.0f);
+    Vector3D targetPos = getComponentOfType(Transform, target)->getPosition();
+    position = DirectX::XMVectorSet(targetPos.x, targetPos.y + height, targetPos.z, 1.0f);
   }
 
   targetPosition = DirectX::XMVectorAdd(position, forward);
@@ -66,7 +62,7 @@ void Visual::Camera::update()
   upDirection = DirectX::XMVector3Normalize(upDirection);
 
   // Update the perspective matrix
-  perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 0.1f, viewDistance);
+  perspectiveMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, 1.0f, viewDistance);
 
   // Update the view matrix
   viewMatrix = DirectX::XMMatrixLookAtLH(position, targetPosition, upDirection);
@@ -134,4 +130,15 @@ const Vector3D Visual::Camera::getRightVector()
 void Visual::Camera::setTarget(Entities::Entity* newTarget)
 {
   target = newTarget;
+}
+
+void Visual::Camera::SetPosition(Vector3D pos)
+{
+  position = { pos.x,pos.y,pos.z };
+}
+
+void Visual::Camera::SetRotation(float yaw_, float pitch_)
+{
+  yaw = yaw_;
+  pitch = pitch_;
 }

@@ -12,13 +12,16 @@
 namespace Input
 {
 
-
   class InputSystem : public Systems::System
   {
 
   public:
 
     InputSystem(std::string systemName);
+
+    // static methods for getting input
+    static bool KeyPressed(int key);
+    static bool KeyDown(int key);
 
     // general game loop update
     void update();
