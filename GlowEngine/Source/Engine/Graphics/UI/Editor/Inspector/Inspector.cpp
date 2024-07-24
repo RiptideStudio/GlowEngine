@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "Inspector.h"
 
+// static varibles initialized here
 Entities::Entity* Editor::Inspector::selectedEntity = nullptr;
 Entities::Entity* Editor::Inspector::previousEntity = nullptr;
 
@@ -46,10 +47,10 @@ void Editor::Inspector::update()
 
 			if (ImGui::TreeNode(componentName.c_str())) // begin component tree node *
 			{
+				ImGui::NewLine();
+
 				for (auto& variable : component->getVariables())
 				{
-					ImGui::NewLine();
-
 					// label the variable
 					variable.display();
 				}

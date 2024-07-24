@@ -9,6 +9,7 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "Engine/Graphics/Renderer.h"
+#include "Engine/Graphics/Camera/Camera.h"
 
 // base scene constructor
 Scene::Scene::Scene()
@@ -17,8 +18,9 @@ Scene::Scene::Scene()
   input = engine->getInputSystem();
   factory = engine->getEntityFactory();
   globalList = new Entities::EntityList();
-  entityList = new Entities::EntityList();
-  addEntityList();
+  rootList = new Entities::EntityList();
+  rootList->add(engine->getCamera());
+  rootList->SetName("Root");
   name = "Scene";
 }
 
@@ -44,23 +46,17 @@ void Scene::Scene::render()
 // update a scene's given entities
 void Scene::Scene::updateEntities()
 {
-  // update all of our entity lists
-  for (auto& wrapper : entityLists)
-  {
-    wrapper->list->update();
-  }
+  // update all of our entity lists; entity lists recursively update their sublists
+  rootList->update();
 
-  // check for collisions in our global list
+  // we have a separate list for handling collisions
   globalList->updateColliders();
 }
 
 // render a scene's entities
 void Scene::Scene::renderEntities()
 {
-  for (auto& wrapper : entityLists)
-  {
-    wrapper->list->render();
-  }
+  rootList->render();
 }
 
 // create an entity within a scene that will directly add it to the list
@@ -117,13 +113,8 @@ Entities::Actor* Scene::Scene::instanceCreateGeneral(std::string name, std::stri
 // add an entity to the root node list; we'll eventually be using the scene hierarchy to do most of this
 void Scene::Scene::add(Entities::Entity* entity)
 {
-  entityLists[0]->list->add(entity);
-  entityList->add(entity);
-}
-
-void Scene::Scene::addToList(Entities::EntityList* list, Entities::Entity* ent)
-{
-  list->add(ent);
+  rootList->add(entity);
+  entity->SetId(rootList->getSize());
 }
 
 void Scene::Scene::clear()
@@ -133,7 +124,7 @@ void Scene::Scene::clear()
     wrapper->list->clear();
   }
   globalList->clear();
-  entityList->clear();
+  rootList->clear();
 }
 
 void Scene::Scene::ReorderLists(int src, int dst)
@@ -143,29 +134,13 @@ void Scene::Scene::ReorderLists(int src, int dst)
   entityLists.insert(entityLists.begin() + dst, list);
 }
 
-// creates a new entity wrapper given a name
-void Scene::Scene::addEntityList(std::string name)
-{
-  Entities::EntityList* list = new Entities::EntityList();
-  Entities::EntityListWrapper* wrapper = new Entities::EntityListWrapper(list);
-
-  size_t size = entityLists.size();
-
-  wrapper->name = name;
-
-  if (size > 0)
-    wrapper->name += std::to_string(size);
-
-  entityLists.push_back(wrapper);
-}
-
 // pick an entity from a scene given an origin vector and a direction, finds the first one
 Entities::Entity* Scene::Scene::RayPick(Vector3D origin, Vector3D dir)
 {
   float closestDistance = FLT_MAX;
   Entities::Entity* closestEntity = nullptr;
 
-  for (const auto& entity : entityList->getEntities())
+  for (const auto& entity : rootList->getEntities())
   {
     if (!entity->isVisible())
       continue;

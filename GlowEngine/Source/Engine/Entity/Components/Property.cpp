@@ -43,7 +43,7 @@ void Variable::display()
 	switch (type)
 	{
 	case VariableType::String:
-		ImGui::InputText(("##" + name).c_str(), std::get<std::string*>(value)->data(), 256);
+		ImGui::InputText(("##" + name).c_str(), std::get<std::string*>(value)->data(), 16);
 		break;
 	case VariableType::Bool:
 		ImGui::Checkbox(("##" + name).c_str(), std::get<bool*>(value));

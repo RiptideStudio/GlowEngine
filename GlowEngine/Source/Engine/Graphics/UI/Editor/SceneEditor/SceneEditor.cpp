@@ -14,6 +14,7 @@
 #include "Game/Scene/SceneSystem.h"
 #include "Engine/Graphics/UI/Editor/Inspector/Inspector.h"
 #include "Engine/Graphics/Camera/Camera.h"
+#include "Engine/Graphics/Textures/TextureLibrary.h"
 
 Editor::SceneEditor::SceneEditor(std::string title, std::string desc, ImGuiWindowFlags flags) : Widget(title, desc, flags)
 {
@@ -32,122 +33,219 @@ void Editor::SceneEditor::init()
 
 void Editor::SceneEditor::update()
 {
-	// add containers, move them around
-	interact();
+	DrawSceneHierarchy();
+}
 
-	// Check for right-click within the scene for new container
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+
+void Editor::SceneEditor::DrawSceneHierarchy()
+{
+	// similar to unity, we want to be able to iterate over every entity in the scene hierarchy.
+	// We then want to be able to create and add folders and subfolders, etc. We can't delete the root node
+	Entities::EntityList* rootList = currentScene->getRootList();
+	DrawHierarchy(rootList);
+
+	// Below is the logic for adding entities and new lists to the hierarchy
+	// Right click on our empty space to add a new container outside of an existing container
+	if ((selectedContainer || selectedEntity) && ImGui::BeginPopupContextWindow("NewContainer"))
 	{
-		ImGui::OpenPopup("NewContainer");
-	}
-
-	// for each list of entities, we want to display them and their name
-	int i = 0;
-	for (const auto& wrapper : currentScene->getEntityWrappers())
-	{
-		const auto& container = wrapper->list;
-
-		// select this container so we can add to it!
-		ImVec2 start = ImGui::GetCursorScreenPos();
-		ImVec2 end = ImVec2(start.x + ImGui::GetContentRegionAvail().x, start.y + ImGui::GetTextLineHeightWithSpacing());
-
-		// Check for right-click within the bounding box
-		if (ImGui::IsMouseHoveringRect(start, end) && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+		// create a new folder
+		if (selectedContainer)
 		{
-			ImGui::OpenPopup("NewObject");
-		}
-
-		if (ImGui::TreeNode(wrapper->name.c_str())) // start container menu *
-		{
-			// if collapsed, don't display entities
-			// display each entity in the container
-			DragContainer(wrapper,i);
-
-			int j = 0;
-			for (const auto& entity : container->getEntities())
+			// add an entity to this folder
+			if (ImGui::MenuItem("Create Entity"))
 			{
-				// click on the entity to inspect it 
-				if (ImGui::Selectable((entity->getName()+"##"+std::to_string(j)).c_str())) // start entity menu *
-				{
-					selectedEntity = entity;
-					Inspector::inspect(entity); // set the inspector
-				}
-
-				// check if we've double clicked on an entity and go to it
-				start = ImGui::GetCursorScreenPos();
-				end = ImVec2(start.x + ImGui::GetContentRegionAvail().x, start.y + ImGui::GetTextLineHeightWithSpacing());
-				if (ImGui::IsMouseHoveringRect(start, end) && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !EngineInstance::getEngine()->isPlaying())
-				{
-					Vector3D entityPosition = getComponentOfType(Transform, selectedEntity)->getPosition();
-					camera->setTarget(nullptr);
-					camera->SetPosition(entityPosition + Vector3D(0,0,15));
-					camera->SetRotation(-90,0);
-				}
-
-				// drag a selectable button (this lets us reorganize our tree)
-				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-				{
-					// Set the payload to carry the entity pointer
-					ImGui::SetDragDropPayload("ENTITY", &j, sizeof(int));
-					ImGui::Text(entity->getName().c_str());
-
-					// end the drag sourrce
-					ImGui::EndDragDropSource();
-				}
-
-				// Set the drop target to reposition the entity
-				if (ImGui::BeginDragDropTarget()) 
-				{
-					// set the entity's order within the list
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) 
-					{
-						int srcIndex = *(const int*)payload->Data;
-						int dstIndex = j;
-						container->ReorderEntities(srcIndex, dstIndex);
-					}
-					ImGui::EndDragDropTarget();
-				}
-
-				j++; // end of entity menu *
+				Entities::Entity* entity = new Entities::Entity();
+				entity->addComponent(new Components::Transform(1, Vector3D(3, 3, 3), 0));
+				entity->addComponent(entity->sprite = new Components::Sprite3D());
+				entity->sprite->setModel("Cube");
+				selectedContainer->add(entity);
 			}
 
-			ImGui::TreePop(); // end container menu *
+			// Add a new folder to the root list
+			if (ImGui::MenuItem("Create New Folder"))
+			{
+				selectedContainer->getSubLists().push_back(new Entities::EntityList());
+			}
+
+			// delete a list and all of its sublists
+			if (ImGui::MenuItem("Delete Folder"))
+			{
+				// Delete this container
+				Entities::EntityList* parentContainer = FindParent(rootList, selectedContainer);
+				if (parentContainer)
+				{
+					Entities::EntityList* sc = selectedContainer;
+					// Find and remove the selected container from its parent's sublists
+					auto& sublists = parentContainer->getSubLists();
+					auto it = std::find_if(sublists.begin(), sublists.end(),
+						[sc](Entities::EntityList* el) { return el == sc; });
+					if (it != sublists.end())
+					{
+						(*it)->clear();
+						sublists.erase(it);
+					}
+					selectedContainer = nullptr;
+				}
+			}
 		}
-		else
+
+		if (selectedEntity)
 		{
-			// we need two calls to this so we can select it inside and outside loop
-			DragContainer(wrapper,i);
+			// delete an entity
+			if (ImGui::MenuItem("Delete Entity"))
+			{
+				Entities::EntityList* parentList = FindEntityList(rootList, selectedEntity);
+				if (parentList)
+				{
+					parentList->remove(selectedEntity);
+				}
+			}
 		}
-		i++;
+
+		ImGui::EndPopup();
+	}
+	else
+	{
+		selectedContainer = nullptr;
+		selectedEntity = nullptr;
+	}
+}
+
+// given a list, show every entity in every sublist inside of it; this lets us select it and drag it around
+void Editor::SceneEditor::DrawHierarchy(Entities::EntityList* list)
+{
+	bool nodeOpen = ImGui::TreeNode(list->getName().c_str());
+
+	// hover over our current entity list
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(1))
+	{
+		selectedContainer = list;
+	}
+
+	// check if the node is open, if it is draw our entities
+	if (nodeOpen)
+	{
+		// Recursively draw sublists
+		for (const auto& sublist : list->getSubLists())
+		{
+			DrawHierarchy(sublist);
+		}
+		// Draw entities in the current list
+		for (const auto& entity : list->getEntities())
+		{
+			DrawEntity(*entity);
+		}
+
+		ImGui::TreePop();
+	}
+}
+
+// draw the selectable entity in the hierarchy; this lets us inspect it and drag it around
+void Editor::SceneEditor::DrawEntity(Entities::Entity& entity)
+{
+	// draw our entity name, visibility, and locked status
+	ImGui::SetNextItemAllowOverlap();
+
+	bool selected = ImGui::Selectable(entity.getName().c_str());
+	Textures::TextureLibrary* lib = EngineInstance::getEngine()->getTextureLibrary();
+
+	// select the entity and inspect it
+	if (selected)
+	{
+		Inspector::inspect(&entity);
+	}
+
+	// do actions on this entity
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(1) && !entity.IsLocked())
+	{
+		selectedEntity = &entity;
+	}
+
+	// Calculate position for the buttons
+	float cursorPosX = ImGui::GetCursorPosX();
+	float windowWidth = ImGui::GetWindowWidth();
+	float iconWidth = 24.0f;
+	float spacing = 8.0f; // Adjust spacing as needed
+
+	float buttonPosX = windowWidth - (iconWidth + spacing) * 2 - spacing;
+
+	// Align the cursor position to the right for the first button
+	ImGui::SameLine(buttonPosX);
+	void* visibleIcon = *lib->get("VisibleIcon")->getTextureView();
+	void* inVisibleIcon = *lib->get("InvisibleIcon")->getTextureView();
+	void* lockedIcon = *lib->get("LockedIcon")->getTextureView();
+
+	void* eye = visibleIcon;
+
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+
+	if (!entity.isVisible())
+		eye = inVisibleIcon;
+
+	if (ImGui::ImageButton(("##"+std::to_string(entity.GetId())).c_str(), eye, {24,16}))
+	{
+		entity.ToggleVisiblity();
+	}
+
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
+
+	if (entity.IsLocked())
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+
+		ImGui::SameLine();
+		ImGui::ImageButton(lockedIcon, { 16,16 });
+
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
+	}
+}
+
+// Utility function to find the parent of a given entity list
+Entities::EntityList* Editor::SceneEditor::FindParent(Entities::EntityList * root, Entities::EntityList * child) 
+{
+	for (auto& sublist : root->getSubLists()) 
+	{
+		if (sublist == child) 
+		{
+			return root;
+		}
+		Entities::EntityList* found = FindParent(sublist, child);
+		if (found) 
+		{
+			return found;
+		}
+	}
+	return nullptr;
+}
+
+Entities::EntityList* Editor::SceneEditor::FindEntityList(Entities::EntityList* root, Entities::Entity* child)
+{
+	// check for root first
+	for (auto& entity : root->getEntities())
+	{
+		if (entity == child)
+			return root;
+	}
+
+	// check for sub lists
+	for (auto& list : root->getSubLists())
+	{
+		for (auto& entity : list->getEntities())
+		{
+			if (entity == child)
+				return list;
+		}
 	}
 }
 
 // used to add new entity containers to the scene hierarchy when we right click
 void Editor::SceneEditor::interact()
 {
-	// create a new object
-	if (ImGui::BeginPopup("NewObject"))
-	{
-		if (ImGui::MenuItem("Add New Object"))
-		{
-			if (selectedContainer)
-			{
-				Entities::Actor* ent = new Entities::Actor();
-				currentScene->addToList(selectedContainer->list, ent);
-			}
-		}
-		ImGui::EndPopup();
-	}
 
-	// create a new container list to the hierarchy
-	if (ImGui::BeginPopup("NewContainer"))
-	{
-		if (ImGui::MenuItem("Add New Container"))
-		{
-			currentScene->addEntityList("Container");
-		}
-		ImGui::EndPopup();
-	}
 }
 
 // code to drag and re-place our entity containers and entities within the scene editor list

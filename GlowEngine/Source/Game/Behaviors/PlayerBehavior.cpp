@@ -20,6 +20,10 @@ Game::PlayerBehavior::PlayerBehavior() : Behavior()
   jumpSpeed = 25.f;
   god = false;
   name = "Player Behavior";
+
+  AddVariable(CreateVariable("Movement Speed", &moveSpeed));
+  AddVariable(CreateVariable("Jump Height", &jumpSpeed));
+  AddVariable(CreateVariable("God Mode", &god));
 }
 
 // move our player

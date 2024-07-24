@@ -7,6 +7,7 @@
 */
 
 #pragma once
+#include "Engine/Entity/Entity.h"
 
 namespace Graphics
 {
@@ -14,24 +15,21 @@ namespace Graphics
   class Window;
 }
 
-namespace Entities
-{
-  class Entity;
-}
-
 namespace Visual
 {
 
-  class Camera
+  class Camera : public Entities::Entity
   {
 
   public:
+
     Camera(Graphics::Renderer* renderEngine);
 
     // update the camera properties
     void update();
     // camera controller
-    void cameraController();
+    void GameCameraController();
+    void SceneCameraController();
 
     // get the view matrix
     const Matrix& getViewMatrix();

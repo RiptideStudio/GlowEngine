@@ -31,10 +31,21 @@ namespace Entities
     // name of wrapper
     std::string name;
 
-    // parent wrapper
+  };
+
+  // define a wrapper for entities
+  class EntityWrapper
+  {
+
+  public:
+
+    EntityWrapper(Entities::Entity* ent) : entity(ent) {};
+
+    Entities::Entity* entity;
     EntityListWrapper* parent;
 
   };
+
 
   class EntityList
   {
@@ -48,13 +59,14 @@ namespace Entities
     void updateColliders();
     void render();
     void clear();
-
+    void remove(Entities::Entity* entity);
     void checkCollisions();
 
     Entities::Entity* find(std::string name);
 
     int getSize() { return size; }
     std::string getName() { return name; }
+    void SetName(std::string name_) { name = name_; }
 
     // retrieve the active list; one returns const while one does not, so our scene editor can modify it
     std::vector<Entities::Entity*>& getEntities() { return activeList; }
@@ -62,6 +74,7 @@ namespace Entities
 
     std::vector<Entities::Entity*>& getColliderList() { return colliderList; }
     std::vector<Entities::Entity*>& getNonStaticList() { return nonStaticList; }
+    std::vector<Entities::EntityList*>& getSubLists() { return subLists; }
 
     // reorder the entities by id
     void ReorderEntities(int srcIndex, int dstIndex);
@@ -74,6 +87,8 @@ namespace Entities
 
     std::vector<Entities::Entity*> colliderList;
     std::vector<Entities::Entity*> nonStaticList;
+
+    std::vector<Entities::EntityList*> subLists; // used for scene hierarchy drawing
 
     // pointer to our parent scene
     Scene::Scene* parentScene = nullptr;

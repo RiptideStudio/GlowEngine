@@ -19,9 +19,11 @@ Input::InputSystem::InputSystem(std::string systemName)
   previousMousePosition = { 0 };
   currentMousePosition = { 0 };
   mouseDelta = { 0 };
-  scroll = 0;
+  scrollDelta = 0;
   focused = true;
-  ShowCursor(FALSE);
+  pivot = false;
+  showCursor = true;
+  isSimulation = true;
 }
 
 bool Input::InputSystem::KeyDown(int key)
@@ -29,45 +31,103 @@ bool Input::InputSystem::KeyDown(int key)
   return EngineInstance::getEngine()->getInputSystem()->keyDown(key);
 }
 
+bool Input::InputSystem::MouseScrollUp()
+{
+  return EngineInstance::getEngine()->getInputSystem()->getMouseScrollDelta() > 0;
+}
+
+bool Input::InputSystem::MouseScrollDown()
+{
+  return EngineInstance::getEngine()->getInputSystem()->getMouseScrollDelta() < 0;
+}
+
 bool Input::InputSystem::KeyPressed(int key)
 {
   return EngineInstance::getEngine()->getInputSystem()->keyTriggered(key);
 }
 
+bool Input::InputSystem::KeyReleased(int key)
+{
+  return EngineInstance::getEngine()->getInputSystem()->keyReleased(key);
+}
+
+void Input::InputSystem::UpdateController()
+{
+  // if we are pivoting, lock our mouse position; also make sure to recalculate delta x and y to be relative to the pivot point
+  if (pivot)
+  {
+    showCursor = false;
+
+    // calculate mouse position and delta 
+    if (GetCursorPos(&currentMousePosition))
+    {
+      mouseDelta.x = currentMousePosition.x - pivotPoint.x;
+      mouseDelta.y = currentMousePosition.y - pivotPoint.y;
+
+      previousMousePosition = currentMousePosition;
+      SetCursorPos(pivotPoint.x, pivotPoint.y);
+    }
+    else
+    {
+      mouseDelta.x = 0;
+      mouseDelta.y = 0;
+    }
+  }
+  else if (engine->isPlaying() && !engine->IsPaused())
+  {
+    showCursor = false;
+
+    // game mouse controller
+    if (GetCursorPos(&currentMousePosition))
+    {
+      // Calculate mouse delta
+      mouseDelta.x = currentMousePosition.x - previousMousePosition.x;
+      mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
+    }
+    // focus the mouse in the center of the screen
+    GetClientRect(windowHandle, &clientRect);
+    center = { (clientRect.right - clientRect.left) / 2, (clientRect.bottom - clientRect.top) / 2 };
+    ClientToScreen(windowHandle, &center);
+    SetCursorPos(center.x, center.y);
+
+    // update previous mouse position to the center
+    previousMousePosition.x = center.x;
+    previousMousePosition.y = center.y;
+
+  }
+  else
+  {
+    showCursor = true;
+
+    // default controller
+    GetCursorPos(&currentMousePosition);
+    previousMousePosition = currentMousePosition;
+  }
+
+}
+
 // update the input state
 void Input::InputSystem::update()
 {
-  // calculate mouse delta
-  if (GetCursorPos(&currentMousePosition))
-  {
-    // Calculate mouse delta
-    mouseDelta.x = currentMousePosition.x - previousMousePosition.x;
-    mouseDelta.y = currentMousePosition.y - previousMousePosition.y;
-  }
-  // focus the mouse in the center of the screen
-  RECT clientRect;
-  GetClientRect(windowHandle, &clientRect);
-  POINT center = { (clientRect.right - clientRect.left) / 2, (clientRect.bottom - clientRect.top) / 2 };
-  ClientToScreen(windowHandle, &center);
-  SetCursorPos(center.x, center.y);
-
-  // update previous mouse position to the center
-  previousMousePosition.x = center.x;
-  previousMousePosition.y = center.y;
+  UpdateController();
 }
 
 void Input::InputSystem::updateKeyStates()
 {
+  // update any of our hotkeys
   updateHotkeys();
+
+  // reset our keystates
   previousKeystates = keystates;
+  scrollDelta = 0;
 }
 
 void Input::InputSystem::updateHotkeys()
 {
-  if (!engine->IsPaused())
-    while (ShowCursor(FALSE) >= 0);
+  if (showCursor)
+    while (ShowCursor(TRUE) <= 0);
   else
-    while (ShowCursor(TRUE) < 0);
+    while (ShowCursor(FALSE) > 0);
 
   // toggle fullscreen
   if (keyReleased(VK_TAB))
@@ -104,6 +164,27 @@ void Input::InputSystem::updateHotkeys()
   }
 }
 
+POINT Input::InputSystem::GetMousePosition()
+{
+  return currentMousePosition;
+}
+
+void Input::InputSystem::ClearPivot()
+{
+  pivot = false;
+}
+
+void Input::InputSystem::CenterMouse()
+{
+  SetCursorPos(center.x, center.y);
+}
+
+void Input::InputSystem::SetMousePivot(bool val)
+{
+  pivot = val;
+  pivotPoint = currentMousePosition;
+}
+
 // set a key state to active
 void Input::InputSystem::onKeyTriggered(int keycode)
 {
@@ -117,6 +198,16 @@ void Input::InputSystem::onKeyRelease(int keycode)
   keystates[keycode] = false;
 }
 
+void Input::InputSystem::onMouseScroll(int param)
+{
+  scrollDelta = GET_WHEEL_DELTA_WPARAM(param);
+}
+
+void Input::InputSystem::onMouseClick(int param)
+{
+  keystates[param] = true;
+}
+
 // return whether or not a key is being held down
 bool Input::InputSystem::keyDown(int key)
 {
@@ -127,6 +218,11 @@ bool Input::InputSystem::keyDown(int key)
 bool Input::InputSystem::keyTriggered(int key)
 {
   return keystates[key] && !previousKeystates[key];
+}
+
+int Input::InputSystem::getMouseScrollDelta()
+{
+  return scrollDelta;
 }
 
 bool Input::InputSystem::keyReleased(int key)

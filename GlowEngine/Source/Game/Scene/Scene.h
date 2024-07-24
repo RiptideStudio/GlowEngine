@@ -45,8 +45,6 @@ namespace Scene
 
     // add an entity to the scene (allows us to make entities from code easily)
     void add(Entities::Entity* entity);
-    // add an entity to a specific list
-    void addToList(Entities::EntityList* list, Entities::Entity* ent);
     // clear all entities
     void clear();
     // reorder lists to determine which ones get updated first
@@ -54,12 +52,11 @@ namespace Scene
 
     // get the entity wrappers
     std::vector<Entities::EntityListWrapper*>& getEntityWrappers() { return entityLists; }
-    // add a new list to the entity lists
-    void addEntityList(std::string name = "Container");
 
     // get our global list
     Entities::EntityList* getGlobalList() { return globalList; }
-    int getEntityCount() { return entityList->getEntities().size(); }
+    Entities::EntityList* getRootList() { return rootList; }
+    int getEntityCount() { return rootList->getEntities().size(); }
 
     // cast a ray and grab an entity from our scene
     Entities::Entity* RayPick(Vector3D origin, Vector3D dir);
@@ -75,7 +72,7 @@ namespace Scene
     // entity list of all colliders
     Entities::EntityList* globalList;
     // dummy list that contains all entities for statistics
-    Entities::EntityList* entityList;
+    Entities::EntityList* rootList;
     // entity factory
     Entities::EntityFactory* factory;
 

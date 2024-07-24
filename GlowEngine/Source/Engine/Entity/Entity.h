@@ -57,6 +57,14 @@ namespace Entities
     void AddVariable(Variable var) { variables.push_back(var); }
     // set selected
     void SetSelected(bool val) { selected = val; }
+    // toggle visibility
+    void ToggleVisiblity() { visible = !visible; }
+    // set locked status
+    bool IsLocked() { return locked; }
+    // get the ID
+    int GetId() { return id; }
+    // set the ID
+    void SetId(int val) { id = val; }
 
     // core components are public for easy modification and access
     Components::Transform* transform;
@@ -71,6 +79,7 @@ namespace Entities
     bool visible = true;
     bool selected = false; // if we are selected by the inspector
     bool needsComponentSort = true; // flag for sorting components
+    bool locked = false; // locked entities cannot be edited
 
     std::string name;
 

@@ -12,8 +12,9 @@
 
 namespace Entities
 {
-  class EntityList; // forward declare
+  class EntityList;
   class EntityListWrapper;
+  class EntityWrapper;
 }
 
 namespace Visual
@@ -36,6 +37,16 @@ namespace Editor
     void update();
     void interact();
 
+    // draws all the lists
+    void DrawSceneHierarchy();
+    // draws all of the entities in a list
+    void DrawHierarchy(Entities::EntityList* entities);
+    // draws a single entity
+    void DrawEntity(Entities::Entity&);
+    // find the parent of an entity list
+    Entities::EntityList* FindParent(Entities::EntityList* root, Entities::EntityList* child);
+    Entities::EntityList* FindEntityList(Entities::EntityList* root, Entities::Entity* child);
+
     // avoid duplicate logic
     void DragContainer(Entities::EntityListWrapper*, int);
 
@@ -46,7 +57,7 @@ namespace Editor
     Scene::Scene* currentScene;
     Visual::Camera* camera;
 
-    Entities::EntityListWrapper* selectedContainer;
+    Entities::EntityList* selectedContainer;
     Entities::Entity* selectedEntity;
 
   };

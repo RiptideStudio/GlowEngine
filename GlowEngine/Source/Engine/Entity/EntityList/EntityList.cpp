@@ -82,6 +82,12 @@ void Entities::EntityList::update()
     delete entity;
   }
   destroyList.clear();
+
+  // recursively update any of our sublists
+  for (auto& list : subLists)
+  {
+    list->update();
+  }
 }
 
 // this function is used to update our global list and check for collisions
@@ -107,11 +113,34 @@ void Entities::EntityList::render()
 
     entity->render();
   }
+
+  for (auto& list : subLists)
+  {
+    list->render();
+  }
 }
 
 void Entities::EntityList::clear()
 {
+  for (auto& list : subLists)
+  {
+    list->clear();
+  }
   activeList.clear();
+  subLists.clear();
+}
+
+// removes an entity from the list and deletes it
+void Entities::EntityList::remove(Entities::Entity* entityToRemove)
+{
+  auto it = std::find_if(activeList.begin(), activeList.end(),
+    [entityToRemove](Entities::Entity* entity) {
+      return entity == entityToRemove;
+    });
+  if (it != activeList.end()) {
+    (*it)->destroy();
+    activeList.erase(it);
+  }
 }
 
 void Entities::EntityList::checkCollisions()

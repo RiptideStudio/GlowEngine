@@ -16,6 +16,10 @@ namespace Editor
 
   public:
 
+    // track if our mouse is in the window or not
+    static bool MouseIsInsideWindow();
+
+    // game window needs a lot more flags
     GameWindow(std::string title, std::string desc = "", ImGuiWindowFlags flags = 
       ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar |
       ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar |
@@ -36,5 +40,7 @@ namespace Editor
     // game window properties
     ImVec2 availableSize;
     ImVec2 gameScreenPosition;
+    static bool mouseIsInsideWindow;
+
   };
 }

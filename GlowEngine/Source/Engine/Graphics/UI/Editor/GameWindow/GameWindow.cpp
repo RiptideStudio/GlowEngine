@@ -21,7 +21,6 @@ void Editor::GameWindow::update()
 {
   // calculate the size of the game window
   calculateGameWindowSize();
-  gameScreenPosition = ImGui::GetCursorScreenPos();
 
   // render the game to an ImGui texture
   ID3D11ShaderResourceView* texture = EngineInstance::getEngine()->getRenderer()->GetGameTexture();
@@ -31,31 +30,9 @@ void Editor::GameWindow::update()
   }
 
   // while we're playing
-  if (EngineInstance::getEngine()->isPlaying())
+  if (EngineInstance::IsPlaying())
   {
     DrawCrosshair();
-  }
-  else
-  // Check if the game window is focused and a mouse click occurred
-  if (ImGui::IsWindowFocused()) 
-  {
-    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-    {
-      ImVec2 mousePos = ImGui::GetMousePos();
-      Vector3D screenCoords(mousePos.x, mousePos.y, 0.f);
-
-      Visual::Camera* camera = EngineInstance::getEngine()->getCamera();
-      // Get the view and projection matrices
-      DirectX::XMMATRIX viewMatrix = camera->getViewMatrix();
-      DirectX::XMMATRIX perspectiveMatrix = camera->getPerspecitveMatrix();
-
-      // Convert screen coordinates to world coordinates
-      Vector3D worldCoords = Vector3D::ScreenToWorldCoords(screenCoords);
-
-      // Perform ray picking
-      Entities::Entity* selectedEntity = RayPickEntity(worldCoords, viewMatrix);
-      Inspector::inspect(selectedEntity);
-    }
   }
 }
 
@@ -81,6 +58,8 @@ void Editor::GameWindow::calculateGameWindowSize()
   const float aspectRatio = EngineInstance::getEngine()->getWindow()->getAspectRatio();
 
   availableSize = ImGui::GetContentRegionAvail();
+  ImVec2 start = ImGui::GetCursorScreenPos();
+  ImVec2 end = ImVec2(start.x + availableSize.x, start.y + availableSize.y);
 
   // Calculate the new size to maintain the aspect ratio
   float newWidth = availableSize.x;
@@ -96,7 +75,10 @@ void Editor::GameWindow::calculateGameWindowSize()
   ImVec2 newSize(newWidth, newHeight);
 
   // Update the size after setting the new window size
+  mouseIsInsideWindow = ImGui::IsMouseHoveringRect(start,end);
   availableSize = newSize;
+  gameScreenPosition = ImGui::GetCursorScreenPos();
+
 }
 
 void Editor::GameWindow::DrawCrosshair()
@@ -120,4 +102,12 @@ void Editor::GameWindow::DrawCrosshair()
 
   // Draw horizontal line
   draw_list->AddLine(ImVec2(centerX - crosshairSize, centerY), ImVec2(centerX + crosshairSize, centerY), color, 2.0f);
+}
+
+// return if we're inside the game window or not
+bool Editor::GameWindow::mouseIsInsideWindow = false;
+
+bool Editor::GameWindow::MouseIsInsideWindow()
+{
+  return mouseIsInsideWindow;
 }

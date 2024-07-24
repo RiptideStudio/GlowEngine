@@ -66,7 +66,7 @@ float4 main(PixelInputType input) : SV_TARGET
     // outlined object are slightly scaled up
     if (outlineBuffer.objectColor.a != 0)
     {
-        outlineBuffer.objectColor;
+        return outlineBuffer.objectColor;
     }
     // Get the texture color
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);

@@ -44,7 +44,7 @@ void Scene::ForestScene::init()
   m->addComponent(new Components::Physics());
   m->addComponent(new Components::BoxCollider());
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
-
+  return;
   for (int i = 0; i < 25; ++i)
   {
     for (int j = 0; j < 25; ++j)

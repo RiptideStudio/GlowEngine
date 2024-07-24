@@ -71,7 +71,6 @@ void Editor::GameSettings::OnPlay()
     // first launch logic
     engine->SetPaused(false);
     engine->setPlaying(true);
-    sceneSystem->getCurrentScene()->restart();
   }
   else
   {
@@ -92,5 +91,4 @@ void Editor::GameSettings::OnStop()
 {
   engine->SetPaused(true);
   engine->setPlaying(false);
-  sceneSystem->getCurrentScene()->restart();
 }

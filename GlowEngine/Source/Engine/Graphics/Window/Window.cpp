@@ -113,10 +113,52 @@ LRESULT Graphics::Window::windowProc(HWND hWnd, UINT message, WPARAM wParam, LPA
     input->onKeyRelease(wParam);
     break;
 
+    // Mouse wheel scrolled
+  case WM_MOUSEWHEEL:
+  {
+    input->onMouseScroll(wParam);
+    break;
+  }
+
+    // handle mouse clicking being held down
+  case WM_LBUTTONDOWN:
+  case WM_RBUTTONDOWN:
+  case WM_MBUTTONDOWN:
+  {
+    WPARAM button = 0;
+    if (message == WM_LBUTTONDOWN)
+      button = MK_LBUTTON;
+    else if (message == WM_RBUTTONDOWN)
+      button = MK_RBUTTON;
+    else if (message == WM_MBUTTONDOWN)
+      button = MK_MBUTTON;
+
+    input->onKeyTriggered(button);
+    break;
+  }
+
+    // handle mouse clicking being released
+  case WM_LBUTTONUP:
+  case WM_RBUTTONUP:
+  case WM_MBUTTONUP:
+  {
+    WPARAM button = 0;
+    if (message == WM_LBUTTONUP)
+      button = MK_LBUTTON;
+    else if (message == WM_RBUTTONUP)
+      button = MK_RBUTTON;
+    else if (message == WM_MBUTTONUP)
+      button = MK_MBUTTON;
+
+    input->onKeyRelease(button);
+    break;
+  }
+
     // destroy the window and stop the engine
   case WM_DESTROY:
     PostQuitMessage(0);
     break;
+
   default:
     return DefWindowProc(hWnd, message, wParam, lParam);
   }

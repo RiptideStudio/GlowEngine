@@ -17,8 +17,6 @@ Components::Component::Component()
   name("Component")
 {
   type = ComponentType::None;
-
-  AddVariable(CreateVariable("Active",&active));
 }
 
 // clone is more flexible than copy constructor
