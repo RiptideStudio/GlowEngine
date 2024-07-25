@@ -20,6 +20,7 @@
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include <filesystem>
 #include "Game/Scene/SceneSystem.h"
+#include "Engine/Graphics/Lighting/Shadows/ShadowSystem.h"
 
 // define the amount of max lights we can have
 #define MAXLIGHTS 8
@@ -46,11 +47,13 @@ Graphics::Renderer::Renderer(HWND handle)
   camera = new Visual::Camera(this);
   // constant buffers
   buffers.push_back(objectBuffer = new ConstantBuffer<cbPerObject>(device, deviceContext, 0, false, ShaderType::Vertex));
+  buffers.push_back(shadowLightBuffer = new ConstantBuffer<ShadowLightBuffer>(device, deviceContext, 0, false, ShaderType::Vertex));
   buffers.push_back(lightBuffer = new ConstantBuffer<PointLightBuffer>(device, deviceContext, 0, false, ShaderType::Pixel));
   buffers.push_back(globalLightBuffer = new ConstantBuffer<GlobalLightBuffer>(device, deviceContext, 1, true, ShaderType::Pixel));
   buffers.push_back(colorBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 2, false, ShaderType::Pixel));
   buffers.push_back(outlineBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 3, false, ShaderType::Pixel));
-
+  // shadow system
+  shadowSystem = new Lighting::ShadowSystem(device,deviceContext);
   //background
   float bgCol[4] = { 0.5,0.3,0.4,1 };
   setBackgroundColor(bgCol);
@@ -99,6 +102,7 @@ void Graphics::Renderer::beginFrame()
 
   // update the GUI widgets
   glowGui->update();
+
 }
 
 void Graphics::Renderer::update()
@@ -172,6 +176,7 @@ void Graphics::Renderer::loadShaders()
   // bind our main shaders to the device context
   vertexShader = shaderManager->getVertexShader("VertexShader");
   pixelShader = shaderManager->getPixelShader("PixelShader");
+
   deviceContext->VSSetShader(vertexShader, nullptr, 0);
   deviceContext->PSSetShader(pixelShader, nullptr, 0);
 
@@ -278,8 +283,7 @@ void Graphics::Renderer::createBlendState()
 
   ID3D11BlendState* pBlendState = NULL;
   device->CreateBlendState(&blendDesc, &pBlendState);
-  deviceContext->OMSetBlendState(pBlendState, NULL, 0xffffffff);
-  pBlendState->Release();
+  deviceContext->OMSetBlendState(pBlendState, nullptr, 0xffffffff);
 }
 
 // create a depth stencil to define stencil tests and depth ordering
@@ -318,6 +322,7 @@ void Graphics::Renderer::createDepthStencil()
   {
     Logger::error("Failed to create depth stencil view");
   }
+
 }
 
 // create a sampler state for sampling textures
@@ -566,4 +571,3 @@ ID3D11Texture2D* Graphics::Renderer::getBackBuffer()
 {
   return backBuffer;
 }
-

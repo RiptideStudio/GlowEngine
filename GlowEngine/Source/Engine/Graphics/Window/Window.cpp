@@ -14,8 +14,8 @@
 // construct the window
 Graphics::Window::Window()
   : 
-  windowWidth(GetSystemMetrics(SM_CXSCREEN)/1.25f),
-  windowHeight(GetSystemMetrics(SM_CYSCREEN)/1.25f)
+  windowWidth((float)GetSystemMetrics(SM_CXSCREEN)/1.25f),
+  windowHeight((float)GetSystemMetrics(SM_CYSCREEN)/1.25f)
 {
   windowClassName = L"Otherglow Window";
   windowName = L"Otherglow";

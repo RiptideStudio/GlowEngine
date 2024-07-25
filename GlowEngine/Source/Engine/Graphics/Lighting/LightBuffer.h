@@ -34,6 +34,12 @@ namespace Lighting
     DirectX::XMFLOAT4 color;
   };
 
+  // define a shadow light buffer for global light
+  struct ShadowLightBuffer
+  {
+    DirectX::XMMATRIX lightMatrix;
+  };
+
   // define a point light class that contains the buffer
   class PointLight
   {

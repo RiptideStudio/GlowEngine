@@ -14,6 +14,8 @@
 #include "Engine/Graphics/Textures/Texture.h"
 #include "Engine/Graphics/Textures/TextureLibrary.h"
 #include "Engine/EngineInstance.h"
+#include "Engine/Graphics/Lighting/Shadows/ShadowSystem.h"
+#include "Engine/Entity/Components/Visual/Models/ModelLibrary.h"
 
 // overloaded constructor to take in a model and a texture
 Components::Sprite3D::Sprite3D(const std::string modelName, const std::string textureName)
@@ -53,8 +55,6 @@ void Components::Sprite3D::init()
   name = "Sprite-3D";
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
-
-  AddVariable(CreateVariable("Model", &model->getName()));
 }
 
 // render a Sprite3D's model
@@ -127,6 +127,39 @@ void Components::Sprite3D::DrawOutline()
   }
 }
 
+void Components::Sprite3D::display()
+{
+  Models::ModelLibrary* lib = EngineInstance::getEngine()->getModelLibrary();
+
+  // Assuming `currentModel` is a member variable that holds the name of the current model
+  static std::string currentModel = "";  // You might want to initialize this with your default model
+
+  if (ImGui::TreeNode("Models"))
+  {
+    for (const auto& modelEntry : lib->models)
+    {
+      const std::string& modelName = modelEntry.first;
+      bool isSelected = (modelName == currentModel);
+
+      if (ImGui::Selectable(modelName.c_str(), isSelected))
+      {
+        // Update the current model when the selectable item is clicked
+        currentModel = modelName;
+
+        // Update your model here, e.g., loading the new model into your Sprite3D component
+        setModel(modelName); // Assuming setModel is a method to update the model
+      }
+
+      // Keep the selection highlighted if it matches the current model
+      if (isSelected)
+      {
+        ImGui::SetItemDefaultFocus();
+      }
+    }
+    ImGui::TreePop();
+  }
+}
+
 // set this model given a name
 void Components::Sprite3D::setModel(const std::string modelName)
 {
@@ -175,7 +208,6 @@ void Components::Sprite3D::setTextures(std::string singleTextureName)
       textures[modelName] = texLib->get(textureName);
     }
   }
-
 }
 
 void Components::Sprite3D::setTextureRepeat(bool val)

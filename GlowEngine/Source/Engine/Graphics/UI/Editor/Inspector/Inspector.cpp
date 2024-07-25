@@ -49,6 +49,8 @@ void Editor::Inspector::update()
 			{
 				ImGui::NewLine();
 
+				component->display();
+
 				for (auto& variable : component->getVariables())
 				{
 					// label the variable

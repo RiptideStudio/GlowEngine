@@ -87,10 +87,16 @@ void Textures::Texture::createTextureResource()
   subResource.SysMemPitch = width * 4;
   subResource.SysMemSlicePitch = 0;
 
+  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+  srvDesc.Format = textureDesc.Format;
+  srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  srvDesc.Texture2D.MostDetailedMip = 0;
+  srvDesc.Texture2D.MipLevels = 1;
+
   // create the texture
   renderer->getDevice()->CreateTexture2D(&textureDesc, &subResource, &texture2D);
   if (texture2D)
   {
-    renderer->getDevice()->CreateShaderResourceView(texture2D, nullptr, &textureView);
+    renderer->getDevice()->CreateShaderResourceView(texture2D, &srvDesc, &textureView);
   }
 }

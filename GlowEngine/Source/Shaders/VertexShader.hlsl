@@ -1,13 +1,3 @@
-// this is the constant buffer that holds the different matrices for transforming to clip space
-// they are individually passed her for other calculations in the future
-cbuffer ConstantBufferType : register(b0)
-{
-    matrix worldMatrix;
-    matrix viewMatrix;
-    matrix projectionMatrix;
-}
-
-// this is where the vertices are passed into the shader
 struct VertexInputType
 {
     float4 position : POSITION;
@@ -16,32 +6,44 @@ struct VertexInputType
     float2 texcoord : TEXCOORD;
 };
 
-// this is where data is passed to the pixel shader
 struct PixelInputType
 {
     float4 position : SV_POSITION;
-    float4 worldPos : WORLDPOS; // we can't access sv_position
+    float4 worldpos : WORLDPOS;
     float4 color : COLOR;
     float3 normal : NORMAL;
     float2 texcoord : TEXCOORD;
+    float4 shadowCoord : TEXCOORD1;
 };
 
-// main entrypoint
+cbuffer MatrixBuffer : register(b0)
+{
+    matrix worldMatrix;
+    matrix viewMatrix;
+    matrix projectionMatrix;
+    matrix lightViewProjectionMatrix;
+};
+
 PixelInputType main(VertexInputType input)
 {
     PixelInputType output;
-    // Transform the vertex position from model space to clip space
-    float4 worldPosition = mul(input.position, worldMatrix);
-    float4 viewPosition = mul(worldPosition, viewMatrix);
-    // set pixel shader output position
-    output.position = mul(viewPosition, projectionMatrix);
-    output.worldPos = worldPosition;
-    // set pixel shader color
+
+    // Transform the vertex position into world space
+    output.worldpos = mul(input.position, worldMatrix);
+
+    // Transform the vertex position into view space
+    float4 viewPos = mul(output.worldpos, viewMatrix);
+
+    // Transform the vertex position into projection space
+    output.position = mul(viewPos, projectionMatrix);
+
+    // Transform the vertex position into light view-projection space for shadow mapping
+    output.shadowCoord = mul(output.worldpos, lightViewProjectionMatrix);
+
+    // Pass through the color, texture coordinates, and normal
     output.color = input.color;
-    // set the normals
-    output.normal = normalize(mul(input.normal, (float3x3) worldMatrix));
-    // set the texcoord
     output.texcoord = input.texcoord;
+    output.normal = mul(input.normal, (float3x3)worldMatrix);
 
     return output;
 }

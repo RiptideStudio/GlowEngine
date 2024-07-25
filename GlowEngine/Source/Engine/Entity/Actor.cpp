@@ -124,6 +124,7 @@ Vector3D Entities::Actor::getHitboxSize()
   {
     return collider->getHitboxSize();
   }
+  return 0;
 }
 
 // create the point light

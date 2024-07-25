@@ -135,6 +135,9 @@
     <Filter Include="Source Files\Engine\Graphics\UI\Editor\GameWindow">
       <UniqueIdentifier>{5c8d83e2-a2d7-4fd2-8cfd-c23fb5407fbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Graphics\Lighting\Shadows">
+      <UniqueIdentifier>{15252d47-8dc0-4d6b-b6e3-e2aedc3fea8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Graphics\Renderer.h">
@@ -353,6 +356,10 @@
     <ClInclude Include="Source\Engine\Graphics\UI\Editor\GameWindow\GameWindow.h">
       <Filter>Source Files\Engine\Graphics\UI\Editor\GameWindow</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Entity\Components\Collision\BoundingBox.h" />
+    <ClInclude Include="Source\Engine\Graphics\Lighting\Shadows\ShadowSystem.h">
+      <Filter>Source Files\Engine\Graphics\Lighting\Shadows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -556,6 +563,12 @@
     <ClCompile Include="Source\Engine\Graphics\UI\Editor\GameWindow\GameWindow.cpp">
       <Filter>Source Files\Engine\Graphics\UI\Editor\GameWindow</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Entity\Components\Collision\BoundingBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Graphics\Lighting\Shadows\ShadowSystem.cpp">
+      <Filter>Source Files\Engine\Graphics\Lighting\Shadows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Windows\GlowEngine.ico">
@@ -575,6 +588,9 @@
       <Filter>Source Files\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Source\Shaders\VertexShader.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\Shaders\VertexShadowMapShader.hlsl">
       <Filter>Source Files\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

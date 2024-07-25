@@ -56,6 +56,14 @@ void Models::ModelLibrary::add(std::string name, Models::Model* model)
 // get a model from the library
 Models::Model* Models::ModelLibrary::get(std::string name)
 {
-  Models::Model* model = models[name];
-  return model;
+  auto it = models.find(name);
+  if (it != models.end())
+  {
+    return it->second;
+  }
+  else
+  {
+    // Handle the case where the model is not found
+    return nullptr; // Or handle it appropriately
+  }
 }

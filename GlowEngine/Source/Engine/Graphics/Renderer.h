@@ -30,6 +30,10 @@ namespace Shaders
 {
   class ShaderManager;
 }
+namespace Lighting
+{
+  class ShadowSystem;
+}
 
 namespace Graphics
 {
@@ -118,8 +122,12 @@ namespace Graphics
 
     // get the camera
     Visual::Camera* getCamera() { return camera; }
+    Lighting::ShadowSystem* GetShadowSystem() { return shadowSystem; }
 
   private:
+
+    // shadow system
+    Lighting::ShadowSystem* shadowSystem;
 
     // render targets 
     ID3D11ShaderResourceView* backBufferSRV;
@@ -135,6 +143,7 @@ namespace Graphics
     ID3D11Texture2D* renderTargetTexture = nullptr;
     ID3D11RenderTargetView* renderTargetViewGui = nullptr;
     ID3D11ShaderResourceView* shaderResourceView = nullptr;
+    ID3D11SamplerState* shadowSampler = nullptr;
 
     // devices
     ID3D11Device* device;
@@ -153,7 +162,6 @@ namespace Graphics
 
     // sampler
     ID3D11SamplerState* sampler;
-    ID3D11SamplerState* shadowSampler;
     ID3D11ShaderResourceView* shadowShaderView;
 
     // blend state
@@ -163,7 +171,6 @@ namespace Graphics
     ID3D11DepthStencilView* depthStencilView;
     ID3D11Texture2D* depthStencilBuffer;
     ID3D11DepthStencilState* depthStencilState;
-    ID3D11ShaderResourceView* shadowMapSRV;
 
     // shaders
     ID3D11PixelShader* pixelShader;
@@ -175,6 +182,10 @@ namespace Graphics
     ConstantBuffer<cbPerObject>* objectBuffer;
     ConstantBuffer<PointLightBuffer>* lightBuffer;
     ConstantBuffer<GlobalLightBuffer>* globalLightBuffer;
+    ConstantBuffer<ShadowLightBuffer>* shadowLightBuffer;
+
+    float shadowMapWidth = 1024;
+    float shadowMapHeight = 1024;
 
     // we hold a vector of constant buffers that are globally updated and bound
     // you can decide to disable this when creating the buffer

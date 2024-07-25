@@ -30,8 +30,6 @@ namespace Models
     // get a model from the map
     Models::Model* get(std::string name);
 
-  private:
-
     std::map<std::string, Models::Model*> models; // our models
 
   };

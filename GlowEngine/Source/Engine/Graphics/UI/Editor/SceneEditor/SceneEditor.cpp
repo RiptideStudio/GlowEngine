@@ -251,27 +251,5 @@ void Editor::SceneEditor::interact()
 // code to drag and re-place our entity containers and entities within the scene editor list
 void Editor::SceneEditor::DragContainer(Entities::EntityListWrapper* wrapper, int i)
 {
-	// drag a selectable button(this lets us reorganize our tree)
-	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-	{
-		// Set the payload to carry the entity pointer
-		ImGui::SetDragDropPayload("ENTITYLIST", &i, sizeof(int));
-		ImGui::Text(wrapper->name.c_str());
 
-		// end the drag sourrce
-		ImGui::EndDragDropSource();
-	}
-
-	// Set the drop target to reposition the entity
-	if (ImGui::BeginDragDropTarget())
-	{
-		// set the entity's order within the list
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITYLIST"))
-		{
-			int srcIndex = *(const int*)payload->Data;
-			int dstIndex = i;
-			currentScene->ReorderLists(srcIndex, dstIndex);
-		}
-		ImGui::EndDragDropTarget();
-	}
 }

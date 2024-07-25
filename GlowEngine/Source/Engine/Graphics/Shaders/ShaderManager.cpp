@@ -55,7 +55,9 @@ void Shaders::ShaderManager::load()
 
 ID3D11VertexShader* Shaders::ShaderManager::getVertexShader(std::string name)
 {
-  return get(name)->getVertexShader();
+  Shaders::Shader* shader = get(name);
+  ID3D11VertexShader* vertexShader = shader->getVertexShader();
+  return vertexShader;
 }
 
 // creates the input layout for the renderer/vertex shader

@@ -40,6 +40,8 @@ namespace Components
     void render();
     // draw outline
     void DrawOutline();
+    // display model to change
+    void display();
 
     // set the sprite's model
     void setModel(const std::string modelName);

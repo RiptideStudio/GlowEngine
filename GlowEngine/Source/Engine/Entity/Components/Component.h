@@ -44,6 +44,7 @@ namespace Components
       virtual void render() {};
       virtual void exit() {};
       virtual void load(const nlohmann::json&) {};
+      virtual void display() {};
 
       virtual Components::Component* clone();
 

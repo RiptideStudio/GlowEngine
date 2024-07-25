@@ -40,11 +40,10 @@ void Scene::ForestScene::init()
   leaves->updatePointLight(lightPosition, 75, lightColor);
   leaves->setName("Plane Leaves");
 
-  Entities::Entity* m = instanceCreateExt("Monkey", { 5,0,-5 }, { 5,5,5 }, { 45,0,0 });
+  Entities::Entity* m = instanceCreateExt("Monkey", { 5,0,-5 }, { 5,5,5 }, { 0,0,0 });
   m->addComponent(new Components::Physics());
   m->addComponent(new Components::BoxCollider());
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
-  return;
   for (int i = 0; i < 25; ++i)
   {
     for (int j = 0; j < 25; ++j)
@@ -66,10 +65,12 @@ void Scene::ForestScene::init()
       Vector3D scale = { randomScale ,randomScale ,randomScale };
       Entities::Entity* r = instanceCreateExt("Tree", randomPos, scale, Vector3D(0, randomRange(0, 360), 0));
       r->addComponent(new Components::BoxCollider({2,8,2}, true, false));
+      r->sprite->setTextures("Wood");
 
       if (j % 5 == 0)
       {
         Entities::Entity* t = instanceCreateExt("Rock", randomPos2, scale, Vector3D(0, randomRange(0, 360), 0));
+        t->sprite->setTextures("Cobblestone");
       }
     }
   }

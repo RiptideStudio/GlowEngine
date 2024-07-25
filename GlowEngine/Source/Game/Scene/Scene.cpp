@@ -119,19 +119,8 @@ void Scene::Scene::add(Entities::Entity* entity)
 
 void Scene::Scene::clear()
 {
-  for (auto& wrapper : entityLists)
-  {
-    wrapper->list->clear();
-  }
   globalList->clear();
   rootList->clear();
-}
-
-void Scene::Scene::ReorderLists(int src, int dst)
-{
-  auto list = entityLists[src];
-  entityLists.erase(entityLists.begin() + src);
-  entityLists.insert(entityLists.begin() + dst, list);
 }
 
 // pick an entity from a scene given an origin vector and a direction, finds the first one

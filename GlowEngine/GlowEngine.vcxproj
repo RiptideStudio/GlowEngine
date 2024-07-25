@@ -46,6 +46,7 @@
     <ClInclude Include="Source\Engine\Graphics\Camera\Camera.h" />
     <ClInclude Include="Source\Engine\Graphics\Color\Color.h" />
     <ClInclude Include="Source\Engine\Graphics\Lighting\LightBuffer.h" />
+    <ClInclude Include="Source\Engine\Graphics\Lighting\Shadows\ShadowSystem.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\Mesh.h" />
     <ClInclude Include="Source\Engine\Graphics\Meshes\MeshLibrary.h" />
     <ClInclude Include="Source\Engine\Graphics\Renderer.h" />
@@ -134,6 +135,7 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Graphics\Color\Color.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Lighting\LightBuffer.cpp" />
+    <ClCompile Include="Source\Engine\Graphics\Lighting\Shadows\ShadowSystem.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\Mesh.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Meshes\MeshLibrary.cpp" />
     <ClCompile Include="Source\Engine\Graphics\Renderer.cpp">
@@ -222,6 +224,11 @@
     <FxCompile Include="Source\Shaders\VertexShader.hlsl">
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Source\Shaders\VertexShadowMapShader.hlsl">
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">

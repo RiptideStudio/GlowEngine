@@ -47,16 +47,11 @@ namespace Scene
     void add(Entities::Entity* entity);
     // clear all entities
     void clear();
-    // reorder lists to determine which ones get updated first
-    void ReorderLists(int src, int dst);
-
-    // get the entity wrappers
-    std::vector<Entities::EntityListWrapper*>& getEntityWrappers() { return entityLists; }
 
     // get our global list
     Entities::EntityList* getGlobalList() { return globalList; }
     Entities::EntityList* getRootList() { return rootList; }
-    int getEntityCount() { return rootList->getEntities().size(); }
+    int getEntityCount() { return (int)rootList->getEntities().size(); }
 
     // cast a ray and grab an entity from our scene
     Entities::Entity* RayPick(Vector3D origin, Vector3D dir);
@@ -75,9 +70,6 @@ namespace Scene
     Entities::EntityList* rootList;
     // entity factory
     Entities::EntityFactory* factory;
-
-    // we have a vector of all of our currently active entity lists
-    std::vector<Entities::EntityListWrapper*> entityLists;
 
   };
 
