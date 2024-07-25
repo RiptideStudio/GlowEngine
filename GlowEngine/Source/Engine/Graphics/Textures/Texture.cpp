@@ -57,7 +57,7 @@ void Textures::Texture::load(std::string fileName)
 void Textures::Texture::createTexture(std::string filePath)
 {
   // could not find texture
-  data = stbi_load(filePath.c_str(), &width, &height, &channels, 4);
+  data = stbi_load(filePath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
   if (!data)
   {
     // if data was invalid

@@ -56,7 +56,6 @@ float4 main(PixelInputType input) : SV_TARGET
     
     // Get the texture color
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
-    
     // Initialize final color with ambient light
     float4 finalColor = float4(0.3,0.4,0.4,1);
 

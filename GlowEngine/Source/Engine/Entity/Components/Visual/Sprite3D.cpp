@@ -106,6 +106,7 @@ void Components::Sprite3D::render()
 
     DrawOutline();
   }
+  renderer->GetShadowSystem()->DrawShadow({transform->getPosition().x,-9.99,transform->getPosition().z}, {3,3,3});
 }
 
 // draw the outline of this sprite 

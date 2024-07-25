@@ -271,18 +271,21 @@ void Graphics::Renderer::createViewport()
 // create a blend state so we can have alpha
 void Graphics::Renderer::createBlendState()
 {
-  D3D11_BLEND_DESC blendDesc = { 0 };
-  blendDesc.RenderTarget[0].BlendEnable = TRUE;
-  blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-  blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-  blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-  blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-  blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-  blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-  blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+  D3D11_BLEND_DESC blendStateDesc;
+  ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
+  blendStateDesc.AlphaToCoverageEnable = FALSE;
+  blendStateDesc.IndependentBlendEnable = FALSE;
+  blendStateDesc.RenderTarget[0].BlendEnable = TRUE;
+  blendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+  blendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+  blendStateDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+  blendStateDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+  blendStateDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+  blendStateDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  blendStateDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
   ID3D11BlendState* pBlendState = NULL;
-  device->CreateBlendState(&blendDesc, &pBlendState);
+  device->CreateBlendState(&blendStateDesc, &pBlendState);
   deviceContext->OMSetBlendState(pBlendState, nullptr, 0xffffffff);
 }
 
