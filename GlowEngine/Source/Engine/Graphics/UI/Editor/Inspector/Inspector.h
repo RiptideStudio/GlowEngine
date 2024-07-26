@@ -32,5 +32,10 @@ namespace Editor
     static Entities::Entity* selectedEntity;
     static Entities::Entity* previousEntity;
 
+  private:
+
+    bool openContextMenu = false;
+    void* selectedObject = nullptr;
+
   };
 }

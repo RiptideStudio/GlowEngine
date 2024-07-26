@@ -38,6 +38,7 @@ Engine::GlowEngine::GlowEngine()
   inEditor(true),
   paused(true),
   playing(false),
+  gameWindowIsFocused(false),
   fps(60)
 {
   EngineInstance::setup(this);
@@ -63,7 +64,8 @@ bool Engine::GlowEngine::start()
   createCoreSystems();
   // create later systems
   createLaterSystems();
-
+  // setup global data
+  SetupGlobalDataStructures();
   // success
   Logger::write("Done!");
   return true;
@@ -104,6 +106,8 @@ bool Engine::GlowEngine::run()
     update();
     // render systems
     render();
+    // finish render
+    input->Clear();
 
     // update our FPS
     if (fpsTimer >= 1.0f)
@@ -215,6 +219,11 @@ void Engine::GlowEngine::initializeSystemCorePointers()
   {
     system->sceneSystem = sceneSystem;
   }
+}
+
+// this adds archetypes for components so we can a base component to be cloned
+void Engine::GlowEngine::SetupGlobalDataStructures()
+{
 }
 
 // called on engine exit

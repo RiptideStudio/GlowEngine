@@ -47,6 +47,8 @@ namespace Entities
     void setName(std::string newName);
     // has a component
     bool hasComponent(Components::Component::ComponentType type);
+    // delete a component
+    void DeleteComponent(Components::Component* component);
     // get a component
     Components::Component* getComponent(Components::Component::ComponentType type);
     // get the components vector
@@ -65,6 +67,10 @@ namespace Entities
     int GetId() { return id; }
     // set the ID
     void SetId(int val) { id = val; }
+
+    bool hasComponent(const std::string& type);
+
+    void addComponent(const std::string& type);
 
     // core components are public for easy modification and access
     Components::Transform* transform;

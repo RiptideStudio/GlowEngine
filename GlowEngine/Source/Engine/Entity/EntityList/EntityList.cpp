@@ -18,10 +18,10 @@
 #include <algorithm>
 
 // base constructor
-Entities::EntityList::EntityList()
+Entities::EntityList::EntityList(std::string newName)
 :
   size(0),
-  name("Container")
+  name(newName)
 {
   
 }
@@ -36,6 +36,15 @@ void Entities::EntityList::add(Entities::Entity* entity)
   }
 
   activeList.push_back(entity);
+  size++;
+}
+
+void Entities::EntityList::insert(Entities::Entity* entity, int index)
+{
+  index = std::clamp(index, 0, (int)activeList.size());
+
+  auto it = activeList.begin() + index;
+  activeList.insert(it, entity);
   size++;
 }
 
@@ -138,7 +147,6 @@ void Entities::EntityList::remove(Entities::Entity* entityToRemove)
       return entity == entityToRemove;
     });
   if (it != activeList.end()) {
-    (*it)->destroy();
     activeList.erase(it);
   }
 }

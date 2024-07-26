@@ -53,16 +53,20 @@ Visual::Camera::Camera(Graphics::Renderer* renderEngine)
 
 void Visual::Camera::update()
 {
-  // update our camera controller - this handles input and calculates our forward direction, right, and target
-  if (engine->isPlaying())
+  // camera doesn't update unless we're focused on the game window
+  if (engine->GameWindowIsFocused())
   {
-    // game camera controller
-    GameCameraController();
-  }
-  else
-  {
-    // scene camera controller
-    SceneCameraController();
+    // update our camera controller - this handles input and calculates our forward direction, right, and target
+    if (engine->isPlaying())
+    {
+      // game camera controller
+      GameCameraController();
+    }
+    else
+    {
+      // scene camera controller
+      SceneCameraController();
+    }
   }
 
   // make sure we cannot look behind us

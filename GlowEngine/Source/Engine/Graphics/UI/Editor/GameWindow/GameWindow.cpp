@@ -22,6 +22,9 @@ void Editor::GameWindow::update()
   // calculate the size of the game window
   calculateGameWindowSize();
 
+  // if we're not in focus, then we shouldn't have anything selected; focus is not playing, it is if the game window is selected
+  EngineInstance::getEngine()->SetGameFocus(ImGui::IsWindowFocused());
+
   // render the game to an ImGui texture
   ID3D11ShaderResourceView* texture = EngineInstance::getEngine()->getRenderer()->GetGameTexture();
   if (texture)

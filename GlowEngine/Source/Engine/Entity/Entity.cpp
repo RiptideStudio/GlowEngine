@@ -44,7 +44,6 @@ Entities::Entity::Entity(const Entity& other)
 
 void Entities::Entity::init()
 {
-  AddVariable(CreateVariable("Visible", &visible));
   AddVariable(CreateVariable("Name", &name));
 }
 
@@ -137,6 +136,19 @@ bool Entities::Entity::hasComponent(Components::Component::ComponentType type)
   return false;
 }
 
+void Entities::Entity::DeleteComponent(Components::Component* component)
+{
+  // Find the component in the components vector
+  auto it = std::find(components.begin(), components.end(), component);
+
+  // If the component is found, delete it and remove it from the vector
+  if (it != components.end())
+  {
+    delete* it;
+    components.erase(it);
+  }
+}
+
 // get a component
 Components::Component* Entities::Entity::getComponent(Components::Component::ComponentType type)
 {
@@ -149,3 +161,30 @@ Components::Component* Entities::Entity::getComponent(Components::Component::Com
   }
   return nullptr;
 }
+
+bool Entities::Entity::hasComponent(const std::string& type)
+{
+  for (const auto& comp : components)
+  {
+    if (comp->getName() == type)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+void Entities::Entity::addComponent(const std::string& type)
+{
+  // make sure we don't have this component already
+  if (!hasComponent(type)) 
+  {
+    Components::Component* component = ComponentFactory::instance().createComponent(type);
+    if (component) 
+    {
+      component->parent = this;
+      components.push_back(component);
+    }
+  }
+}
+

@@ -41,6 +41,13 @@ bool Input::InputSystem::MouseScrollDown()
   return EngineInstance::getEngine()->getInputSystem()->getMouseScrollDelta() < 0;
 }
 
+void Input::InputSystem::Clear()
+{
+  // reset our keystates
+  previousKeystates = keystates;
+  scrollDelta = 0;
+}
+
 bool Input::InputSystem::KeyPressed(int key)
 {
   return EngineInstance::getEngine()->getInputSystem()->keyTriggered(key);
@@ -116,10 +123,6 @@ void Input::InputSystem::updateKeyStates()
 {
   // update any of our hotkeys
   updateHotkeys();
-
-  // reset our keystates
-  previousKeystates = keystates;
-  scrollDelta = 0;
 }
 
 void Input::InputSystem::updateHotkeys()

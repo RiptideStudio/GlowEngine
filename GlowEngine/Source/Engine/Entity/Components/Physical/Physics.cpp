@@ -11,17 +11,31 @@
 #include "Engine/GlowEngine.h"
 #include "Engine/Math/Lerp.h"
 
+REGISTER_COMPONENT(Physics);
+
 Components::Physics::Physics()
 {
   maxVelocity = 25.f;
   acceleration = { 0,0,0 };
   velocity = { 0,0,0 };
   gravity = 35.f;
-  priority = 1;
   targetVelocity = { 0,0,0 };
+  init();
+}
+
+Components::Physics::Physics(const Physics& other) : Component(other)
+{
+  gravity = other.gravity;
+  maxVelocity = other.maxVelocity;
+  init();
+}
+
+void Components::Physics::init()
+{
   type = Components::Component::Physics;
   name = "Physics";
   simulation = false;
+  priority = 1;
 
   AddVariable(CreateVariable("Gravity", &gravity));
   AddVariable(CreateVariable("Acceleration", &acceleration));

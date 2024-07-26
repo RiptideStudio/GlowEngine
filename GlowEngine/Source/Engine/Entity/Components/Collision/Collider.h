@@ -26,7 +26,6 @@ namespace Components
     virtual void onFirstCollide(const Components::Collider* other) {};
     // when we leave the collision
     virtual void onLeaveCollide(const Components::Collider* other) {};
-    // our general update function
     virtual void update();
 
     // calls the function callback after some checks

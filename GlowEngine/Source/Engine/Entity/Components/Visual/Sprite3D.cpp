@@ -17,6 +17,8 @@
 #include "Engine/Graphics/Lighting/Shadows/ShadowSystem.h"
 #include "Engine/Entity/Components/Visual/Models/ModelLibrary.h"
 
+REGISTER_COMPONENT(Sprite3D);
+
 // overloaded constructor to take in a model and a texture
 Components::Sprite3D::Sprite3D(const std::string modelName, const std::string textureName)
   : Component(),
@@ -32,6 +34,13 @@ Components::Sprite3D::Sprite3D()
   renderer(nullptr)
 {
   init();
+}
+
+Components::Sprite3D::Sprite3D(const Sprite3D& other) : Component(other)
+{
+  init();
+  setModel(other.model->getName());
+  textures = other.textures;
 }
 
 Components::Sprite3D* Components::Sprite3D::clone()
@@ -52,9 +61,12 @@ void Components::Sprite3D::init()
   model = new Models::Model();
   texture = nullptr;
   type = Components::Component::Sprite3D;
-  name = "Sprite-3D";
+  name = "Sprite3D";
   Engine::GlowEngine* engine = EngineInstance::getEngine();
   renderer = engine->getRenderer();
+
+  AddVariable(CreateVariable("Repeat Texture", &repeatTexture));
+  AddVariable(CreateVariable("Shadow", &drawShadow));
 }
 
 // render a Sprite3D's model
@@ -71,9 +83,9 @@ void Components::Sprite3D::render()
   if (!textures.empty())
   {
     // change the UVs
-    if (model->isDirty() && repeatTexture)
+    if (repeatTexture)
     {
-      model->setUV(transform->getScale());
+      renderer->SetUVScale(transform->getScale().x, transform->getScale().y);
     }
   }
   else
@@ -106,7 +118,12 @@ void Components::Sprite3D::render()
 
     DrawOutline();
   }
-  renderer->GetShadowSystem()->DrawShadow({transform->getPosition().x,-9.99,transform->getPosition().z}, {3,3,3});
+
+  // reset UV scale after drawing
+  renderer->SetUVScale(1, 1);
+
+  if (drawShadow)
+    renderer->GetShadowSystem()->DrawShadow(transform->getPosition(), transform->getScale());
 }
 
 // draw the outline of this sprite 
@@ -131,6 +148,7 @@ void Components::Sprite3D::DrawOutline()
 void Components::Sprite3D::display()
 {
   Models::ModelLibrary* lib = EngineInstance::getEngine()->getModelLibrary();
+  Textures::TextureLibrary* tex = EngineInstance::getEngine()->getTextureLibrary();
 
   // Assuming `currentModel` is a member variable that holds the name of the current model
   static std::string currentModel = "";  // You might want to initialize this with your default model
@@ -152,6 +170,27 @@ void Components::Sprite3D::display()
       }
 
       // Keep the selection highlighted if it matches the current model
+      if (isSelected)
+      {
+        ImGui::SetItemDefaultFocus();
+      }
+    }
+    ImGui::TreePop();
+  }
+
+  if (ImGui::TreeNode("Textures"))
+  {
+    for (const auto& entry : tex->textures)
+    {
+      const std::string& name = entry.first;
+      bool isSelected = (name == currentModel);
+
+      if (ImGui::Selectable(name.c_str(), isSelected))
+      {
+        currentModel = name;
+        setTextures(name);
+      }
+
       if (isSelected)
       {
         ImGui::SetItemDefaultFocus();

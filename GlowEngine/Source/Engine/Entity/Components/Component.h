@@ -17,6 +17,7 @@ namespace Entities
 namespace Components
 {
 
+  // we have a container of all possible components
 
   class Component
   {
@@ -39,7 +40,9 @@ namespace Components
     public:
 
       Component();
+      Component(const Component& other);
 
+      void init();
       virtual void update() {};
       virtual void render() {};
       virtual void exit() {};
@@ -54,6 +57,7 @@ namespace Components
 
       // get our name
       std::string getName() { return name; }
+      void SetName(std::string newName) { name = newName; }
       // get the parent
       Entities::Entity* getParent();
       // set the parent entity
@@ -68,6 +72,7 @@ namespace Components
 
       // get the variables vector
       std::vector<Variable>& getVariables() { return variables; }
+      const std::vector<Variable>& getVariables() const { return variables; }
       // if this component can be simulated
       bool IsSimulation() { return simulation; }
 
@@ -87,6 +92,57 @@ namespace Components
       // components have a list of variables we expose to the editor
       std::vector<Variable> variables;
       
+  public:
+
+    static std::map<Components::Component::ComponentType, Components::Component*> allComponents;
+
+    static void AddNewComponent(Components::Component::ComponentType type, Components::Component* component);
+    static std::map<Components::Component::ComponentType, Components::Component*>& GetComponentArchetypes();
   };
 
 }
+
+class ComponentFactory {
+public:
+  using CreatorFunc = Components::Component* (*)();
+
+  static ComponentFactory& instance() {
+    static ComponentFactory factory;
+    return factory;
+  }
+
+  void registerComponent(const std::string& type, CreatorFunc func) {
+    creators[type] = func;
+    registeredTypes.push_back(type);
+  }
+
+  Components::Component* createComponent(const std::string& type) {
+    auto it = creators.find(type);
+    if (it != creators.end()) {
+      return it->second();
+    }
+    return nullptr;
+  }
+
+  const std::vector<std::string>& getRegisteredTypes() const {
+    return registeredTypes;
+  }
+
+private:
+  std::unordered_map<std::string, CreatorFunc> creators;
+  std::vector<std::string> registeredTypes;
+};
+
+template <typename T>
+Components::Component* createInstance() {
+  return new T();
+}
+
+#define REGISTER_COMPONENT(CLASS) \
+    namespace { \
+        inline bool register_##CLASS() { \
+            ComponentFactory::instance().registerComponent(#CLASS, createInstance<Components::CLASS>); \
+            return true; \
+        } \
+        static const bool registered_##CLASS = register_##CLASS(); \
+    }

@@ -10,6 +10,8 @@
 #include "Transform.h"
 #include "Engine/GlowEngine.h"
 
+REGISTER_COMPONENT(Transform);
+
 // initialize a new Transform
 Components::Transform::Transform()
   :
@@ -26,9 +28,20 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
   :
   position(pos_),
   scale(scale_),
-  rotation(rotation_),
-  dirty(true)
+  rotation(rotation_)
 {
+  init();
+}
+
+Components::Transform::Transform(const Transform& other) : Component(other)
+{
+  Vector3D finalPosition = other.getPosition();
+  finalPosition += {0, 3, 0};
+
+  scale = other.scale;
+  position = finalPosition;
+  rotation = other.rotation;
+
   init();
 }
 
@@ -36,6 +49,7 @@ void Components::Transform::init()
 {
   type = ComponentType::Transform;
   name = "Transform";
+  dirty = true;
 
   AddVariable(CreateVariable("Position", &position));
   AddVariable(CreateVariable("Scale", &scale));

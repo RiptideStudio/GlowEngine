@@ -25,6 +25,7 @@ class EngineInstance
 
     static bool IsPlaying();
     static bool IsPaused();
+    static bool GameWindowIsFocused();
 
   private:
 

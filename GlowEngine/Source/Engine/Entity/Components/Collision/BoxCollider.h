@@ -21,7 +21,11 @@ namespace Components
   public:
 
     BoxCollider(Vector3D newScale = { 1,1,1 }, bool isStatic = true, bool autoResize = true);
+    BoxCollider(const BoxCollider& other);
 
+    BoxCollider* clone() { return new Components::BoxCollider(*this); };
+
+    void init();
     virtual void renderDebug();
 
     virtual bool isColliding(const Components::Collider*) override;

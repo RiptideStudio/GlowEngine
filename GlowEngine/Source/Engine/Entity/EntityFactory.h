@@ -26,6 +26,7 @@ namespace Entities
 
     // load an entity's data
     Entities::Entity* loadEntity(std::string name);
+    std::map<std::string, Entities::Entity*>& GetArchetypes() { return archetypes; }
 
     // create an entity and add it to the active scene (using loadEntity())
     Entities::Entity* createEntity(std::string name, Vector3D position, EntityType type = EntityType::Entity);

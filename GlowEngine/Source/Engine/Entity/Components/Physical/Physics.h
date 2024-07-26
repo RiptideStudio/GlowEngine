@@ -18,7 +18,11 @@ namespace Components
   public:
 
     Physics();
+    Physics(const Physics& other);
 
+    Physics* clone() { return new Components::Physics(*this); };
+
+    void init();
     void setVelocity(Vector3D vel);
     void setTargetVelocity(Vector3D vel);
     void setAcceleration(Vector3D acc);

@@ -26,6 +26,20 @@ namespace Editor
 {
   class Inspector; // forward declare
 
+  enum class MoveType
+  {
+    DragEntity,
+    DragContainer
+  };
+
+  struct EntityMove
+  {
+    Entities::Entity* entity;
+    Entities::EntityList* targetList;
+    int targetIndex;
+    MoveType moveType;
+  };
+
   class SceneEditor : public Widget
   {
 
@@ -40,15 +54,15 @@ namespace Editor
     // draws all the lists
     void DrawSceneHierarchy();
     // draws all of the entities in a list
-    void DrawHierarchy(Entities::EntityList* entities);
+    void DrawHierarchy(Entities::EntityList* entities, int depth);
     // draws a single entity
-    void DrawEntity(Entities::Entity&);
+    void DrawEntity(Entities::Entity*, Entities::EntityList* list, int depth);
     // find the parent of an entity list
     Entities::EntityList* FindParent(Entities::EntityList* root, Entities::EntityList* child);
     Entities::EntityList* FindEntityList(Entities::EntityList* root, Entities::Entity* child);
 
     // avoid duplicate logic
-    void DragContainer(Entities::EntityListWrapper*, int);
+    void DragContainer(Entities::EntityList* list, int index);
 
   private:
 
@@ -58,8 +72,15 @@ namespace Editor
     Visual::Camera* camera;
 
     Entities::EntityList* selectedContainer;
+    Entities::EntityList* draggedContainer;
     Entities::Entity* selectedEntity;
+    Entities::Entity* draggedEntity;
 
+    std::vector<EntityMove> moves;
+
+    // for copy paste
+    Entities::Entity* entityButtonSelected = nullptr;
+    Entities::Entity* copyPasteEntity = nullptr;
   };
 }
 

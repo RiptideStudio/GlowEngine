@@ -19,6 +19,7 @@ namespace Components
 
     Transform();
     Transform(Vector3D pos_, Vector3D scale_, Vector3D rotation_);
+    Transform(const Transform& other);
 
     // initialize
     void init();
@@ -39,6 +40,7 @@ namespace Components
     // position
     void setPosition(Vector3D pos) { position = pos; dirty = true; }
     Vector3D getPosition() { return position; }
+    const Vector3D getPosition() const { return position; }
 
     void setOldPosition(Vector3D pos) { oldPosition = pos; }
     Vector3D getOldPosition() { return oldPosition; }
@@ -64,5 +66,4 @@ namespace Components
     bool dirty;
 
   };
-
 }

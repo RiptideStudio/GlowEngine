@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "Inspector.h"
+#include "Engine/Entity/Components/Component.h"
 
 // static varibles initialized here
 Entities::Entity* Editor::Inspector::selectedEntity = nullptr;
@@ -20,10 +21,28 @@ Editor::Inspector::Inspector(std::string title, std::string desc, ImGuiWindowFla
 
 void Editor::Inspector::update()
 {
+	// deselect if not focus
+	if (EngineInstance::IsPlaying() && !EngineInstance::IsPaused())
+		inspect(nullptr);
+
 	// if we have a selected entity, we allow changing its properties
 	if (selectedEntity)
 	{
 		selectedEntity->SetSelected(true);
+
+		// move the entity with arrow keys
+		Components::Transform* transform = getComponentOfType(Transform, selectedEntity);
+
+		float adjustSpeed = 0.05f;
+
+		if (Input::InputSystem::KeyDown(VK_LEFT))
+			transform->setPosition(transform->getPosition() + Vector3D(-adjustSpeed,0,0));
+		if (Input::InputSystem::KeyDown(VK_RIGHT))
+			transform->setPosition(transform->getPosition() + Vector3D(adjustSpeed, 0, 0));
+		if (Input::InputSystem::KeyDown(VK_UP))
+			transform->setPosition(transform->getPosition() + Vector3D(0, adjustSpeed, 0));
+		if (Input::InputSystem::KeyDown(VK_DOWN))
+			transform->setPosition(transform->getPosition() + Vector3D(0, -adjustSpeed, 0));
 
 		ImGui::NewLine();
 		ImGui::Separator();
@@ -39,21 +58,54 @@ void Editor::Inspector::update()
 		ImGui::Separator();
 		ImGui::NewLine();
 
+		// popup window for adding and removing components
+		if (openContextMenu && ImGui::BeginPopupContextWindow("COMPONENTS"))
+		{
+
+			if (ImGui::MenuItem("Delete Component"))
+			{
+				// delete the selected component
+				Components::Component* component = (Components::Component*) selectedObject;
+				selectedEntity->DeleteComponent(component);
+				selectedObject = nullptr;
+			}
+
+			if (ImGui::MenuItem("Add Component"))
+			{
+				// delete the selected component
+				Components::Component* component = (Components::Component*)selectedObject;
+				selectedEntity->DeleteComponent(component);
+				selectedObject = nullptr;
+			}
+
+			ImGui::EndPopup();
+		}
+
 		// iterate over every component's properties; each serializable property will be modifiable
 		// this is done using a vector of properties in each component
 		for (const auto& component : selectedEntity->getComponents())
 		{
 			std::string componentName = component->getName();
 
-			if (ImGui::TreeNode(componentName.c_str())) // begin component tree node *
+			bool open = ImGui::TreeNode(componentName.c_str());
+
+			// select to delete
+			if (ImGui::IsItemClicked(1))
+			{
+				openContextMenu = !openContextMenu;
+				selectedObject = component;
+			}
+
+			if (open) // begin component tree node *
 			{
 				ImGui::NewLine();
 
+				// some components have specific custom displays
 				component->display();
 
 				for (auto& variable : component->getVariables())
 				{
-					// label the variable
+					// label the variable; some variables might have custom displays, we will add this layer
 					variable.display();
 				}
 
@@ -62,7 +114,32 @@ void Editor::Inspector::update()
 			}
 		}
 
-		DragEntity();
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::NewLine();
+
+		// add a new component if we want
+		bool componentList = ImGui::TreeNode("Add New Component");
+
+		if (componentList)
+		{
+			for (const auto& type : ComponentFactory::instance().getRegisteredTypes())
+			{
+				// get the type of component
+				std::string name = type.c_str();
+
+				// check if we have the component
+				if (!selectedEntity->hasComponent(type)) 
+				{
+					if (ImGui::Selectable(type.c_str())) 
+					{
+						selectedEntity->addComponent(type);
+					}
+				}
+			}
+			ImGui::TreePop();
+		}
+
 	}
 }
 

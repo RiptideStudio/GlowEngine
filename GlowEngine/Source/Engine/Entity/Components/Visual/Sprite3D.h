@@ -30,6 +30,7 @@ namespace Components
     // constructors
     Sprite3D(const std::string modelName, const std::string textureName = "");
     Sprite3D();
+    Sprite3D(const Sprite3D& other);
 
     Sprite3D* clone();
     virtual void load(const nlohmann::json&);
@@ -70,6 +71,7 @@ namespace Components
 
     bool repeatTexture = false;
     bool singleTexture = true;
+    bool drawShadow = false;
 
     Models::Model* model;
     std::map<std::string, Textures::Texture*> textures; // map of textures to objects

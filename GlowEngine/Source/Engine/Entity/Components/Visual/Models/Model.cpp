@@ -165,17 +165,7 @@ void Models::Model::updateIndexBuffer()
 // set the texture coordinates to scale with a vector for tiling
 void Models::Model::setUV(Vector3D coords)
 {
-  for (auto name : modelNames)
-  {
-    for (auto& v : modelVertices[name])
-    {
-      v.tx *= coords.x;
-      v.ty *= coords.y;
-    }
-  }
-
-  updateVertexBuffer();
-  dirty = false;
+  renderer->SetUVScale(coords.x, coords.y);
 }
 
 // set a model's color

@@ -124,6 +124,10 @@ namespace Graphics
     Visual::Camera* getCamera() { return camera; }
     Lighting::ShadowSystem* GetShadowSystem() { return shadowSystem; }
 
+    // set draw data for each object (per object buffer)
+    // set the UV scale coords
+    void SetUVScale(float x, float y);
+
   private:
 
     // shadow system
@@ -182,7 +186,7 @@ namespace Graphics
     ConstantBuffer<cbPerObject>* objectBuffer;
     ConstantBuffer<PointLightBuffer>* lightBuffer;
     ConstantBuffer<GlobalLightBuffer>* globalLightBuffer;
-    ConstantBuffer<ShadowLightBuffer>* shadowLightBuffer;
+    ConstantBuffer<DrawDataBuffer>* drawDataBuffer;
 
     float shadowMapWidth = 1024;
     float shadowMapHeight = 1024;

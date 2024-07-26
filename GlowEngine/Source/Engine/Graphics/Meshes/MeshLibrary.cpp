@@ -131,7 +131,7 @@ void Meshes::MeshLibrary::drawBox(Components::BoxCollider* box)
   result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
 
   Vector3D scale = box->getMeshScale();
-  Vector3D pos = box->parent->transform->getPosition();
+  Vector3D pos = getComponentOfType(Transform,box->parent)->getPosition();
   DirectX::XMFLOAT4 rotation = { 0,0,0,0 };
 
   DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);

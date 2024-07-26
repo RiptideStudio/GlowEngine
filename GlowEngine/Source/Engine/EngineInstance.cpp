@@ -34,3 +34,8 @@ bool EngineInstance::IsPaused()
 {
   return EngineInstance::getEngine()->IsPaused();
 }
+
+bool EngineInstance::GameWindowIsFocused()
+{
+  return EngineInstance::getEngine()->GameWindowIsFocused();
+}

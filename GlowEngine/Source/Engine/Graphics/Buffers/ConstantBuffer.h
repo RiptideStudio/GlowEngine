@@ -16,6 +16,13 @@ struct cbPerObject
   DirectX::XMMATRIX projection;
 };
 
+struct DrawDataBuffer
+{
+  DirectX::XMFLOAT2 uvScale;
+  float padding;
+  float padding2;
+};
+
 namespace Graphics
 {
   template <typename T>

@@ -26,6 +26,9 @@ namespace Input
     static bool MouseScrollUp();
     static bool MouseScrollDown();
 
+    // clear the input
+    void Clear();
+
     // general game loop update
     void update();
     // update key states

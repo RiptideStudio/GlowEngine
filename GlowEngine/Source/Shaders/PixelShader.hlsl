@@ -14,6 +14,20 @@ struct ColorBuffer
     float4 objectColor;
 };
 
+cbuffer UvScale : register(b0)
+{
+  float2 uvScale;
+  float padding;
+  float padding2;
+};
+
+cbuffer GlobalLightBuffer : register(b1)
+{
+  float3 lightDirection;
+  float3 lightColor;
+  float3 cameraPosition;
+};
+
 cbuffer ColorRegister : register(b2)
 {
     ColorBuffer colorBuffer;
@@ -24,13 +38,6 @@ cbuffer OutlineRegister : register(b3)
     ColorBuffer outlineBuffer;
 };
 
-// GPU fog buffer
-cbuffer GlobalLightBuffer : register(b1)
-{
-    float3 lightDirection;
-    float3 lightColor;
-    float3 cameraPosition;
-};
 
 // Texture sampler
 Texture2D shaderTexture;
@@ -54,15 +61,24 @@ float4 main(PixelInputType input) : SV_TARGET
         return outlineBuffer.objectColor;
     }
     
+    // dynamically scale UV coordinates
+    input.texcoord *= uvScale;
+  
     // Get the texture color
     float4 textureColor = shaderTexture.Sample(SampleType, input.texcoord);
-    // Initialize final color with ambient light
-    float4 finalColor = float4(0.3,0.4,0.4,1);
+  
+    // Normalize the normal vector
+    float3 normal = normalize(input.normal);
 
-    // Apply the accumulated light color to the pixel's color
-    float4 litColor = finalColor;
+    // Calculate the diffuse light factor
+    float diffuseFactor = max(dot(normal, -lightDirection), 0.2);
+
+    // Apply the light color to the diffuse factor
+    float3 diffuseColor = diffuseFactor * lightColor;
 
     // Combine the lit color with the texture color, if a texture is present
+    float4 litColor = float4(diffuseColor, 1.0);
+    
     litColor *= textureColor;
 
     // Calculate fog factor
@@ -70,7 +86,7 @@ float4 main(PixelInputType input) : SV_TARGET
     float fogEnd = 250.0f; // End distance for fog
     float fogDistance = length(input.worldpos.xyz - cameraPosition);
     float fogFactor = saturate((fogEnd - fogDistance) / (fogEnd - fogStart));
-    
+
     // Fog color
     float3 fogColor = float3(0.5, 0.5, 0.5);
 

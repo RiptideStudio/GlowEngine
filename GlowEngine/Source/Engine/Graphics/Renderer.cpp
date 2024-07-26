@@ -47,7 +47,7 @@ Graphics::Renderer::Renderer(HWND handle)
   camera = new Visual::Camera(this);
   // constant buffers
   buffers.push_back(objectBuffer = new ConstantBuffer<cbPerObject>(device, deviceContext, 0, false, ShaderType::Vertex));
-  buffers.push_back(shadowLightBuffer = new ConstantBuffer<ShadowLightBuffer>(device, deviceContext, 0, false, ShaderType::Vertex));
+  buffers.push_back(drawDataBuffer = new ConstantBuffer<DrawDataBuffer>(device, deviceContext, 0, false, ShaderType::Pixel));
   buffers.push_back(lightBuffer = new ConstantBuffer<PointLightBuffer>(device, deviceContext, 0, false, ShaderType::Pixel));
   buffers.push_back(globalLightBuffer = new ConstantBuffer<GlobalLightBuffer>(device, deviceContext, 1, true, ShaderType::Pixel));
   buffers.push_back(colorBuffer = new ConstantBuffer<ColorBuffer>(device, deviceContext, 2, false, ShaderType::Pixel));
@@ -338,7 +338,9 @@ void Graphics::Renderer::createSamplerState()
   sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
   sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
   sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+  sampDesc.MipLODBias = 0.0f;
+  sampDesc.MaxAnisotropy = 1;
+  sampDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
   sampDesc.MinLOD = 0;
   sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
   device->CreateSamplerState(&sampDesc, &sampler);
@@ -378,8 +380,8 @@ void Graphics::Renderer::UpdateBuffers()
   // temporary global light data for testing
   GlobalLightBuffer lightData;
   lightData.cameraPosition = { DirectX::XMVectorGetX(camera->getPosition()),DirectX::XMVectorGetY(camera->getPosition()),DirectX::XMVectorGetZ(camera->getPosition()) };
-  lightData.lightColor = { 1.5,1.1,1.75 };
-  lightData.lightDirection = { 0, 1,0 };
+  lightData.lightColor = { 1.5,1.1,1.25 };
+  lightData.lightDirection = { 0.5,-0.8,-0.5 };
   globalLightBuffer->set(lightData);
 
   // for now, we just have one light
@@ -557,6 +559,13 @@ ID3D11Device* Graphics::Renderer::getDevice()
 ID3D11ShaderResourceView* Graphics::Renderer::GetGameTexture()
 {
   return shaderResourceView;
+}
+
+void Graphics::Renderer::SetUVScale(float x, float y)
+{
+  drawDataBuffer->get().uvScale = { x,y };
+  drawDataBuffer->updateAndBind();
+
 }
 
 // get the device context

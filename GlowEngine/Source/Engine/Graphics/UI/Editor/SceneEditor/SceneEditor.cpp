@@ -33,16 +33,61 @@ void Editor::SceneEditor::init()
 
 void Editor::SceneEditor::update()
 {
+	// draw the scene hierarchy
 	DrawSceneHierarchy();
-}
 
+	// copy an entity
+	if (Input::InputSystem::KeyDown(VK_CONTROL))
+	{
+		if (Input::InputSystem::KeyPressed('C'))
+		{
+			copyPasteEntity = entityButtonSelected;
+		}
+	}
+	// paste an entity
+	if (Input::InputSystem::KeyDown(VK_CONTROL) && Input::InputSystem::KeyPressed('V'))
+	{
+		if (copyPasteEntity)
+		{
+			Entities::EntityList* parentList = FindEntityList(currentScene->getRootList(), copyPasteEntity);
+			if (parentList)
+			{
+				Entities::Entity* copy = new Entities::Entity(*copyPasteEntity);
+				copy->setName("Entity");
+				parentList->add(copy);
+			}
+		}
+	}
+}
 
 void Editor::SceneEditor::DrawSceneHierarchy()
 {
 	// similar to unity, we want to be able to iterate over every entity in the scene hierarchy.
 	// We then want to be able to create and add folders and subfolders, etc. We can't delete the root node
+	int i = 0;
 	Entities::EntityList* rootList = currentScene->getRootList();
-	DrawHierarchy(rootList);
+	DrawHierarchy(rootList,i++);
+
+	// do our drop operations outside the loop
+	for (const auto& move : moves)
+	{
+		switch (move.moveType)
+		{
+
+			// drop an entity into a target container
+		case MoveType::DragEntity:
+			Entities::EntityList* oldParentList = FindEntityList(currentScene->getRootList(), move.entity);
+			if (oldParentList)
+			{
+				oldParentList->remove(move.entity);
+				move.targetList->insert(move.entity, move.targetIndex);
+			}
+
+			break;
+		}
+
+		moves.clear();
+	}
 
 	// Below is the logic for adding entities and new lists to the hierarchy
 	// Right click on our empty space to add a new container outside of an existing container
@@ -64,7 +109,7 @@ void Editor::SceneEditor::DrawSceneHierarchy()
 			// Add a new folder to the root list
 			if (ImGui::MenuItem("Create New Folder"))
 			{
-				selectedContainer->getSubLists().push_back(new Entities::EntityList());
+				selectedContainer->getSubLists().push_back(new Entities::EntityList("Container"+std::to_string(rootList->getSubLists().size())));
 			}
 
 			// delete a list and all of its sublists
@@ -112,9 +157,10 @@ void Editor::SceneEditor::DrawSceneHierarchy()
 }
 
 // given a list, show every entity in every sublist inside of it; this lets us select it and drag it around
-void Editor::SceneEditor::DrawHierarchy(Entities::EntityList* list)
+void Editor::SceneEditor::DrawHierarchy(Entities::EntityList* list, int depth)
 {
 	bool nodeOpen = ImGui::TreeNode(list->getName().c_str());
+	int i = 0;
 
 	// hover over our current entity list
 	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(1))
@@ -122,18 +168,24 @@ void Editor::SceneEditor::DrawHierarchy(Entities::EntityList* list)
 		selectedContainer = list;
 	}
 
+	// Accept drag and drop target at the list level
+	DragContainer(list, depth);
+
 	// check if the node is open, if it is draw our entities
 	if (nodeOpen)
 	{
 		// Recursively draw sublists
 		for (const auto& sublist : list->getSubLists())
 		{
-			DrawHierarchy(sublist);
+			DrawHierarchy(sublist, depth++);
 		}
 		// Draw entities in the current list
 		for (const auto& entity : list->getEntities())
 		{
-			DrawEntity(*entity);
+			if (entity)
+			{
+				DrawEntity(entity, list, i++);
+			}
 		}
 
 		ImGui::TreePop();
@@ -141,25 +193,44 @@ void Editor::SceneEditor::DrawHierarchy(Entities::EntityList* list)
 }
 
 // draw the selectable entity in the hierarchy; this lets us inspect it and drag it around
-void Editor::SceneEditor::DrawEntity(Entities::Entity& entity)
+void Editor::SceneEditor::DrawEntity(Entities::Entity* entity, Entities::EntityList* list, int depth)
 {
 	// draw our entity name, visibility, and locked status
 	ImGui::SetNextItemAllowOverlap();
 
-	bool selected = ImGui::Selectable(entity.getName().c_str());
+	bool selected = ImGui::Selectable(entity->getName().c_str(), entityButtonSelected == entity);
 	Textures::TextureLibrary* lib = EngineInstance::getEngine()->getTextureLibrary();
 
 	// select the entity and inspect it
 	if (selected)
 	{
-		Inspector::inspect(&entity);
+		Inspector::inspect(entity);
+		entityButtonSelected = entity;
+	}
+
+	// double click an entity to travel to it
+	if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && !entity->IsLocked())
+	{
+		camera->SetPosition(getComponentOfType(Transform,entity)->getPosition() + Vector3D(0, 0, 15));
+		camera->SetRotation(-90, 0);
 	}
 
 	// do actions on this entity
-	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(1) && !entity.IsLocked())
+	if (ImGui::IsItemHovered() && ImGui::IsMouseReleased(1) && !entity->IsLocked())
 	{
-		selectedEntity = &entity;
+		selectedEntity = entity;
 	}
+
+	// Begin drag and drop source
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+	{
+		ImGui::SetDragDropPayload("DND_DEMO_CELL", &entity, sizeof(Entities::Entity));
+		ImGui::Text("%s", entity->getName().c_str());
+		ImGui::EndDragDropSource();
+		draggedEntity = entity;
+	}
+
+	DragContainer(list, depth);
 
 	// Calculate position for the buttons
 	float cursorPosX = ImGui::GetCursorPosX();
@@ -180,18 +251,18 @@ void Editor::SceneEditor::DrawEntity(Entities::Entity& entity)
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 
-	if (!entity.isVisible())
+	if (!entity->isVisible())
 		eye = inVisibleIcon;
 
-	if (ImGui::ImageButton(("##"+std::to_string(entity.GetId())).c_str(), eye, {24,16}))
+	if (ImGui::ImageButton(("##"+std::to_string(entity->GetId())).c_str(), eye, {24,16}))
 	{
-		entity.ToggleVisiblity();
+		entity->ToggleVisiblity();
 	}
 
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();
 
-	if (entity.IsLocked())
+	if (entity->IsLocked())
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
@@ -249,7 +320,19 @@ void Editor::SceneEditor::interact()
 }
 
 // code to drag and re-place our entity containers and entities within the scene editor list
-void Editor::SceneEditor::DragContainer(Entities::EntityListWrapper* wrapper, int i)
+void Editor::SceneEditor::DragContainer(Entities::EntityList* list, int index)
 {
+	// drag an entity around
+	if (ImGui::BeginDragDropTarget() && draggedEntity)
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
+		{
+			IM_ASSERT(payload->DataSize == sizeof(Entities::Entity));
+			Entities::Entity* droppedEntity = (Entities::Entity*)payload->Data;
 
+			moves.push_back({draggedEntity,list,index,MoveType::DragEntity});
+			draggedEntity = nullptr;
+		}
+		ImGui::EndDragDropTarget();
+	}
 }

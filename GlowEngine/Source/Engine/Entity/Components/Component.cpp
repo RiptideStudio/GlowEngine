@@ -11,12 +11,24 @@
 #include "Engine/Entity/Entity.h"
 
 // base component constructor
+std::map<Components::Component::ComponentType, Components::Component*> Components::Component::allComponents;
+
 Components::Component::Component()
-  :
-  parent(nullptr),
-  name("Component")
+{
+  init();
+}
+
+Components::Component::Component(const Component& other)
+{
+  variables.clear();
+  init();
+}
+
+void Components::Component::init()
 {
   type = ComponentType::None;
+  name = "Component";
+  parent = nullptr;
 }
 
 // clone is more flexible than copy constructor
@@ -40,4 +52,14 @@ Entities::Entity* Components::Component::getParent()
 void Components::Component::setParent(Entities::Entity* newParent)
 {
   parent = newParent;
+}
+
+void Components::Component::AddNewComponent(Components::Component::ComponentType type, Component* component)
+{
+  allComponents[type] = component;
+}
+
+std::map<Components::Component::ComponentType, Components::Component*>& Components::Component::GetComponentArchetypes()
+{
+  return allComponents;
 }

@@ -52,7 +52,7 @@ namespace Entities
 
   public:
 
-    EntityList();
+    EntityList(std::string name = "Container");
 
     void add(Entities::Entity* entity);
     void update();
@@ -61,6 +61,7 @@ namespace Entities
     void clear();
     void remove(Entities::Entity* entity);
     void checkCollisions();
+    void insert(Entities::Entity* entity, int index);
 
     Entities::Entity* find(std::string name);
 

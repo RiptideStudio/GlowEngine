@@ -42,6 +42,8 @@ namespace Engine
     void createLaterSystems();
     // create later core pointers
     void initializeSystemCorePointers();
+    // setup global variables and data structures
+    void SetupGlobalDataStructures();
 
     // cleanup on engine exit
     void cleanUp();
@@ -69,9 +71,11 @@ namespace Engine
     bool isPlaying();
     bool InEditor() { return inEditor; }
     bool IsPaused() { return paused; }
+    bool GameWindowIsFocused() { return gameWindowIsFocused; }
     void EnableEditor(bool val) { inEditor = val; }
     void setPlaying(bool val);
     void SetPaused(bool val) { paused = val; }
+    void SetGameFocus(bool val) { gameWindowIsFocused = val; }
 
     // get the window handle from the window class
     HWND getWindowHandle();
@@ -100,6 +104,7 @@ namespace Engine
     bool playing;
     bool inEditor;
     bool paused;
+    bool gameWindowIsFocused;
 
     // statistics
     float totalTime;

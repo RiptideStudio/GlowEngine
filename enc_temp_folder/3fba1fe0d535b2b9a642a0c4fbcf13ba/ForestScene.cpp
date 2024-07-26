@@ -40,6 +40,9 @@ void Scene::ForestScene::init()
   leaves->updatePointLight(lightPosition, 75, lightColor);
   leaves->setName("Plane Leaves");
 
+  Entities::Entity* m = instanceCreateExt("Monkey", { 5,0,-5 }, { 5,5,5 }, { 0,0,0 });
+  m->addComponent(new Components::Physics());
+  m->addComponent(new Components::BoxCollider());
   Entities::Actor* d = createEntity({ -10,5.56f,-5 }, { 3,3,3 }, { 0 }, "Chest", "Chest");
   for (int i = 0; i < 25; ++i)
   {

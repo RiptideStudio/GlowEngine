@@ -12,14 +12,30 @@
 #include "Engine/Graphics/Renderer.h"
 #include "Engine/Graphics/Meshes/MeshLibrary.h"
 
+REGISTER_COMPONENT(BoxCollider);
+
 Components::BoxCollider::BoxCollider(Vector3D newScale, bool isStatic, bool autoResize)
 {
   colliderIsStatic = isStatic;
   autoSize = autoResize;
   scale = newScale;
+  init();
+}
+
+Components::BoxCollider::BoxCollider(const BoxCollider& other)
+{
+  autoSize = other.autoSize;
+  scale = other.scale;
+  meshScale = other.meshScale;
+  colliderIsStatic = other.colliderIsStatic;
+  init();
+}
+
+void Components::BoxCollider::init()
+{
   type = ComponentType::Collider;
-  name = "Box Collider";
-  simulation = true;
+  name = "BoxCollider";
+  simulation = false;
 
   AddVariable(CreateVariable("Hitbox Size", &scale));
   AddVariable(CreateVariable("Static", &colliderIsStatic));
@@ -29,8 +45,11 @@ Components::BoxCollider::BoxCollider(Vector3D newScale, bool isStatic, bool auto
 // return whether or not two colliders are colliding
 bool Components::BoxCollider::isColliding(const Components::Collider* other)
 {
-  Vector3D position = parent->transform->getPosition();
-  Vector3D otherPosition = other->parent->transform->getPosition();
+  Components::Transform* otherTransform = getComponentOfType(Transform, other->parent);
+  Components::Transform* transform = getComponentOfType(Transform, parent);
+
+  Vector3D position = transform->getPosition();
+  Vector3D otherPosition = otherTransform->getPosition();
   const BoxCollider* otherBox = dynamic_cast<const BoxCollider*>(other);
 
   return isAABBColliding(*otherBox);
@@ -38,8 +57,11 @@ bool Components::BoxCollider::isColliding(const Components::Collider* other)
 
 bool Components::BoxCollider::isAABBColliding(const BoxCollider& other) 
 {
-  Vector3D position = parent->transform->getPosition();
-  Vector3D otherPosition = other.parent->transform->getPosition();
+  Components::Transform* otherTransform = getComponentOfType(Transform, other.parent);
+  Components::Transform* transform = getComponentOfType(Transform, parent);
+
+  Vector3D position = transform->getPosition();
+  Vector3D otherPosition = otherTransform->getPosition();
 
   Vector3D minA = position - scale * 0.5f;
   Vector3D maxA = position + scale * 0.5f;
@@ -66,6 +88,7 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
   }
 
   Components::Transform* transform = getComponentOfType(Transform, parent);
+  Components::Transform* otherTransform = getComponentOfType(Transform, other->parent);
   const BoxCollider* otherBox = dynamic_cast<const BoxCollider*>(other);
 
   // Get the current position and velocity
@@ -74,7 +97,7 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
   Vector3D velocity = physics->getVelocity();
 
   // Get the positions of both colliding objects
-  Vector3D otherPosition = other->parent->transform->getPosition();
+  Vector3D otherPosition = otherTransform->getPosition();
 
   // Calculate the half-sizes
   Vector3D halfSizeA = scale * 0.5f;
@@ -136,7 +159,7 @@ void Components::BoxCollider::onCollide(const Components::Collider* other)
 void Components::BoxCollider::setHitboxSize(Vector3D hitboxSize)
 {
   calculateScale();
-  meshScale = hitboxSize / parent->transform->getScale();
+  meshScale = hitboxSize / getComponentOfType(Transform, parent)->getScale();
   scale = hitboxSize;
   dirty = false;
 }

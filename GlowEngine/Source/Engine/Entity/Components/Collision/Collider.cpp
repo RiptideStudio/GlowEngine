@@ -32,7 +32,7 @@ void Components::Collider::update()
     if (autoSize)
     {
       calculateScale();
-      meshScale = scale / parent->transform->getScale();
+      meshScale = scale / transform->getScale();
     }
     else
     {
@@ -47,18 +47,22 @@ void Components::Collider::update()
 // we also call our collider callback for anything specific
 void Components::Collider::leaveCollision(const Components::Collider* other)
 {
+  // erase the reference to the other collider since we've stopped colliding
   collidingObjects.erase(other);
   collided = false;
   colliding = false;
 
   // if we have a physics component, then we want to do some falling logic
   Components::Physics* physics = getComponentOfType(Physics, parent);
+  Components::Transform* transform = getComponentOfType(Transform, parent);
+  Components::Transform* otherTransform = getComponentOfType(Transform, other->parent);
+
   if (physics)
   {
     bool grounded = false;
     for (auto* collider : collidingObjects)
     {
-      Vector3D collisionNormal = parent->transform->getPosition() - collider->parent->transform->getPosition();
+      Vector3D collisionNormal = transform->getPosition() - otherTransform->getPosition();
       collisionNormal.normalize();
       if (collisionNormal.y > 0)
       {
@@ -108,17 +112,22 @@ void Components::Collider::render()
 void Components::Collider::calculateScale()
 {
   // find out vertices
-  const std::map<std::string, std::vector<Vertex>>& modelVertices = parent->sprite->getModel()->getModelVertices();
-  Components::Transform& transform = *parent->transform;
+  Components::Sprite3D* sprite = getComponentOfType(Sprite3D, parent);
+
+  if (!sprite)
+    return;
+
+  const std::map<std::string, std::vector<Vertex>>& modelVertices = sprite->getModel()->getModelVertices();
+  Components::Transform& transform = *getComponentOfType(Transform, parent);
 
   // Find the model in the map
-  if (parent->sprite->getModel()->getModelNames().empty())
+  if (sprite->getModel()->getModelNames().empty())
   {
     scale = transform.getScale();
     return;
   }
 
-  std::string modelName = parent->sprite->getModel()->getModelNames()[0];
+  std::string modelName = sprite->getModel()->getModelNames()[0];
 
   auto it = modelVertices.find(modelName);
 
@@ -155,7 +164,7 @@ void Components::Collider::calculateScale()
   this->vertices.clear();
 
   // Define the vertices of the box collider
-  Vector3D sc = parent->transform->getScale();
+  Vector3D sc = transform.getScale();
   Vector3D halfScale = sc * 0.5f;
   Vector3D corners[8] = {
       center + Vector3D(-halfScale.x, -halfScale.y, -halfScale.z),
@@ -180,13 +189,13 @@ void Components::Collider::calculateScale()
   }
 
   Components::BoundingBox* boundingBox = getComponentOfType(BoundingBox, parent);
-  dirty = parent->transform->isDirty();
+  dirty = getComponentOfType(Transform, parent)->isDirty();
 }
 
 void Components::Collider::CalculateMeshScale(Vector3D hitboxSize)
 {
   calculateScale();
-  meshScale = hitboxSize / parent->transform->getScale();
+  meshScale = hitboxSize / getComponentOfType(Transform,parent)->getScale();
   scale = hitboxSize;
   dirty = false;
 }

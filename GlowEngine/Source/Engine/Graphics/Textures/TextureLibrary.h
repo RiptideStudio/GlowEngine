@@ -27,7 +27,6 @@ namespace Textures
     // get a texture from the library
     Textures::Texture* get(std::string name);
 
-  private:
     std::map<std::string, Textures::Texture*> textures;
 
   };

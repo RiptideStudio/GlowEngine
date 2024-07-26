@@ -61,7 +61,7 @@ bool Graphics::Window::setup()
   // position the window to be in the centre of the screen
   RECT rect = { 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
   AdjustWindowRect(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE);
-  SetWindowPos(windowHandle, nullptr, 64, 64, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+  SetWindowPos(windowHandle, nullptr, 64, 164, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
   aspectRatio = (float)windowWidth / (float)windowHeight;
 

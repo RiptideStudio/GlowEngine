@@ -70,7 +70,7 @@ void Lighting::ShadowSystem::DrawShadow(const Vector3D& position, Vector3D scale
 
   result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
 
-  DirectX::XMMATRIX translation = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
+  DirectX::XMMATRIX translation = DirectX::XMMatrixTranslation(position.x, -9.99, position.z);
   DirectX::XMMATRIX scaleMatrix = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
   DirectX::XMFLOAT4 rotation = { 0,0,0,0 };
   float angleInRadians = DirectX::XMConvertToRadians(90.0f); // 45 degrees in radians
