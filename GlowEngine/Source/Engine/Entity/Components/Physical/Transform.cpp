@@ -36,7 +36,7 @@ Components::Transform::Transform(Vector3D pos_, Vector3D scale_, Vector3D rotati
 Components::Transform::Transform(const Transform& other) : Component(other)
 {
   Vector3D finalPosition = other.getPosition();
-  finalPosition += {0, 3, 0};
+  finalPosition += {0, 0, 0};
 
   scale = other.scale;
   position = finalPosition;

@@ -33,15 +33,19 @@ void Editor::Inspector::update()
 		// move the entity with arrow keys
 		Components::Transform* transform = getComponentOfType(Transform, selectedEntity);
 
-		float adjustSpeed = 0.05f;
+		float adjustSpeed = 0.1f;
 
 		if (Input::InputSystem::KeyDown(VK_LEFT))
 			transform->setPosition(transform->getPosition() + Vector3D(-adjustSpeed,0,0));
 		if (Input::InputSystem::KeyDown(VK_RIGHT))
 			transform->setPosition(transform->getPosition() + Vector3D(adjustSpeed, 0, 0));
 		if (Input::InputSystem::KeyDown(VK_UP))
-			transform->setPosition(transform->getPosition() + Vector3D(0, adjustSpeed, 0));
+			transform->setPosition(transform->getPosition() + Vector3D(0, 0, -adjustSpeed));
 		if (Input::InputSystem::KeyDown(VK_DOWN))
+			transform->setPosition(transform->getPosition() + Vector3D(0, 0, adjustSpeed));
+		if (Input::InputSystem::KeyDown('Z'))
+			transform->setPosition(transform->getPosition() + Vector3D(0, adjustSpeed, 0));
+		if (Input::InputSystem::KeyDown('X'))
 			transform->setPosition(transform->getPosition() + Vector3D(0, -adjustSpeed, 0));
 
 		ImGui::NewLine();

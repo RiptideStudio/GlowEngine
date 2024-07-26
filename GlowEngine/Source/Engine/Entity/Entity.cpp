@@ -44,7 +44,6 @@ Entities::Entity::Entity(const Entity& other)
 
 void Entities::Entity::init()
 {
-  AddVariable(CreateVariable("Name", &name));
 }
 
 // virtual destructor for entities
