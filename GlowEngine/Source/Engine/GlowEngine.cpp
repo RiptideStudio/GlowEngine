@@ -135,7 +135,7 @@ void Engine::GlowEngine::update()
   // update all systems
   for (auto system : SystemInstance::getSystems())
   {
-    // systems that are simulations 
+    // Systems that are simulations will still run when paused
     if (paused)
     {
       if (system->IsSimulation())
@@ -170,6 +170,8 @@ void Engine::GlowEngine::render()
 void Engine::GlowEngine::exit()
 {
   cleanUp();
+
+  sceneSystem->getCurrentScene()->SaveScene();
 }
 
 // create systems that need to be initialized first
@@ -240,6 +242,26 @@ bool Engine::GlowEngine::isPlaying()
 void Engine::GlowEngine::setPlaying(bool val)
 {
   playing = val;
+}
+
+/// <summary>
+/// When the game stops, we revert back to our default state
+/// Anything made while the game is running is deleted
+/// </summary>
+void Engine::GlowEngine::StopGame()
+{
+  setPlaying(false);
+  sceneSystem->getCurrentScene()->LoadSnapshot();
+}
+
+/// <summary>
+/// When the game starts, we initialize the scene (runs scene init)
+/// </summary>
+void Engine::GlowEngine::StartGame()
+{
+  setPlaying(true);
+  sceneSystem->getCurrentScene()->SaveSnapshot();
+  sceneSystem->getCurrentScene()->init();
 }
 
 // directly get the window handle

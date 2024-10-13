@@ -24,6 +24,112 @@ Scene::Scene::Scene()
   name = "Scene";
 }
 
+/// <summary>
+/// Iterates through every entity in the scene and saves entities to a temporary file
+/// This way, we can play the game and revert back to how it was before
+/// </summary>
+void Scene::Scene::SaveSnapshot(std::string filePath)
+{
+  // Create a file to save to
+  std::ofstream temp(filePath);
+
+  nlohmann::json sceneData;
+  nlohmann::json entityListData;
+
+  // Iterate over each of our entities and save their data to a temporary file
+  std::vector<Entities::EntityList*> lists = rootList->getSubLists();
+  lists.push_back(rootList);
+
+  for (const auto& list : lists)
+  {
+    entityListData[list->getName()] = list->Save();
+  }
+
+  sceneData["Entities"] = entityListData;
+
+  // Save the json file
+  temp << sceneData.dump(4);
+  temp.close();
+
+  Logger::write("Saved snapshot successfully to " + filePath);
+}
+
+/// <summary>
+/// Load the scene back to its default state using the temporary snapshot
+/// </summary>
+void Scene::Scene::LoadSnapshot(std::string filePath)
+{
+  // Reload entities from temporary file
+  std::ifstream file(filePath);
+
+  // If we can't find a temporary file, this is really bad. In the future, if this happens
+  // (The temp file was deleted) we want to revert to a previous hard save.
+  if (!file.is_open())
+  {
+    Logger::write("Failed to find temp scene snapshot " + filePath);
+    return;
+  }
+
+  // Check if the file is empty
+  file.seekg(0, std::ios::end);  // Move the file pointer to the end
+  if (file.tellg() == 0)  // If the file pointer is at position 0, the file is empty
+  {
+    Logger::write("Snapshot file is empty " + filePath);
+    return;
+  }
+  file.seekg(0, std::ios::beg);
+
+  // Destroy every single entity in existence (clean slate)
+  rootList->DeleteAllEntities();
+
+  // Load everything from the snapshot
+  nlohmann::json sceneData;
+
+  file >> sceneData;
+
+  // Iterate over every entity in scene and load it back in
+  for (const auto& [entryName, fileData] : sceneData.items())
+  {
+    // Recreate an entity with the saved data
+    if (entryName == "Entities")
+    {
+      // Iterate over entity lists
+      for (const auto& [entityList, entityListData] : fileData.items())
+      {
+        // Add each entity within the list
+        for (const auto& [entity, entityData] : entityListData.items())
+        {
+          // Construct the entity
+          Entities::Entity* newEntity = new Entities::Entity(entity);
+          newEntity->Load(entityData);
+          
+          // Try to find the list associated with it (TODO)
+          rootList->add(newEntity);
+        }
+      }
+    }
+  }
+
+  Logger::write("Loaded snapshot from " + filePath);
+}
+
+/// <summary>
+/// Saves every part of a scene, including settings
+/// For now, this will just take a snapshot of all current entities
+/// </summary>
+void Scene::Scene::SaveScene()
+{
+  SaveSnapshot("Data/Maps/"+name+"_MapData.json");
+}
+
+/// <summary>
+/// Load a scene's saved data when scene is opened
+/// </summary>
+void Scene::Scene::LoadScene()
+{
+  LoadSnapshot("Data/Maps/"+name+"_MapData.json");
+}
+
 // exit a given scene; this doesn't do anything right now, because we have no data we want to unload
 // this may be useful in the future, but for now it will just restart the scene
 void Scene::Scene::exit()

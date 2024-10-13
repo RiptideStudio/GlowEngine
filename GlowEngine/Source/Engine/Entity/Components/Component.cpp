@@ -37,6 +37,25 @@ Components::Component* Components::Component::clone()
   return new Components::Component(*this);
 }
 
+/// <summary>
+/// Save all properties of a component and return its json data
+/// </summary>
+/// <returns></returns>
+const nlohmann::json Components::Component::Save() const
+{
+  nlohmann::json saveData;
+
+  // Save any specific fields for components
+  CustomSave(saveData);
+
+  for (auto variable : variables)
+  {
+    saveData[variable.name] = variable.Save();
+  }
+
+  return saveData;
+}
+
 // get the type
 const Components::Component::ComponentType Components::Component::getType()
 {

@@ -55,10 +55,36 @@ void Components::Sprite3D::load(const nlohmann::json& data)
   if (data.contains("texture")) setTextures(data["texture"]); else setTextures("None");
 }
 
+/// <summary>
+/// Refreshes the model after being loaded
+/// </summary>
+void Components::Sprite3D::CustomLoad(const nlohmann::json saveData)
+{
+  if (model)
+  {
+    if (saveData.contains("Model")) setModel(saveData["Model"]["value"]);
+    if (saveData.contains("Texture")) setTextures(saveData["Texture"]["Wood"]);
+  }
+}
+
+/// <summary>
+/// Save things like textures and meshes
+/// </summary>
+/// <param name=""> The json object </param>
+void Components::Sprite3D::CustomSave(nlohmann::json saveData) const
+{
+  saveData["Model"] = model->getName();
+
+  if (texture)
+  {
+    saveData["Texture"] = texture->getName();
+  }
+}
+
 // initialize the Sprite3D component
 void Components::Sprite3D::init()
 {
-  model = new Models::Model();
+  model = new Models::Model("Cube");
   texture = nullptr;
   type = Components::Component::Sprite3D;
   name = "Sprite3D";
@@ -67,6 +93,7 @@ void Components::Sprite3D::init()
 
   AddVariable(CreateVariable("Repeat Texture", &repeatTexture));
   AddVariable(CreateVariable("Shadow", &drawShadow));
+  AddVariable(CreateVariable("Model", &(model->getName())));
 }
 
 // render a Sprite3D's model
@@ -122,8 +149,8 @@ void Components::Sprite3D::render()
   // reset UV scale after drawing
   renderer->SetUVScale(1, 1);
 
-  if (drawShadow)
-    renderer->GetShadowSystem()->DrawShadow(transform->getPosition(), transform->getScale());
+ /* if (drawShadow)
+    renderer->GetShadowSystem()->DrawShadow(transform->getPosition(), transform->getScale());*/
 }
 
 // draw the outline of this sprite 

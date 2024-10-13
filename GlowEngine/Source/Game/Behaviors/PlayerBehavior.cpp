@@ -13,13 +13,15 @@
 #include "Engine/GlowEngine.h"
 
 // create a PlayerBehavior
+REGISTER_BEHAVIOR(PlayerBehavior);
+
 Game::PlayerBehavior::PlayerBehavior() : Behavior()
 {
   type = Components::Component::ComponentType::Behavior;
   moveSpeed = 20.f;
   jumpSpeed = 25.f;
   god = false;
-  name = "Player Behavior";
+  name = "PlayerBehavior";
 
   AddVariable(CreateVariable("Movement Speed", &moveSpeed));
   AddVariable(CreateVariable("Jump Height", &jumpSpeed));

@@ -21,7 +21,8 @@
 Entities::EntityList::EntityList(std::string newName)
 :
   size(0),
-  name(newName)
+  name(newName),
+  destroyed(false)
 {
   
 }
@@ -46,6 +47,102 @@ void Entities::EntityList::insert(Entities::Entity* entity, int index)
   auto it = activeList.begin() + index;
   activeList.insert(it, entity);
   size++;
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <returns></returns>
+nlohmann::json Entities::EntityList::Save()
+{
+  nlohmann::json saveData;
+
+  for (auto& list : subLists)
+  {
+    list->Save();
+  }
+
+  // Iterate over our entites and add their data to the json object
+  for (const auto& entity : activeList)
+  {
+    if (!entity->IsLocked())
+    {
+      saveData[entity->getName()] = entity->Save();
+    }
+  }
+
+  return saveData;
+}
+
+/// <summary>
+/// Find a sublist given a name
+/// </summary>
+/// <param name="name"> The name of the list to search for </param>
+/// <returns> The list </returns>
+Entities::EntityList* Entities::EntityList::FindSublist(std::string name)
+{
+  if (this->name == name)
+  {
+    return this;
+  }
+
+  for (const auto& list : subLists)
+  {
+    if (list->name == name)
+    {
+      return list;
+    }
+  }
+
+  return nullptr;
+}
+
+/// <summary>
+/// Deletes all entities, then deletes the list
+/// </summary>
+void Entities::EntityList::DestroySublists()
+{
+  for (auto& list : subLists)
+  {
+    list->Destroy();
+  }
+}
+
+/// <summary>
+/// Deletes a list and all of its entities
+/// </summary>
+void Entities::EntityList::Destroy()
+{
+  for (auto& entity : activeList)
+  {
+    entity->destroy();
+  }
+
+  destroyed = true;
+}
+
+/// <summary>
+/// Deletes all entities in a list without deleting the list
+/// </summary>
+void Entities::EntityList::DeleteEntities()
+{
+  for (auto& entity : activeList)
+  {
+    entity->destroy();
+  }
+}
+
+/// <summary>
+/// Deletes all entities and ones in their sublists
+/// </summary>
+void Entities::EntityList::DeleteAllEntities()
+{
+  for (auto& list : subLists)
+  {
+    list->DeleteAllEntities();
+  }
+
+  DeleteEntities();
 }
 
 // update a list of entities
@@ -96,6 +193,12 @@ void Entities::EntityList::update()
   for (auto& list : subLists)
   {
     list->update();
+  }
+
+  // Delete ourself if we are marked for destroy
+  if (destroyed)
+  {
+    delete this;
   }
 }
 
@@ -207,6 +310,7 @@ Entities::Entity* Entities::EntityList::find(std::string name)
   }
   return nullptr;
 }
+
 
 // given a source index and a destination index, we move two entities within a list
 void Entities::EntityList::ReorderEntities(int srcIndex, int dstIndex)

@@ -35,6 +35,53 @@ struct Variable
   // create a way to display our data in ImGui
   void display();
 
+  /// <summary>
+  /// Convert a vector into a json object
+  /// </summary>
+  /// <param name="j"> Json object </param>
+  /// <param name="v"> Vector to convert </param>
+  void ToJson(nlohmann::json& j, const Vector3D& v)
+  {
+    j = nlohmann::json{ {"x", v.x}, {"y", v.y}, {"z", v.z} };
+  }
+
+  /// <summary>
+  // Save a variable (return its value in a json serializable way)
+  /// </summary>
+  /// <returns> A const json object </returns>
+  nlohmann::json Save()
+  {
+    nlohmann::json jsonData;
+
+    // Use std::visit to handle the different types in the variant
+    // Dereference the pointer to get the actual value
+    std::visit([&jsonData, this](auto&& arg) {
+      using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, int*>) {
+          // Saving ints
+          jsonData["value"] = *arg;
+        }
+        else if constexpr (std::is_same_v<T, float*>) {
+          // Saving floats
+          jsonData["value"] = *arg;
+        }
+        else if constexpr (std::is_same_v<T, bool*>) {
+          // Saving bools
+          jsonData["value"] = *arg;
+        }
+        else if constexpr (std::is_same_v<T, std::string*>) {
+          // Saving strings
+          jsonData["value"] = *arg;
+        }
+        else if constexpr (std::is_same_v<T, Vector3D*>) {
+          // Saving vectors
+          ToJson(jsonData["value"], *arg);
+        }
+      }, value);
+
+    return jsonData;
+  }
+
 private:
 
   // used to define a type for switch statement use in inspector

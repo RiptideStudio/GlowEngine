@@ -34,6 +34,7 @@ namespace Components
       Physics,
       Collider,
       BoundingBox,
+      PlayerBehavior,
       None
     };
 
@@ -48,9 +49,12 @@ namespace Components
       virtual void exit() {};
       virtual void load(const nlohmann::json&) {};
       virtual void display() {};
+      virtual void CustomLoad(const nlohmann::json saveData) {};
+      virtual void CustomSave(nlohmann::json data) const {};
 
       virtual Components::Component* clone();
 
+      const nlohmann::json Save() const;
       int getPriority() { return priority; }
 
       const ComponentType getType();
@@ -142,6 +146,15 @@ Components::Component* createInstance() {
     namespace { \
         inline bool register_##CLASS() { \
             ComponentFactory::instance().registerComponent(#CLASS, createInstance<Components::CLASS>); \
+            return true; \
+        } \
+        static const bool registered_##CLASS = register_##CLASS(); \
+    }
+
+#define REGISTER_BEHAVIOR(CLASS) \
+    namespace { \
+        inline bool register_##CLASS() { \
+            ComponentFactory::instance().registerComponent(#CLASS, createInstance<Game::CLASS>); \
             return true; \
         } \
         static const bool registered_##CLASS = register_##CLASS(); \

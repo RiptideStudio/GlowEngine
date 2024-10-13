@@ -99,10 +99,7 @@ void Editor::SceneEditor::DrawSceneHierarchy()
 			// add an entity to this folder
 			if (ImGui::MenuItem("Create Entity"))
 			{
-				Entities::Entity* entity = new Entities::Entity();
-				entity->addComponent(new Components::Transform(1, Vector3D(3, 3, 3), 0));
-				entity->addComponent(entity->sprite = new Components::Sprite3D());
-				entity->sprite->setModel("Cube");
+				Entities::Entity* entity = Entities::EntityFactory::CreateBaseEntity();
 				selectedContainer->add(entity);
 			}
 
@@ -192,6 +189,10 @@ void Editor::SceneEditor::DrawHierarchy(Entities::EntityList* list, int depth)
 	}
 }
 
+static bool renameMode = false;                  // Whether renaming mode is active
+static char nameBuffer[128] = "";                // Buffer for the new name input
+static std::string selectedEntityName = "Entity Name";  // Default entity name
+
 // draw the selectable entity in the hierarchy; this lets us inspect it and drag it around
 void Editor::SceneEditor::DrawEntity(Entities::Entity* entity, Entities::EntityList* list, int depth)
 {
@@ -207,6 +208,35 @@ void Editor::SceneEditor::DrawEntity(Entities::Entity* entity, Entities::EntityL
 		Inspector::inspect(entity);
 		entityButtonSelected = entity;
 	}
+
+	// Rename the entity with F2
+	if (entityButtonSelected == entity)
+	{
+		if (!renameMode)
+		{
+			// If F2 is pressed and entity is selected, activate rename mode
+			if (entityButtonSelected && !entityButtonSelected->IsLocked() && Input::InputSystem::KeyPressed(VK_F2))
+			{
+				renameMode = true;  // Enable rename mode
+				strncpy_s(nameBuffer, selectedEntityName.c_str(), sizeof(nameBuffer));  // Copy current name to buffer
+				nameBuffer[sizeof(nameBuffer) - 1] = '\0';  // Ensure null termination
+			}
+		}
+		else
+		{
+			// In rename mode, show text input field to type a new name
+			ImGui::InputText("##RenameEntity", nameBuffer, sizeof(nameBuffer));
+
+			// Confirm renaming on pressing Enter or clicking an OK button
+			if (ImGui::IsKeyPressed(ImGui::GetKeyIndex(ImGuiKey_Enter)))
+			{
+				selectedEntityName = std::string(nameBuffer);  // Set the new name
+				entityButtonSelected->setName(selectedEntityName);  // Update the entity's internal name
+				renameMode = false;  // Exit rename mode
+			}
+		}
+	}
+
 
 	// double click an entity to travel to it
 	if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0) && !entity->IsLocked())

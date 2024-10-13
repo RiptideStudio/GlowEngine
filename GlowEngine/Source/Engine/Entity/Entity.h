@@ -24,8 +24,12 @@ namespace Entities
 
     virtual ~Entity();
     virtual void load(const nlohmann::json&);
-    
+
     void init(); 
+
+    // Return the serialized data of the entity as a json
+    const nlohmann::json Save() const;
+    void Load(const nlohmann::json);
 
     // update all of an entity's components
     void update();

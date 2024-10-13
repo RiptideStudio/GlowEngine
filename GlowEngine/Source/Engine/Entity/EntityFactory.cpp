@@ -113,3 +113,29 @@ Entities::Actor* Entities::EntityFactory::createActor(std::string name, Vector3D
 
   return entity;
 }
+
+/// <summary>
+/// Creates a new actor entity
+/// </summary>
+/// <param name="name"> Name of entity </param>
+/// <param name="position"> Position of entity </param>
+/// <returns> Created actor </returns>
+Entities::Actor* Entities::EntityFactory::CreateBaseActor(std::string name, Vector3D position)
+{
+  Entities::Actor* actor = new Entities::Actor();
+  return actor;
+}
+
+/// <summary>
+/// Creates a new base entity
+/// </summary>
+/// <param name="name"> Name of entity </param>
+/// <param name="position"> Position of entity </param>
+/// <returns> Created actor </returns>
+Entities::Entity* Entities::EntityFactory::CreateBaseEntity(std::string name, Vector3D position)
+{
+  Entities::Entity* entity = new Entities::Entity(name);
+  entity->addComponent(entity->transform = new Components::Transform(position, { 3,3,3 },{0,0,0}));
+  entity->addComponent(entity->sprite = new Components::Sprite3D());
+  return entity;
+}

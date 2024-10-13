@@ -199,5 +199,4 @@ void Models::Model::render()
 
   // unbind the texture
   renderer->unBindTexture();
-
 }

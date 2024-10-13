@@ -79,7 +79,10 @@ float4 main(PixelInputType input) : SV_TARGET
     // Combine the lit color with the texture color, if a texture is present
     float4 litColor = float4(diffuseColor, 1.0);
     
-    litColor *= textureColor;
+    if (textureColor.a)
+    {
+        litColor *= textureColor;
+    }
 
     // Calculate fog factor
     float fogStart = 125.0f; // Start distance for fog

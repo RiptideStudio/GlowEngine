@@ -34,6 +34,8 @@ namespace Components
 
     Sprite3D* clone();
     virtual void load(const nlohmann::json&);
+    virtual void CustomLoad(const nlohmann::json);
+    virtual void CustomSave(nlohmann::json) const;
 
     // initialize
     void init();

@@ -25,6 +25,12 @@ namespace Scene
     virtual void init() {};
     virtual void update() {};
 
+    void SaveSnapshot(std::string filePath = "Data/Temp/Scene_Data.json");
+    void LoadSnapshot(std::string filePath = "Data/Temp/Scene_Data.json");
+
+    void SaveScene();
+    void LoadScene();
+
     void exit();
     void restart();
 

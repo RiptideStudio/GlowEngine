@@ -26,7 +26,7 @@ void Scene::SceneSystem::update()
   // restart the current scene
   if (input->keyTriggered('R'))
   {
-    currentScene->restart();
+    // currentScene->restart();
   }
 }
 
@@ -59,8 +59,7 @@ void Scene::SceneSystem::setCurrentScene(Scene* scene)
 
   // set the current scene
   currentScene = scene;
-  // initialize the new scene
-  currentScene->init();
+  currentScene->LoadScene();
 }
 
 void Scene::SceneSystem::setCurrentScene(std::string name)

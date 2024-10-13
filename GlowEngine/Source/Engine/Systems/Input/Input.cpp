@@ -11,6 +11,7 @@
 #include "Engine/GlowEngine.h"
 #include "Engine/EngineInstance.h"
 #include "Engine/Graphics/Renderer.h"
+#include "Game/Scene/SceneSystem.h"
 
 Input::InputSystem::InputSystem(std::string systemName) 
   : System(systemName)
@@ -136,6 +137,15 @@ void Input::InputSystem::updateHotkeys()
   if (keyReleased(VK_TAB))
   {
     engine->getRenderer()->toggleFullscreen();
+  }
+
+  // quick save
+  if (keyDown(VK_CONTROL))
+  {
+    if (keyTriggered('S'))
+    {
+      engine->getSceneSystem()->getCurrentScene()->SaveScene();
+    }
   }
 
   // terminate engine on escape

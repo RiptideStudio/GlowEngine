@@ -75,6 +75,8 @@ namespace Engine
     void EnableEditor(bool val) { inEditor = val; }
     void setPlaying(bool val);
     void SetPaused(bool val) { paused = val; }
+    void StopGame();
+    void StartGame();
     void SetGameFocus(bool val) { gameWindowIsFocused = val; }
 
     // get the window handle from the window class

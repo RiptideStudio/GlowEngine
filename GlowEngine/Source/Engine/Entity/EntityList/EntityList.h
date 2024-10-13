@@ -62,6 +62,14 @@ namespace Entities
     void remove(Entities::Entity* entity);
     void checkCollisions();
     void insert(Entities::Entity* entity, int index);
+    nlohmann::json Save();
+    Entities::EntityList* FindSublist(std::string name);
+
+    // Used to destroy lists and delete entities en masse
+    void DestroySublists();
+    void Destroy();
+    void DeleteEntities();
+    void DeleteAllEntities();
 
     Entities::Entity* find(std::string name);
 
@@ -96,6 +104,7 @@ namespace Entities
 
     // size of current active list
     int size;
+    bool destroyed; // we can mark an entire list for delete
 
     // name of entity list for display purposes
     std::string name;
