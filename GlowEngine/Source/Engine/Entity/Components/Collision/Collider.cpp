@@ -23,24 +23,6 @@ void Components::Collider::update()
   {
     colliderIsStatic = true;
   }
-
-  // recalculate the real scale of the mesh when our transform changes
-  // this can be modified to only be done if the scale changes in the future
-  if (transform->isDirty() || dirty)
-  {
-    // autosize will calculate the bounding box dynamically
-    if (autoSize)
-    {
-      calculateScale();
-      meshScale = scale / transform->getScale();
-    }
-    else
-    {
-      // we just want to change our mesh scale to our actual scale and update vertices
-      CalculateMeshScale(scale);
-    }
-    dirty = false;
-  }
 }
 
 // when we leave a collision, we erase the other collider from the active list
@@ -98,6 +80,25 @@ void Components::Collider::updateCollision(const Collider* other)
 void Components::Collider::render()
 {
   Graphics::Renderer* renderer = EngineInstance::getEngine()->getRenderer();
+  Components::Transform* transform = getComponentOfType(Transform, parent);
+
+  // recalculate the real scale of the mesh when our transform changes
+  // this can be modified to only be done if the scale changes in the future
+  if (transform->isDirty() || dirty)
+  {
+    // autosize will calculate the bounding box dynamically
+    if (autoSize)
+    {
+      calculateScale();
+      meshScale = scale / transform->getScale();
+    }
+    else
+    {
+      // we just want to change our mesh scale to our actual scale and update vertices
+      CalculateMeshScale(scale);
+    }
+    dirty = false;
+  }
 
   if (renderer->isDebugMode())
   {

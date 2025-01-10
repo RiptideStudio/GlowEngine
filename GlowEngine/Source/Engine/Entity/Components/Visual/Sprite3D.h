@@ -75,6 +75,7 @@ namespace Components
     bool singleTexture = true;
     bool drawShadow = false;
 
+    std::string textureName;
     Models::Model* model;
     std::map<std::string, Textures::Texture*> textures; // map of textures to objects
     Textures::Texture* texture;

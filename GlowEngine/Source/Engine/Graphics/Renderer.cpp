@@ -55,7 +55,7 @@ Graphics::Renderer::Renderer(HWND handle)
   // shadow system
   shadowSystem = new Lighting::ShadowSystem(device,deviceContext);
   //background
-  float bgCol[4] = { 0.5,0.3,0.4,1 };
+  float bgCol[4] = { 0.4,0.3,0.4,1 };
   setBackgroundColor(bgCol);
 }
 
@@ -100,9 +100,11 @@ void Graphics::Renderer::beginFrame()
   // bind the texture sampler
   deviceContext->PSSetSamplers(0, 1, &sampler);
 
+  // Update hotkeys (for toggling grahpics)
+  UpdateHotkeys();
+
   // update the GUI widgets
   glowGui->update();
-
 }
 
 void Graphics::Renderer::update()
@@ -346,6 +348,18 @@ void Graphics::Renderer::createSamplerState()
   device->CreateSamplerState(&sampDesc, &sampler);
 }
 
+/// <summary>
+/// Hotkeys for toggling graphics debugging
+/// </summary>
+void Graphics::Renderer::UpdateHotkeys()
+{
+  // toggle renderer debug mode
+  if (engine->getInputSystem()->keyTriggered('Q'))
+  {
+    toggleDebugMode();
+  }
+}
+
 // renders our game to a texture 
 void Graphics::Renderer::SetRenderTarget()
 {
@@ -380,7 +394,7 @@ void Graphics::Renderer::UpdateBuffers()
   // temporary global light data for testing
   GlobalLightBuffer lightData;
   lightData.cameraPosition = { DirectX::XMVectorGetX(camera->getPosition()),DirectX::XMVectorGetY(camera->getPosition()),DirectX::XMVectorGetZ(camera->getPosition()) };
-  lightData.lightColor = { 1.5,1.1,1.25 };
+  lightData.lightColor = { 0.75,0.75,0.75 };
   lightData.lightDirection = { 0.5,-0.8,-0.5 };
   globalLightBuffer->set(lightData);
 

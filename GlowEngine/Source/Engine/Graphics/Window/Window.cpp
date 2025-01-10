@@ -176,14 +176,15 @@ void Graphics::Window::setFullscreen(bool val)
   if (val)
   {
     SetWindowLongPtr(windowHandle, GWL_STYLE, WS_BORDER | WS_VISIBLE);
-    SetWindowPos(windowHandle, HWND_TOP, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED);
     ShowWindow(windowHandle, SW_MAXIMIZE);
+    Logger::write("Toggled fullscreen on");
   }
   else
   {
-    SetWindowLongPtr(windowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
-    SetWindowPos(windowHandle, nullptr, 0, 0, windowWidth, windowHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    SetWindowLongPtr(windowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+    SetWindowPos(windowHandle, HWND_TOP, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED);
     ShowWindow(windowHandle, SW_NORMAL);
+    Logger::write("Toggled fullscreen off");
   }
 }
 

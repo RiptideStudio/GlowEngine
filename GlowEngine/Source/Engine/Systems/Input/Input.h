@@ -28,6 +28,7 @@ namespace Input
 
     // clear the input
     void Clear();
+    void Flush();
 
     // general game loop update
     void update();

@@ -59,6 +59,9 @@ namespace Graphics
     void createDepthStencil();
     void createSamplerState();
 
+    // update hotkeys
+    void UpdateHotkeys();
+
     // add a buffer to the list to track
     void addBuffer(Buffer*);
     void UpdateBuffers();

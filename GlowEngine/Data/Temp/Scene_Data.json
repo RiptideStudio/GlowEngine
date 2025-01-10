@@ -1,7 +1,7 @@
 {
     "Entities": {
         "Root": {
-            "BlockSmall": {
+            "Block3": {
                 "Components": {
                     "BoxCollider": {
                         "Automaticly Resize Hitbox": {
@@ -10,7 +10,7 @@
                         "Hitbox Size": {
                             "value": {
                                 "x": 30.0,
-                                "y": 6.0,
+                                "y": 30.0,
                                 "z": 30.0
                             }
                         },
@@ -27,66 +27,16 @@
                         },
                         "Shadow": {
                             "value": false
-                        }
-                    },
-                    "Transform": {
-                        "Position": {
-                            "value": {
-                                "x": 25.100059509277344,
-                                "y": -7.450580596923828e-08,
-                                "z": 7.799994468688965
-                            }
                         },
-                        "Rotation": {
-                            "value": {
-                                "x": 0.0,
-                                "y": 0.0,
-                                "z": 0.0
-                            }
-                        },
-                        "Scale": {
-                            "value": {
-                                "x": 15.0,
-                                "y": 3.0,
-                                "z": 15.0
-                            }
-                        }
-                    }
-                }
-            },
-            "BlockTall": {
-                "Components": {
-                    "BoxCollider": {
-                        "Automaticly Resize Hitbox": {
-                            "value": true
-                        },
-                        "Hitbox Size": {
-                            "value": {
-                                "x": 30.0,
-                                "y": 12.0,
-                                "z": 30.0
-                            }
-                        },
-                        "Static": {
-                            "value": true
-                        }
-                    },
-                    "Sprite3D": {
-                        "Model": {
+                        "Texture": {
                             "value": "Cube"
-                        },
-                        "Repeat Texture": {
-                            "value": true
-                        },
-                        "Shadow": {
-                            "value": false
                         }
                     },
                     "Transform": {
                         "Position": {
                             "value": {
                                 "x": 31.700084686279297,
-                                "y": 1.200000286102295,
+                                "y": -6.999995231628418,
                                 "z": 3.7999987602233887
                             }
                         },
@@ -100,14 +50,14 @@
                         "Scale": {
                             "value": {
                                 "x": 15.0,
-                                "y": 6.0,
+                                "y": 15.0,
                                 "z": 15.0
                             }
                         }
                     }
                 }
             },
-            "Entity0": {
+            "Block4": {
                 "Components": {
                     "BoxCollider": {
                         "Automaticly Resize Hitbox": {
@@ -116,7 +66,7 @@
                         "Hitbox Size": {
                             "value": {
                                 "x": 30.0,
-                                "y": 6.0,
+                                "y": 30.0,
                                 "z": 30.0
                             }
                         },
@@ -133,14 +83,17 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Cube"
                         }
                     },
                     "Transform": {
                         "Position": {
                             "value": {
-                                "x": -23.700054168701172,
-                                "y": -7.450580596923828e-08,
-                                "z": 1.0000001192092896
+                                "x": -39.59996795654297,
+                                "y": -3.3999991416931152,
+                                "z": 1.341104507446289e-07
                             }
                         },
                         "Rotation": {
@@ -153,7 +106,119 @@
                         "Scale": {
                             "value": {
                                 "x": 15.0,
-                                "y": 3.0,
+                                "y": 15.0,
+                                "z": 15.0
+                            }
+                        }
+                    }
+                }
+            },
+            "Block5": {
+                "Components": {
+                    "BoxCollider": {
+                        "Automaticly Resize Hitbox": {
+                            "value": true
+                        },
+                        "Hitbox Size": {
+                            "value": {
+                                "x": 30.0,
+                                "y": 30.0,
+                                "z": 30.0
+                            }
+                        },
+                        "Static": {
+                            "value": true
+                        }
+                    },
+                    "Sprite3D": {
+                        "Model": {
+                            "value": "Cube"
+                        },
+                        "Repeat Texture": {
+                            "value": true
+                        },
+                        "Shadow": {
+                            "value": false
+                        },
+                        "Texture": {
+                            "value": ""
+                        }
+                    },
+                    "Transform": {
+                        "Position": {
+                            "value": {
+                                "x": -22.800050735473633,
+                                "y": -12.300010681152344,
+                                "z": 1.341104507446289e-07
+                            }
+                        },
+                        "Rotation": {
+                            "value": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            }
+                        },
+                        "Scale": {
+                            "value": {
+                                "x": 15.0,
+                                "y": 15.0,
+                                "z": 15.0
+                            }
+                        }
+                    }
+                }
+            },
+            "BlockSmall": {
+                "Components": {
+                    "BoxCollider": {
+                        "Automaticly Resize Hitbox": {
+                            "value": true
+                        },
+                        "Hitbox Size": {
+                            "value": {
+                                "x": 30.0,
+                                "y": 30.0,
+                                "z": 30.0
+                            }
+                        },
+                        "Static": {
+                            "value": true
+                        }
+                    },
+                    "Sprite3D": {
+                        "Model": {
+                            "value": "Cube"
+                        },
+                        "Repeat Texture": {
+                            "value": true
+                        },
+                        "Shadow": {
+                            "value": false
+                        },
+                        "Texture": {
+                            "value": "Cube"
+                        }
+                    },
+                    "Transform": {
+                        "Position": {
+                            "value": {
+                                "x": 25.100059509277344,
+                                "y": -13.00001335144043,
+                                "z": 7.799994468688965
+                            }
+                        },
+                        "Rotation": {
+                            "value": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            }
+                        },
+                        "Scale": {
+                            "value": {
+                                "x": 15.0,
+                                "y": 15.0,
                                 "z": 15.0
                             }
                         }
@@ -186,6 +251,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -239,6 +307,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -292,6 +363,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -345,6 +419,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -398,6 +475,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -451,6 +531,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -504,6 +587,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -557,6 +643,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -610,6 +699,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Tree"
                         }
                     },
                     "Transform": {
@@ -645,9 +737,9 @@
                         },
                         "Hitbox Size": {
                             "value": {
-                                "x": 222.0,
+                                "x": 500.0,
                                 "y": 0.0,
-                                "z": 222.0
+                                "z": 500.0
                             }
                         },
                         "Static": {
@@ -663,6 +755,9 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Plane"
                         }
                     },
                     "Transform": {
@@ -682,9 +777,9 @@
                         },
                         "Scale": {
                             "value": {
-                                "x": 111.0,
-                                "y": 111.0,
-                                "z": 111.0
+                                "x": 250.0,
+                                "y": 250.0,
+                                "z": 250.0
                             }
                         }
                     }
@@ -698,9 +793,9 @@
                         },
                         "Hitbox Size": {
                             "value": {
-                                "x": 2.559999942779541,
-                                "y": 1.9388229846954346,
-                                "z": 1.9199999570846558
+                                "x": 5.119999885559082,
+                                "y": 3.877645969390869,
+                                "z": 3.8399999141693115
                             }
                         },
                         "Static": {
@@ -716,7 +811,7 @@
                             }
                         },
                         "Gravity": {
-                            "value": 50.0
+                            "value": 35.0
                         },
                         "Maximum Velocity": {
                             "value": 25.0
@@ -734,7 +829,7 @@
                             "value": false
                         },
                         "Jump Height": {
-                            "value": 30.0
+                            "value": 25.0
                         },
                         "Movement Speed": {
                             "value": 20.0
@@ -749,14 +844,17 @@
                         },
                         "Shadow": {
                             "value": false
+                        },
+                        "Texture": {
+                            "value": "Chest"
                         }
                     },
                     "Transform": {
                         "Position": {
                             "value": {
-                                "x": -23.26995849609375,
-                                "y": 3.9694113731384277,
-                                "z": 0.026654362678527832
+                                "x": -16.700027465820313,
+                                "y": 4.63881254196167,
+                                "z": 5.999996185302734
                             }
                         },
                         "Rotation": {
@@ -768,9 +866,9 @@
                         },
                         "Scale": {
                             "value": {
-                                "x": 1.0,
-                                "y": 1.0,
-                                "z": 1.0
+                                "x": 2.0,
+                                "y": 2.0,
+                                "z": 2.0
                             }
                         }
                     }

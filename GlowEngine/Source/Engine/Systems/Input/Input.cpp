@@ -49,6 +49,16 @@ void Input::InputSystem::Clear()
   scrollDelta = 0;
 }
 
+/// <summary>
+/// Flushes all input
+/// </summary>
+void Input::InputSystem::Flush()
+{
+  previousKeystates.clear();
+  keystates.clear();
+  scrollDelta = 0;
+}
+
 bool Input::InputSystem::KeyPressed(int key)
 {
   return EngineInstance::getEngine()->getInputSystem()->keyTriggered(key);
@@ -135,7 +145,9 @@ void Input::InputSystem::updateHotkeys()
 
   // toggle fullscreen
   if (keyReleased(VK_TAB))
-  {
+  {  
+    // Flush input so no spam
+    Flush();
     engine->getRenderer()->toggleFullscreen();
   }
 
@@ -168,12 +180,6 @@ void Input::InputSystem::updateHotkeys()
     {
       engine->SetPaused(false);
     }
-  }
-
-  // toggle renderer debug mode
-  if (keyTriggered('Q'))
-  {
-    engine->getRenderer()->toggleDebugMode();
   }
 }
 

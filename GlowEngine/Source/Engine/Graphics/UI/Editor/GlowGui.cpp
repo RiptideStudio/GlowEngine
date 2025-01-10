@@ -79,9 +79,11 @@ void Graphics::GlowGui::beginUpdate()
   ImVec2 size = { (float)renderer->getWindow()->getWidth(), (float)renderer->getWindow()->getHeight() };
   // define the main viewport of ImGui
   ImGuiViewport* viewport = ImGui::GetMainViewport();
+
   ImGui::SetNextWindowPos(viewport->Pos);
   ImGui::SetNextWindowSize(size);
   ImGui::SetNextWindowViewport(viewport->ID);
+
 
   // create docking space
   ImGui::Begin("DockSpace", nullptr, window_flags);
