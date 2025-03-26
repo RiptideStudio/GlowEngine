@@ -91,64 +91,8 @@
                     "Transform": {
                         "Position": {
                             "value": {
-                                "x": -39.59996795654297,
-                                "y": -3.3999991416931152,
-                                "z": 1.341104507446289e-07
-                            }
-                        },
-                        "Rotation": {
-                            "value": {
-                                "x": 0.0,
-                                "y": 0.0,
-                                "z": 0.0
-                            }
-                        },
-                        "Scale": {
-                            "value": {
-                                "x": 15.0,
-                                "y": 15.0,
-                                "z": 15.0
-                            }
-                        }
-                    }
-                }
-            },
-            "Block5": {
-                "Components": {
-                    "BoxCollider": {
-                        "Automaticly Resize Hitbox": {
-                            "value": true
-                        },
-                        "Hitbox Size": {
-                            "value": {
-                                "x": 30.0,
-                                "y": 30.0,
-                                "z": 30.0
-                            }
-                        },
-                        "Static": {
-                            "value": true
-                        }
-                    },
-                    "Sprite3D": {
-                        "Model": {
-                            "value": "Cube"
-                        },
-                        "Repeat Texture": {
-                            "value": true
-                        },
-                        "Shadow": {
-                            "value": false
-                        },
-                        "Texture": {
-                            "value": ""
-                        }
-                    },
-                    "Transform": {
-                        "Position": {
-                            "value": {
-                                "x": -22.800050735473633,
-                                "y": -12.300010681152344,
+                                "x": -26.500062942504883,
+                                "y": -10.200002670288086,
                                 "z": 1.341104507446289e-07
                             }
                         },
@@ -332,6 +276,62 @@
                                 "x": 2.0,
                                 "y": 2.0,
                                 "z": 2.0
+                            }
+                        }
+                    }
+                }
+            },
+            "Entity15": {
+                "Components": {
+                    "BoxCollider": {
+                        "Automaticly Resize Hitbox": {
+                            "value": true
+                        },
+                        "Hitbox Size": {
+                            "value": {
+                                "x": 30.0,
+                                "y": 30.0,
+                                "z": 30.0
+                            }
+                        },
+                        "Static": {
+                            "value": true
+                        }
+                    },
+                    "Sprite3D": {
+                        "Model": {
+                            "value": "Cube"
+                        },
+                        "Repeat Texture": {
+                            "value": true
+                        },
+                        "Shadow": {
+                            "value": false
+                        },
+                        "Texture": {
+                            "value": ""
+                        }
+                    },
+                    "Transform": {
+                        "Position": {
+                            "value": {
+                                "x": -39.59996795654297,
+                                "y": -3.3999991416931152,
+                                "z": 1.341104507446289e-07
+                            }
+                        },
+                        "Rotation": {
+                            "value": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            }
+                        },
+                        "Scale": {
+                            "value": {
+                                "x": 15.0,
+                                "y": 15.0,
+                                "z": 15.0
                             }
                         }
                     }
@@ -832,7 +832,7 @@
                             "value": 25.0
                         },
                         "Movement Speed": {
-                            "value": 20.0
+                            "value": 50.0
                         }
                     },
                     "Sprite3D": {
@@ -852,9 +852,9 @@
                     "Transform": {
                         "Position": {
                             "value": {
-                                "x": -16.700027465820313,
+                                "x": 0.0,
                                 "y": 4.63881254196167,
-                                "z": 5.999996185302734
+                                "z": 0.0
                             }
                         },
                         "Rotation": {
